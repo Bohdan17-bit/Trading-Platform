@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class PortfolioWindow;
+    class PortfolioWindow;
 }
 
 class PortfolioWindow : public QWidget
@@ -14,6 +14,10 @@ class PortfolioWindow : public QWidget
 public:
     explicit PortfolioWindow(QWidget *parent = nullptr);
     ~PortfolioWindow();
+signals:
+    void tradeWindowShow();
+private slots:
+    void on_tradeWindow_button_clicked();
 
 private:
     Ui::PortfolioWindow *ui;

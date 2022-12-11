@@ -8,7 +8,16 @@ PortfolioWindow::PortfolioWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+
 PortfolioWindow::~PortfolioWindow()
 {
     delete ui;
 }
+
+
+void PortfolioWindow::on_tradeWindow_button_clicked()
+{
+    emit tradeWindowShow();
+    this->close();
+}
+

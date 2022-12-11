@@ -9,13 +9,17 @@ TradeWindow::TradeWindow(QWidget *parent)
 {
     candle_graph = new CandleGraphBuilder();
     main_layout_diagram = new QGridLayout();
-    ui->setupUi(this);
     portfolioWindow = new PortfolioWindow();
+
+    ui->setupUi(this);
+
     setDefaultSettings();
     init_table_coins();
     getPriceCurrentPair();
+
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
-    connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);    
+    connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
+    connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
 }
 
 
