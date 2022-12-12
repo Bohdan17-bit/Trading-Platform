@@ -11,8 +11,8 @@ private:
     ApiAddressBuilder();
 public:
     static QString getChartData(QString currency_pair, QString start, QString end, QString period);
-    static QString getTicker();
-    static QString getDataCryptoPair(QString pair);
+    static QString getPriceCryptoPair(QString pair);
+    static QString getDailyChangeCryptoPair(QString pair);
 };
 
 #endif // APIADDRESSBUILDER_H

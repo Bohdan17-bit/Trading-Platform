@@ -11,13 +11,13 @@ QString ApiAddressBuilder::getChartData(QString currency_pair, QString start, QS
 }
 
 
-QString ApiAddressBuilder::getTicker()
+QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
 {
-    return QString("https://poloniex.com/public?") + QString("command=") + QString("returnTicker");
+    return QString("https://api.poloniex.com/") + QString("markets/") + pair + QString("/markPrice");
 }
 
 
-QString ApiAddressBuilder::getDataCryptoPair(QString pair)
+QString ApiAddressBuilder::getDailyChangeCryptoPair(QString pair)
 {
-    return QString("https://api.poloniex.com/") + QString("markets/") + pair + QString("/markPrice");
+    return QString("https://api.poloniex.com/") + QString("markets/") + pair + QString("/price");
 }

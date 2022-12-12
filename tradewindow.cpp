@@ -15,8 +15,7 @@ TradeWindow::TradeWindow(QWidget *parent)
 
     setDefaultSettings();
     init_table_coins();
-    getPriceCurrentPair(); // функція отримання ціни поточної пари  ------------*****------------
-
+    getPriceCurrentPair();
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
     connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
@@ -39,7 +38,8 @@ void TradeWindow::initTableTradeHistory()
 
     ui->tableView_trade_history->setModel(model);
     ui->tableView_trade_history->setColumnHidden(0, true);
-    ui->tableView_trade_history->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView_trade_history->verticalHeader()->setVisible(false);
+    ui->tableView_trade_history->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 
@@ -69,7 +69,8 @@ TradeWindow::~TradeWindow()
 
 void TradeWindow::changeCryptoPair(QString coin)
 {
-    QString pair = "USDT_" + coin;
+    QString pair = coin + "_USDT";
+    current_coin = coin;
     setCurrentPair(pair);
 }
 
@@ -102,12 +103,13 @@ void TradeWindow::init_table_coins()
 }
 
 
-void TradeWindow::setDefaultSettings() // ТУТ ВСТАНОВЛЮЄТЬСЯ USDT_BTC ------------*****------------
+void TradeWindow::setDefaultSettings()
 {
     Interval temp;
     temp = Interval::FIFTEEN_MINUTES;
     setCurrentInterval(temp);
-    setCurrentPair("USDT_BTC");
+    setCurrentPair("BTC_USDT");
+    current_coin = "BTC";
     InitTimer();
     getChartGeneral();
 }
@@ -133,7 +135,7 @@ void TradeWindow::InitTimer()
     timer_refresh_price = new QTimer(this);
 
     timer_refresh_chart->start(60000);
-    timer_refresh_price->start(10000);
+    timer_refresh_price->start(1000);
 }
 
 
@@ -145,12 +147,11 @@ void TradeWindow::setCurrentPair(QString pair)
 
 void TradeWindow::getPriceCurrentPair()
 {
-    QString address = ApiAddressBuilder::getTicker(); // змінити на функцію з нового API ------------*****------------
+    QString address = ApiAddressBuilder::getPriceCryptoPair(current_pair);
     QJsonDocument document = ApiService::MakeRequestChartData(address);
-
     QJsonObject object = document.object();
-    QJsonObject nest = object[current_pair].toObject();
-    if(nest["last"].toString().toDouble() > last_price)
+    QString price = object["markPrice"].toString();
+    if(price.toDouble() > last_price)
     {
         ui->price_label->setStyleSheet("color: green;");
     }
@@ -158,7 +159,7 @@ void TradeWindow::getPriceCurrentPair()
     {
         ui->price_label->setStyleSheet("color: red;");
     }
-    last_price = nest["last"].toString().toDouble();
+    last_price = price.toDouble();
     //last_price = round(last_price*100)/100;
     ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
     setPriceToBuyEditTextBox(last_price);
@@ -251,7 +252,8 @@ void TradeWindow::getChartGeneral()
 void TradeWindow::getChartData5Minutes()
 {
     QString api_address
-            = ApiAddressBuilder::getChartData(current_pair, TimeConverter::getOneAndHalfHourUnixTime(),
+            = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                    TimeConverter::getOneAndHalfHourUnixTime(),
                                                     TimeConverter::getCurrentUnixTime(),
                                                     TimeConverter::get5MinuteInSeconds());
     QJsonDocument json = ApiService::MakeRequestChartData(api_address);
@@ -262,7 +264,7 @@ void TradeWindow::getChartData5Minutes()
 
 void TradeWindow::getChartData15Minutes()
 {
-    QString api_address = ApiAddressBuilder::getChartData(current_pair,
+    QString api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
                                                           TimeConverter::getFourHoursUnixTime(),
                                                           TimeConverter::getCurrentUnixTime(),
                                                           TimeConverter::get15MinuteInSeconds());
@@ -274,7 +276,7 @@ void TradeWindow::getChartData15Minutes()
 
 void TradeWindow::getChartData2Hours()
 {
-    QString api_address = ApiAddressBuilder::getChartData(current_pair,
+    QString api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
                                                           TimeConverter::getLastOneDayUnixTime(),
                                                           TimeConverter::getCurrentUnixTime(),
                                                           TimeConverter::get2HourInSeconds());
