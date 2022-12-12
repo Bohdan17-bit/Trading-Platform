@@ -14,8 +14,10 @@ class PortfolioWindow : public QWidget
 public:
     explicit PortfolioWindow(QWidget *parent = nullptr);
     ~PortfolioWindow();
+
 signals:
     void tradeWindowShow();
+
 private slots:
     void on_tradeWindow_button_clicked();
 

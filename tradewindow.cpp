@@ -15,7 +15,7 @@ TradeWindow::TradeWindow(QWidget *parent)
 
     setDefaultSettings();
     init_table_coins();
-    getPriceCurrentPair();
+    getPriceCurrentPair(); // функція отримання ціни поточної пари  ------------*****------------
 
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
@@ -102,7 +102,7 @@ void TradeWindow::init_table_coins()
 }
 
 
-void TradeWindow::setDefaultSettings()
+void TradeWindow::setDefaultSettings() // ТУТ ВСТАНОВЛЮЄТЬСЯ USDT_BTC ------------*****------------
 {
     Interval temp;
     temp = Interval::FIFTEEN_MINUTES;
@@ -145,8 +145,9 @@ void TradeWindow::setCurrentPair(QString pair)
 
 void TradeWindow::getPriceCurrentPair()
 {
-    QString address = ApiAddressBuilder::getTicker();
+    QString address = ApiAddressBuilder::getTicker(); // змінити на функцію з нового API ------------*****------------
     QJsonDocument document = ApiService::MakeRequestChartData(address);
+
     QJsonObject object = document.object();
     QJsonObject nest = object[current_pair].toObject();
     if(nest["last"].toString().toDouble() > last_price)
@@ -158,7 +159,7 @@ void TradeWindow::getPriceCurrentPair()
         ui->price_label->setStyleSheet("color: red;");
     }
     last_price = nest["last"].toString().toDouble();
-    last_price = round(last_price*100)/100;
+    //last_price = round(last_price*100)/100;
     ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
     setPriceToBuyEditTextBox(last_price);
     setPriceToSellEditTextBox(last_price);

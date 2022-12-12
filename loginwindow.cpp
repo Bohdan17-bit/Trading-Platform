@@ -6,8 +6,6 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
-    tradeWindow = new TradeWindow();
-    connect(this, &LoginWindow::sendData, tradeWindow, &TradeWindow::recieveUserName);
 }
 
 
@@ -24,6 +22,8 @@ void LoginWindow::on_btn_login_clicked()
     QString user = ui->lineEdit_username->text();
     if(Database::userIsExist(user))
     {
+        tradeWindow = new TradeWindow();
+        connect(this, &LoginWindow::sendData, tradeWindow, &TradeWindow::recieveUserName);
         tradeWindow->show();
         emit sendData(user);
         this->close();
