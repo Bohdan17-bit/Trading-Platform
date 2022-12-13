@@ -12,7 +12,7 @@ private:
 public:
     static QString getChartData(QString currency_pair, QString start, QString end, QString period);
     static QString getPriceCryptoPair(QString pair);
-    static QString getDailyChangeCryptoPair(QString pair);
+    static QString getDataAllCryptoPairs();
 };
 
 #endif // APIADDRESSBUILDER_H

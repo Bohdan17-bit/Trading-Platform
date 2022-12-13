@@ -20,6 +20,7 @@ signals:
 
 private slots:
     void on_tradeWindow_button_clicked();
+    void getDataCryptocoins();
 
 private:
     Ui::PortfolioWindow *ui;
