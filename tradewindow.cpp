@@ -16,9 +16,38 @@ TradeWindow::TradeWindow(QWidget *parent)
     setDefaultSettings();
     init_table_coins();
     getPriceCurrentPair();
+
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
     connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
+
+}
+
+
+void TradeWindow::showEvent(QShowEvent *event)
+{
+    startAllRequests();
+}
+
+
+void TradeWindow::closeEvent(QCloseEvent *event)
+{
+    stopAllRequests();
+}
+
+
+void TradeWindow::stopAllRequests()
+{
+    timer_refresh_chart->stop();
+    timer_refresh_price->stop();
+    qDebug() << "Зупинка усіх запитів!";
+}
+
+
+void TradeWindow::startAllRequests()
+{
+    timer_refresh_price->start(1000);
+    timer_refresh_chart->start(10000);
 }
 
 
@@ -61,7 +90,6 @@ TradeWindow::~TradeWindow()
 {
     delete diagram;
     delete main_layout_diagram;
-    delete timer_refresh_chart;
     delete candle_graph;
     delete ui;
 }
@@ -110,7 +138,7 @@ void TradeWindow::setDefaultSettings()
     setCurrentInterval(temp);
     setCurrentPair("BTC_USDT");
     current_coin = "BTC";
-    InitTimer();
+    InitTimers();
     getChartGeneral();
 }
 
@@ -129,13 +157,11 @@ void TradeWindow::setCurrentInterval(Interval temp)
 }
 
 
-void TradeWindow::InitTimer()
+void TradeWindow::InitTimers()
 {
     timer_refresh_chart = new QTimer(this);
     timer_refresh_price = new QTimer(this);
-
-    timer_refresh_chart->start(60000);
-    timer_refresh_price->start(1000);
+    startAllRequests();
 }
 
 
@@ -424,6 +450,6 @@ void TradeWindow::on_to_portfolio_btn_clicked()
 
 void TradeWindow::on_exit_button_clicked()
 {
-    qApp->quit();
+    qApp->exit();
 }
 

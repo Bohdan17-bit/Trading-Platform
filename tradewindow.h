@@ -25,10 +25,12 @@ class TradeWindow : public QMainWindow
 public:
     TradeWindow(QWidget *parent = nullptr);
     ~TradeWindow();
-    void InitTimer();
+    void InitTimers();
     void setDefaultSettings();
     void setCurrentInterval(Interval interval);
     void changeCryptoPair(QString pair);
+    void stopAllRequests();
+    void startAllRequests();
 private:
     Ui::TradeWindow *ui;
     PortfolioWindow *portfolioWindow;
@@ -58,6 +60,8 @@ public slots:
     void parseJson(QJsonDocument document);
     void recieveUserName(QString name);
 private slots:
+    void closeEvent(QCloseEvent *event) override;
+    void showEvent(QShowEvent *event) override;
     void clearFields();
     void init_table_coins();
     void on_btn_5_minutes_clicked();
