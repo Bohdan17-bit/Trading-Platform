@@ -1,5 +1,7 @@
 #include "tradewindow.h"
 #include "ui_tradewindow.h"
+#include "txtreader.h"
+
 #include <QGridLayout>
 #include <cmath>
 
@@ -105,24 +107,22 @@ void TradeWindow::changeCryptoPair(QString coin)
 
 void TradeWindow::init_table_coins()
 {
-    ui->table_coins->setColumnCount(10);
+    QStringList list_coins = TXTReader::getListCryptocoins();
+    int number_coins = list_coins.length();
+    ui->table_coins->setColumnCount(number_coins);
+
     ui->table_coins->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->table_coins->insertRow(0);
-    ui->table_coins->setItem(0, 0, new QTableWidgetItem("BTC"));
-    ui->table_coins->setItem(0, 1, new QTableWidgetItem("XRP"));
-    ui->table_coins->setItem(0, 2, new QTableWidgetItem("ETH"));
-    ui->table_coins->setItem(0, 3, new QTableWidgetItem("DASH"));
-    ui->table_coins->setItem(0, 4, new QTableWidgetItem("DOGE"));
-    ui->table_coins->setItem(0, 5, new QTableWidgetItem("LTC"));
-    ui->table_coins->setItem(0, 6, new QTableWidgetItem("BNB"));
-    ui->table_coins->setItem(0, 7, new QTableWidgetItem("SOL"));
-    ui->table_coins->setItem(0, 8, new QTableWidgetItem("UNI"));
-    ui->table_coins->setItem(0, 9, new QTableWidgetItem("TRX"));
+    for(int i = 0; i < list_coins.length(); i++)
+    {
+        ui->table_coins->setItem(0, i, new QTableWidgetItem(list_coins.at(i)));
+    }
+
     ui->table_coins->setEditTriggers(0); // заборона редагування ячеєк таблиці
     ui->table_coins->horizontalHeader()->hide();
     ui->table_coins->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->table_coins->verticalHeader()->hide();
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < number_coins; i++)
     {
         ui->table_coins->item(0, i)->setTextAlignment(Qt::AlignCenter);
     }

@@ -17,7 +17,8 @@ SOURCES += \
     main.cpp \
     portfoliowindow.cpp \
     timeconverter.cpp \
-    tradewindow.cpp
+    tradewindow.cpp \
+    txtreader.cpp
 
 HEADERS += \
     apiaddressbuilder.h \
@@ -27,7 +28,8 @@ HEADERS += \
     loginwindow.h \
     portfoliowindow.h \
     timeconverter.h \
-    tradewindow.h
+    tradewindow.h \
+    txtreader.h
 
 FORMS += \
     loginwindow.ui \
