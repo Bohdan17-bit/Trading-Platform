@@ -1,7 +1,7 @@
 #include "apiservice.h"
 #include <qeventloop.h>
 
-QJsonDocument ApiService::MakeRequestChartData(QString requestStr)
+QJsonDocument ApiService::MakeRequest(QString requestStr)
 {
     QNetworkRequest request((QUrl(requestStr)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

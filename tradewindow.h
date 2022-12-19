@@ -47,6 +47,8 @@ private:
     QGridLayout *main_layout_diagram;
     QWidget *diagram;
     QSqlTableModel *model;
+signals:
+    void sendUserName(QString user_name);
 public slots:
     void getChartGeneral();
     void getChartData5Minutes();

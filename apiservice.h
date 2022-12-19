@@ -12,7 +12,7 @@ class ApiService
 private:
     ApiService(){};
 public:
-    static QJsonDocument MakeRequestChartData(QString requestStr);
+    static QJsonDocument MakeRequest(QString requestStr);
 };
 
 #endif // APISERVICE_H

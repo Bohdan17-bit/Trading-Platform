@@ -3,6 +3,8 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QPair>
+#include <QVector>
 
 class Database
 {
@@ -24,6 +26,9 @@ public:
     static double getNumberCryptocurrency(QString user_name, QString crypto_name);
     static double getBalance(QString user_name);
     static double getBalanceInCryptocurrrency(QString user_name);
+
+    static QVector<QPair<QString, double>> getNumberAllCryptocurrencies(QString user_name);
+
 private:
     Database(){};
     static QSqlDatabase db;

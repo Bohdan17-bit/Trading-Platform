@@ -153,6 +153,24 @@ double Database::getNumberCryptocurrency(QString user_name, QString crypto_name)
 }
 
 
+QVector<QPair<QString, double>> Database::getNumberAllCryptocurrencies(QString user_name)
+{
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Portfolio WHERE name=?");
+    query.bindValue(0, user_name);
+    QVector<QPair<QString, double>> coins;
+    query.exec();
+    while(query.next())
+    {
+        QPair<QString, double> coin;
+        coin.first = query.value(1).toString();
+        coin.second = query.value(2).toDouble();
+        coins.append(coin);
+    }
+    return coins;
+}
+
+
 double Database::getBalance(QString user_name)
 {
     QSqlQuery query;

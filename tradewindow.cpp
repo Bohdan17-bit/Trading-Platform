@@ -174,7 +174,7 @@ void TradeWindow::setCurrentPair(QString pair)
 void TradeWindow::getPriceCurrentPair()
 {
     QString address = ApiAddressBuilder::getPriceCryptoPair(current_pair);
-    QJsonDocument document = ApiService::MakeRequestChartData(address);
+    QJsonDocument document = ApiService::MakeRequest(address);
     QJsonObject object = document.object();
     QString price = object["markPrice"].toString();
     if(price.toDouble() > last_price)
@@ -282,7 +282,7 @@ void TradeWindow::getChartData5Minutes()
                                                     TimeConverter::getOneAndHalfHourUnixTime(),
                                                     TimeConverter::getCurrentUnixTime(),
                                                     TimeConverter::get5MinuteInSeconds());
-    QJsonDocument json = ApiService::MakeRequestChartData(api_address);
+    QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
 }
@@ -294,7 +294,7 @@ void TradeWindow::getChartData15Minutes()
                                                           TimeConverter::getFourHoursUnixTime(),
                                                           TimeConverter::getCurrentUnixTime(),
                                                           TimeConverter::get15MinuteInSeconds());
-    QJsonDocument json = ApiService::MakeRequestChartData(api_address);
+    QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
 }
@@ -306,7 +306,7 @@ void TradeWindow::getChartData2Hours()
                                                           TimeConverter::getLastOneDayUnixTime(),
                                                           TimeConverter::getCurrentUnixTime(),
                                                           TimeConverter::get2HourInSeconds());
-    QJsonDocument json = ApiService::MakeRequestChartData(api_address);
+    QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
 }
@@ -443,6 +443,8 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 
 void TradeWindow::on_to_portfolio_btn_clicked()
 {
+    connect(this, &TradeWindow::sendUserName, portfolioWindow, &PortfolioWindow::getUserName);
+    emit sendUserName(user_name);
     portfolioWindow->show();
     this->close();
 }

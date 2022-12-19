@@ -19,5 +19,5 @@ QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
 
 QString ApiAddressBuilder::getDataAllCryptoPairs()
 {
-    return QString("https://api.poloniex.com/") + QString("markets/") + QString("/price");
+    return QString("https://api.poloniex.com/") + QString("markets/") + QString("price");
 }
