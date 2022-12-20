@@ -44,4 +44,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     images/arrow-left.png \
     images/arrow-right.png \
-    images/exit.png
+    images/exit.png \
+    images/green_triangle.png \
+    images/red_triangle.png

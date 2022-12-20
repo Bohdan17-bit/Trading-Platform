@@ -40,6 +40,9 @@ private slots:
     void getDataCryptocoinsFromDatabase();
     void initDataCryptocoins();
 
+    void initTablePortfolio();
+    void initSettingTablePortfolio();
+
 private:
     Ui::PortfolioWindow *ui;
     QString user_name;
