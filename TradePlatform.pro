@@ -13,8 +13,11 @@ SOURCES += \
     apiservice.cpp \
     candlegraphbuilder.cpp \
     database.cpp \
+    drilldownchart.cpp \
+    drilldownslice.cpp \
     loginwindow.cpp \
     main.cpp \
+    piechartwindow.cpp \
     portfoliowindow.cpp \
     timeconverter.cpp \
     tradewindow.cpp \
@@ -25,7 +28,10 @@ HEADERS += \
     apiservice.h \
     candlegraphbuilder.h \
     database.h \
+    drilldownchart.h \
+    drilldownslice.h \
     loginwindow.h \
+    piechartwindow.h \
     portfoliowindow.h \
     timeconverter.h \
     tradewindow.h \
@@ -33,6 +39,7 @@ HEADERS += \
 
 FORMS += \
     loginwindow.ui \
+    piechartwindow.ui \
     portfoliowindow.ui \
     tradewindow.ui
 

@@ -1,6 +1,7 @@
 #include "database.h"
 #include "qvariant.h"
 #include <QDebug>
+#include "txtreader.h"
 
 
 QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
@@ -70,26 +71,12 @@ void Database::createEmptyFieldsPortfolio(QString user_name)
 
 void Database::createFields(QSqlQuery query)
 {
-    query.bindValue(":cryptocurrency", "BTC");
-    query.exec();
-    query.bindValue(":cryptocurrency", "XRP");
-    query.exec();
-    query.bindValue(":cryptocurrency", "ETH");
-    query.exec();
-    query.bindValue(":cryptocurrency", "DASH");
-    query.exec();
-    query.bindValue(":cryptocurrency", "DOGE");
-    query.exec();
-    query.bindValue(":cryptocurrency", "LTC");
-    query.exec();
-    query.bindValue(":cryptocurrency", "BNB");
-    query.exec();
-    query.bindValue(":cryptocurrency", "SOL");
-    query.exec();
-    query.bindValue(":cryptocurrency", "UNI");
-    query.exec();
-    query.bindValue(":cryptocurrency", "TRX");
-    query.exec();
+    QStringList list_coins = TXTReader::getListCryptocoins();
+    for(int i = 0; i < list_coins.length(); i++)
+    {
+        query.bindValue(":cryptocurrency", list_coins[i]);
+        query.exec();
+    }
 }
 
 

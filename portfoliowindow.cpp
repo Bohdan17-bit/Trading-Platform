@@ -9,6 +9,7 @@ PortfolioWindow::PortfolioWindow(QWidget *parent) :
     ui(new Ui::PortfolioWindow)
 {
     ui->setupUi(this);
+    piechartWindow = new PiechartWindow();
     initSettingTablePortfolio();
 }
 
@@ -157,5 +158,12 @@ void PortfolioWindow::on_tradeWindow_button_clicked()
 {
     emit tradeWindowShow();
     this->close();
+}
+
+
+void PortfolioWindow::on_piechartWindow_button_clicked()
+{
+    this->close();
+    piechartWindow->show();
 }
 

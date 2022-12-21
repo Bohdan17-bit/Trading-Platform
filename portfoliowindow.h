@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "database.h"
+#include "piechartwindow.h"
+
 
 namespace Ui {
     class PortfolioWindow;
@@ -43,8 +45,11 @@ private slots:
     void initTablePortfolio();
     void initSettingTablePortfolio();
 
+    void on_piechartWindow_button_clicked();
+
 private:
     Ui::PortfolioWindow *ui;
+    PiechartWindow *piechartWindow;
     QString user_name;
 };
 
