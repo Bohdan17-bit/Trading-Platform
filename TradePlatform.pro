@@ -19,6 +19,7 @@ SOURCES += \
     main.cpp \
     piechartwindow.cpp \
     portfoliowindow.cpp \
+    singleuser.cpp \
     timeconverter.cpp \
     tradewindow.cpp \
     txtreader.cpp
@@ -33,6 +34,7 @@ HEADERS += \
     loginwindow.h \
     piechartwindow.h \
     portfoliowindow.h \
+    singleuser.h \
     timeconverter.h \
     tradewindow.h \
     txtreader.h
