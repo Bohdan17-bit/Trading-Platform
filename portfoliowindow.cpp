@@ -43,14 +43,12 @@ void PortfolioWindow::getDataCryptocoinsFromAPI()
             }
         }
     }
-
 }
 
 
 void PortfolioWindow::getUserName(QString user_name)
 {
     this->user_name = user_name;
-    qDebug() << "PortfolioWindow: " << user_name;
     initDataCryptocoins();
 }
 
@@ -163,7 +161,21 @@ void PortfolioWindow::on_tradeWindow_button_clicked()
 
 void PortfolioWindow::on_piechartWindow_button_clicked()
 {
-    this->close();
+    connect(this, &PortfolioWindow::sendCoinsData, piechartWindow, &PiechartWindow::getCoins);
     piechartWindow->show();
+    prepare_data_to_pieChart();
 }
 
+
+void PortfolioWindow::prepare_data_to_pieChart()
+{
+    QVector<QPair<QString, double>> coins_to_pieChart;
+    for(int i = 0; i< list_cryptocoins.length(); i++)
+    {
+        QPair<QString, double> coin;
+        coin.first = list_cryptocoins[i].name;
+        coin.second = list_cryptocoins[i].total_cost;
+        coins_to_pieChart.append(coin);
+    }
+    sendCoinsData(coins_to_pieChart);
+}

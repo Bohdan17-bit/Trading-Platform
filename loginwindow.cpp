@@ -1,5 +1,6 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
+#include "singleuser.h"
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QWidget(parent),
@@ -22,10 +23,9 @@ void LoginWindow::on_btn_login_clicked()
     QString user = ui->lineEdit_username->text();
     if(Database::userIsExist(user))
     {
+        SingleUser *singleUser = SingleUser::CreateInstance(user);
         tradeWindow = new TradeWindow();
-        connect(this, &LoginWindow::sendData, tradeWindow, &TradeWindow::recieveUserName);
         tradeWindow->show();
-        emit sendData(user);
         this->close();
     }
     else

@@ -1,19 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author/>
+ <comment/>
+ <exportmacro/>
  <class>PiechartWindow</class>
- <widget class="QWidget" name="PiechartWindow">
+ <widget name="PiechartWindow" class="QMainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>359</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>MainWindow</string>
   </property>
+  <widget name="menubar" class="QMenuBar"/>
+  <widget name="centralwidget" class="QWidget"/>
+  <widget name="statusbar" class="QStatusBar"/>
  </widget>
- <resources/>
+ <pixmapfunction/>
  <connections/>
 </ui>

@@ -46,6 +46,10 @@ private slots:
     void initSettingTablePortfolio();
 
     void on_piechartWindow_button_clicked();
+    void prepare_data_to_pieChart();
+
+signals:
+    void sendCoinsData(QVector<QPair<QString, double>> coins);
 
 private:
     Ui::PortfolioWindow *ui;

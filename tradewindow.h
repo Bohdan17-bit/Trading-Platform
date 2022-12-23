@@ -60,7 +60,6 @@ public slots:
     void setPriceToSellEditTextBox(double base_price);
     void drawDiagram();
     void parseJson(QJsonDocument document);
-    void recieveUserName(QString name);
 private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;

@@ -12,7 +12,8 @@ private:
 public:
     SingleUser(SingleUser &user) = delete;
     void operator = (const SingleUser user) = delete;
-    static SingleUser *GetInstance(const QString name);
-    QString value() const;
+    static SingleUser *GetInstance();
+    static SingleUser *CreateInstance(QString name);
+    QString getActiveUser() const;
 };
 #endif // SINGLEUSER_H

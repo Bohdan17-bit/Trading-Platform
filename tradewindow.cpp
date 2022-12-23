@@ -4,19 +4,23 @@
 
 #include <QGridLayout>
 #include <cmath>
+#include "singleuser.h"
 
 TradeWindow::TradeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TradeWindow)
 {
+    ui->setupUi(this);
+    user_name = SingleUser::GetInstance()->getActiveUser();
+
     candle_graph = new CandleGraphBuilder();
     main_layout_diagram = new QGridLayout();
     portfolioWindow = new PortfolioWindow();
 
-    ui->setupUi(this);
-
     setDefaultSettings();
     init_table_coins();
+    initTableTradeHistory();
+    update_balance_label();
     getPriceCurrentPair();
 
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
@@ -77,14 +81,6 @@ void TradeWindow::initTableTradeHistory()
 void TradeWindow::refreshTableTradeHistory()
 {
     model->select();
-}
-
-
-void TradeWindow::recieveUserName(QString name)
-{
-    user_name = name;
-    update_balance_label();
-    initTableTradeHistory();
 }
 
 

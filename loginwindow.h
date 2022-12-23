@@ -18,9 +18,6 @@ public:
     explicit LoginWindow(QWidget *parent = nullptr);
     ~LoginWindow();
 
-signals:
-    void sendData(QString user_name);
-
 private slots:
     void on_btn_login_clicked();
 

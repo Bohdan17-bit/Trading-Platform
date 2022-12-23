@@ -9,7 +9,12 @@ SingleUser::SingleUser(const QString name)
 
 }
 
-SingleUser *SingleUser::GetInstance(const QString name)
+SingleUser *SingleUser::GetInstance()
+{
+    return singleUser;
+}
+
+SingleUser *SingleUser::CreateInstance(QString name)
 {
     if(singleUser == nullptr)
     {
@@ -18,7 +23,7 @@ SingleUser *SingleUser::GetInstance(const QString name)
     return singleUser;
 }
 
-QString SingleUser::value() const
+QString SingleUser::getActiveUser() const
 {
     return user_name;
 }
