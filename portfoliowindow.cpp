@@ -162,8 +162,8 @@ void PortfolioWindow::on_tradeWindow_button_clicked()
 void PortfolioWindow::on_piechartWindow_button_clicked()
 {
     connect(this, &PortfolioWindow::sendCoinsData, piechartWindow, &PiechartWindow::getCoins);
-    piechartWindow->show();
     prepare_data_to_pieChart();
+    piechartWindow->show();
 }
 
 

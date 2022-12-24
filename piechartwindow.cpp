@@ -23,14 +23,10 @@ PiechartWindow::~PiechartWindow()
     delete ui;
 }
 
-void PiechartWindow::showEvent(QShowEvent *event)
-{
-    //coinSeries->clear();
-    //chart->removeSeries(coinSeries);
-}
 
 void PiechartWindow::drawDiagram(QVector<QPair<QString, double>> coins)
 {
+    coinSeries->clear();
     for(QPair<QString, double> coin : coins)
     {
         if(coin.second != 0)

@@ -23,8 +23,6 @@ private:
     void initSettingsChart();
     void initSettingsPieSeries();
     void drawDiagram(QVector<QPair<QString, double>> coins);
-    void showEvent(QShowEvent *event) override;
-
 
 private:
     Ui::PiechartWindow *ui;
