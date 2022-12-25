@@ -29,6 +29,8 @@ public:
 
     static QVector<QPair<QString, double>> getNumberAllCryptocurrencies(QString user_name);
 
+    static void createAllTables();
+
 private:
     Database(){};
     static QSqlDatabase db;

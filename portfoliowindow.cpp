@@ -3,12 +3,15 @@
 #include "apiaddressbuilder.h"
 #include "apiservice.h"
 #include "txtreader.h"
+#include "database.h"
+
 
 PortfolioWindow::PortfolioWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PortfolioWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Портфоліо");
     piechartWindow = new PiechartWindow();
     initSettingTablePortfolio();
 }
@@ -170,6 +173,11 @@ void PortfolioWindow::on_piechartWindow_button_clicked()
 void PortfolioWindow::prepare_data_to_pieChart()
 {
     QVector<QPair<QString, double>> coins_to_pieChart;
+    double balance = Database::getBalance(user_name);
+    QPair<QString, double> balance_usdt;
+    balance_usdt.first = "USD";
+    balance_usdt.second = balance;
+    coins_to_pieChart.append(balance_usdt);
     for(int i = 0; i< list_cryptocoins.length(); i++)
     {
         QPair<QString, double> coin;

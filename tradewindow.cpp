@@ -12,6 +12,7 @@ TradeWindow::TradeWindow(QWidget *parent)
 {
     ui->setupUi(this);
     user_name = SingleUser::GetInstance()->getActiveUser();
+    setWindowTitle("Головне вікно");
 
     candle_graph = new CandleGraphBuilder();
     main_layout_diagram = new QGridLayout();

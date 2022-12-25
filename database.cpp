@@ -2,6 +2,7 @@
 #include "qvariant.h"
 #include <QDebug>
 #include "txtreader.h"
+#include <QFileInfo>
 
 
 QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
@@ -10,6 +11,44 @@ QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
 void Database::initDatabase()
 {
     db.setDatabaseName("./db/database.db");
+}
+
+
+void Database::createAllTables()
+{
+    QSqlQuery query_create_table_User ("CREATE TABLE User"
+                         "(name TEXT NOT NULL UNIQUE PRIMARY KEY,"
+                         "total_money NUMERIC NOT NULL);");
+
+    QSqlQuery query_create_table_Portfolio ("CREATE TABLE Portfolio"
+                              "(name TEXT NOT NULL,"
+                              "cryptocurrency TEXT NOT NULL,"
+                              "number NUMERIC NOT NULL,"
+                              "FOREIGN KEY(name) REFERENCES User(name));");
+
+    QSqlQuery query_create_table_TradeHistory ("CREATE TABLE TradeHistory"
+                                 "(name TEXT NOT NULL,"
+                                 "action TEXT NOT NULL,"
+                                 "cryptocurrency TEXT NOT NULL,"
+                                 "number NUMERIC NOT NULL,"
+                                 "price NUMERIC NOT NULL,"
+                                 "usd NUMERIC NOT NULL,"
+                                 "FOREIGN KEY(name) REFERENCES User(name));");
+
+    query_create_table_User.exec();
+    query_create_table_Portfolio.exec();
+    query_create_table_TradeHistory.exec();
+}
+
+
+void Database::openDatabase()
+{
+    bool db_file_exist = QFileInfo::exists("./db/database.db");
+    db.open();
+    if(db_file_exist == false)
+    {
+        createAllTables();
+    }
 }
 
 
@@ -76,19 +115,6 @@ void Database::createFields(QSqlQuery query)
     {
         query.bindValue(":cryptocurrency", list_coins[i]);
         query.exec();
-    }
-}
-
-
-void Database::openDatabase()
-{
-    if(db.open())
-    {
-        qDebug("Базу даних відкрито.");
-    }
-    else
-    {
-        qDebug("Базу даних не відкрито.");
     }
 }
 

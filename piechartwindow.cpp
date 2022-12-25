@@ -14,6 +14,7 @@ PiechartWindow::PiechartWindow(QWidget *parent) :
     ui(new Ui::PiechartWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Кругова діаграма");
     initSettingsChart();
     initSettingsPieSeries();
 }
