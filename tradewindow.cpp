@@ -22,6 +22,7 @@ TradeWindow::TradeWindow(QWidget *parent)
     init_table_coins();
     initTableTradeHistory();
     update_balance_label();
+    update_coins_balance_label();
     getPriceCurrentPair();
 
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
@@ -60,7 +61,7 @@ void TradeWindow::startAllRequests()
 
 void TradeWindow::initTableTradeHistory()
 {
-    model = new QSqlTableModel(this);
+    model = new TableModelTradeHistory(this);
     model->setTable("TradeHistory");
 
     model->setFilter("name = '"+ user_name + "'");
@@ -71,6 +72,7 @@ void TradeWindow::initTableTradeHistory()
     model->setHeaderData(3, Qt::Horizontal, "Число", Qt::DisplayRole);
     model->setHeaderData(4, Qt::Horizontal, "Ціна", Qt::DisplayRole);
     model->setHeaderData(5, Qt::Horizontal, "Долари", Qt::DisplayRole);
+
 
     ui->tableView_trade_history->setModel(model);
     ui->tableView_trade_history->setColumnHidden(0, true);
@@ -145,6 +147,19 @@ void TradeWindow::update_balance_label()
     balance = Database::getBalance(user_name);
     ui->balance_label->setText("Баланс : " + QString::number(balance));
     qDebug() << balance;
+}
+
+
+void TradeWindow::update_coins_balance_label()
+{
+    int current_column = ui->table_coins->currentColumn();
+    if(current_column < 0)
+    {
+        current_column = 0;
+    }
+    QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
+    double number_coins = Database::getNumberCryptocurrency(user_name, cryptocurrency);
+    ui->coins_balance_label->setText("Монети: " + QString::number(number_coins));
 }
 
 
@@ -374,6 +389,7 @@ void TradeWindow::on_table_coins_cellClicked(int row, int column)
     clearFields();
     getPriceCurrentPair();
     getChartGeneral();
+    update_coins_balance_label();
 }
 
 
@@ -397,6 +413,7 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
         total = round(total*100)/100;
         Database::writeRecordToHistory(user_name, "buy", cryptocurrency, number_crypto, price, total);
         refreshTableTradeHistory();
+        update_coins_balance_label();
     }
     else
     {
@@ -428,6 +445,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
         total_usd_to_get = round(total_usd_to_get*100)/100;
         Database::writeRecordToHistory(user_name, "sell", cryptocurrency, count_cryptocurrency_to_sell, price, total_usd_to_get);
         refreshTableTradeHistory();
+        update_coins_balance_label();
     }
     else
     {

@@ -591,7 +591,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
+              <width>25</width>
               <height>20</height>
              </size>
             </property>
@@ -601,7 +601,7 @@
            <widget class="QLabel" name="price_label">
             <property name="font">
              <font>
-              <pointsize>14</pointsize>
+              <pointsize>15</pointsize>
              </font>
             </property>
             <property name="text">
@@ -616,7 +616,36 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>100</width>
+              <width>25</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="coins_balance_label">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>Монети: 14500</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>25</width>
               <height>20</height>
              </size>
             </property>
@@ -627,7 +656,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>18</pointsize>
+              <pointsize>16</pointsize>
              </font>
             </property>
             <property name="text">
@@ -642,7 +671,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>60</width>
+              <width>25</width>
               <height>20</height>
              </size>
             </property>

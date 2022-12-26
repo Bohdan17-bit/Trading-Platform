@@ -20,6 +20,7 @@ SOURCES += \
     piechartwindow.cpp \
     portfoliowindow.cpp \
     singleuser.cpp \
+    tablemodeltradehistory.cpp \
     timeconverter.cpp \
     tradewindow.cpp \
     txtreader.cpp
@@ -35,6 +36,7 @@ HEADERS += \
     piechartwindow.h \
     portfoliowindow.h \
     singleuser.h \
+    tablemodeltradehistory.h \
     timeconverter.h \
     tradewindow.h \
     txtreader.h

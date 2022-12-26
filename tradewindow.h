@@ -1,13 +1,15 @@
 #ifndef TRADEWINDOW_H
 #define TRADEWINDOW_H
 
-#include <QMainWindow>
 #include "timeconverter.h"
 #include "apiservice.h"
 #include "apiaddressbuilder.h"
 #include "candlegraphbuilder.h"
 #include "database.h"
 #include "portfoliowindow.h"
+#include "tablemodeltradehistory.h"
+
+#include <QMainWindow>
 #include <QGridLayout>
 #include <QSqlTableModel>
 #include <QMessageBox>
@@ -46,7 +48,7 @@ private:
     CandleGraphBuilder *candle_graph;
     QGridLayout *main_layout_diagram;
     QWidget *diagram;
-    QSqlTableModel *model;
+    TableModelTradeHistory *model;
 signals:
     void sendUserName(QString user_name);
 public slots:
@@ -72,6 +74,7 @@ private slots:
     void on_lineEdit_count_buy_textEdited(const QString &arg1);
     void on_lineEdit_count_sell_textEdited(const QString &arg1);
     void update_balance_label();
+    void update_coins_balance_label();
     void on_btn_buy_cryptocurrency_clicked();
     void on_btn_sell_cryptocurrency_clicked();
     void initTableTradeHistory();
