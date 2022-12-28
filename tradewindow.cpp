@@ -67,7 +67,7 @@ void TradeWindow::initTableTradeHistory()
     model->setFilter("name = '"+ user_name + "'");
     model->select();
 
-    model->setHeaderData(1, Qt::Horizontal, "Дія", Qt::DisplayRole);
+    //model->setHeaderData(1, Qt::Horizontal, "Дія", Qt::DisplayRole);
     model->setHeaderData(2, Qt::Horizontal, "Монета", Qt::DisplayRole);
     model->setHeaderData(3, Qt::Horizontal, "Число", Qt::DisplayRole);
     model->setHeaderData(4, Qt::Horizontal, "Ціна", Qt::DisplayRole);
@@ -76,6 +76,7 @@ void TradeWindow::initTableTradeHistory()
 
     ui->tableView_trade_history->setModel(model);
     ui->tableView_trade_history->setColumnHidden(0, true);
+    ui->tableView_trade_history->setColumnHidden(1, true);
     ui->tableView_trade_history->verticalHeader()->setVisible(false);
     ui->tableView_trade_history->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
