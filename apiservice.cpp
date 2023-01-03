@@ -1,12 +1,13 @@
 #include "apiservice.h"
 #include <qeventloop.h>
 
+QNetworkAccessManager* ApiService::accessManager = new QNetworkAccessManager();
+
 QJsonDocument ApiService::MakeRequest(QString requestStr)
 {
     QNetworkRequest request((QUrl(requestStr)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QNetworkAccessManager accessManager;
-    QNetworkReply *reply = accessManager.get(request);
+    QNetworkReply *reply = accessManager->get(request);
     while (!reply->isFinished())
     {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);

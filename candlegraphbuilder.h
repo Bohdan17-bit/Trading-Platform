@@ -14,10 +14,16 @@ class CandleGraphBuilder
 public:
     CandleGraphBuilder();
     void refresh_graph_builder();
+    void createNewChart();
     void addCandleStickSet(qreal timestamp, qreal open, qreal close, qreal low, qreal high);
-    QtCharts::QChartView* getGraphChart();
+    QtCharts::QChartView* getGraphChartView();
 private:
-    void initCandlesGraph();
+    void initAcmeSeries();
+    void initAxes();
+    void initChartSettings();
+    QtCharts::QChartView *chartView;
+    QtCharts::QChart *chart;
+    QtCharts::QChart *oldChart;
     QtCharts::QCandlestickSeries *acmeSeries;
     QStringList categories;
     QList<QtCharts::QCandlestickSet*> list_candlestick_set;

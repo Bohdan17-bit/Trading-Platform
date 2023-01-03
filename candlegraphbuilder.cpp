@@ -1,47 +1,84 @@
 #include "candlegraphbuilder.h"
 #include <QDebug>
 
+
 CandleGraphBuilder::CandleGraphBuilder()
 {
-    initCandlesGraph();
+    chart = nullptr;
+    oldChart = nullptr;
+    chartView = new QtCharts::QChartView();
+    chartView->setRenderHint(QPainter::Antialiasing);
+    initAcmeSeries();
 }
 
-QtCharts::QChartView* CandleGraphBuilder::getGraphChart()
+
+void CandleGraphBuilder::initChartSettings()
 {
-    QtCharts::QChart *chart = new QtCharts::QChart();
-    chart->addSeries(acmeSeries);
     chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
-    chart->createDefaultAxes();
-    QtCharts::QBarCategoryAxis *axisX = qobject_cast<QtCharts::QBarCategoryAxis *>(chart->axes(Qt::Horizontal).at(0));
-    axisX->setCategories(categories);
-
-    QtCharts::QValueAxis *axisY = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
-    axisY->setMax(axisY->max() * 1.01);
-    axisY->setMin(axisY->min() * 0.99);
-
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignBottom);
+}
 
-    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+
+void CandleGraphBuilder::createNewChart()
+{
+    oldChart = chart;
+
+    chart = new QtCharts::QChart();
+
+    chart->addSeries(acmeSeries);
+
+    initChartSettings();
+
+    initAxes();
+
+    initAcmeSeries();
+
+    chartView->setChart(chart);
+    chartView->update();
+
+    if(oldChart != nullptr) {
+        oldChart->removeAllSeries();
+        delete oldChart;
+    }
+}
+
+
+void CandleGraphBuilder::initAxes()
+{
+    chart->createDefaultAxes();
+
+    QtCharts::QBarCategoryAxis *axisTime = qobject_cast<QtCharts::QBarCategoryAxis *>(chart->axes(Qt::Horizontal).at(0));
+    axisTime->setCategories(categories);
+
+    QtCharts::QValueAxis *axisValue = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
+    axisValue->setMax(axisValue->max() * 1.01);
+    axisValue->setMin(axisValue->min() * 0.99);
+}
+
+
+QtCharts::QChartView* CandleGraphBuilder::getGraphChartView()
+{
     return chartView;
 }
 
+
 void CandleGraphBuilder::refresh_graph_builder()
 {
-    acmeSeries->remove(list_candlestick_set);
+    acmeSeries->clear();
     list_candlestick_set.clear();
     categories.clear();
 }
 
-void CandleGraphBuilder::initCandlesGraph()
+
+void CandleGraphBuilder::initAcmeSeries()
 {
     acmeSeries = new QtCharts::QCandlestickSeries();
     acmeSeries->setName("Графік змінення ціни монети");
     acmeSeries->setIncreasingColor(QColor(Qt::green));
     acmeSeries->setDecreasingColor(QColor(Qt::red));
-    qDebug() << "Графік ініціалізовано. Все ок.";
 }
+
 
 void CandleGraphBuilder::addCandleStickSet(qreal timestamp, qreal open, qreal close, qreal low, qreal high)
 {

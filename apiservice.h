@@ -11,6 +11,7 @@ class ApiService
 {
 private:
     ApiService(){};
+    static QNetworkAccessManager *accessManager;
 public:
     static QJsonDocument MakeRequest(QString requestStr);
 };

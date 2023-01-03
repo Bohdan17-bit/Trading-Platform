@@ -18,6 +18,10 @@ TradeWindow::TradeWindow(QWidget *parent)
     main_layout_diagram = new QGridLayout();
     portfolioWindow = new PortfolioWindow();
 
+    diagram = candle_graph->getGraphChartView();
+    main_layout_diagram->addWidget(diagram);
+    ui->widget->setLayout(main_layout_diagram);
+
     setDefaultSettings();
     init_table_coins();
     initTableTradeHistory();
@@ -344,13 +348,7 @@ void TradeWindow::parseJson(QJsonDocument document)
 
 void TradeWindow::drawDiagram()
 {
-    if(diagram != nullptr)
-    {
-        main_layout_diagram->removeWidget(diagram);
-    }
-    diagram = candle_graph->getGraphChart();
-    main_layout_diagram->addWidget(diagram);
-    ui->widget->setLayout(main_layout_diagram);
+    candle_graph->createNewChart();
 }
 
 
