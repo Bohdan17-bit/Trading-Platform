@@ -14,9 +14,19 @@ CandleGraphBuilder::CandleGraphBuilder()
 
 void CandleGraphBuilder::initChartSettings()
 {
-    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+    chart->setAnimationOptions(QtCharts::QChart::AllAnimations);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignBottom);
+}
+
+
+void CandleGraphBuilder::setLimitPoints(int number_points)
+{
+    if(categories.isEmpty())
+        return;
+    int id_time_last_element = categories.size() - 1;
+    qDebug() << categories.at(id_time_last_element - number_points + 1) << " and " << categories.at(id_time_last_element);
+    axisTime->setRange(categories.at(id_time_last_element - number_points + 1), categories.at(id_time_last_element));
 }
 
 
@@ -48,12 +58,19 @@ void CandleGraphBuilder::initAxes()
 {
     chart->createDefaultAxes();
 
-    QtCharts::QBarCategoryAxis *axisTime = qobject_cast<QtCharts::QBarCategoryAxis *>(chart->axes(Qt::Horizontal).at(0));
+    axisTime = qobject_cast<QtCharts::QBarCategoryAxis *>(chart->axes(Qt::Horizontal).at(0));
     axisTime->setCategories(categories);
+    axisTime->setTitleText("Час");
 
-    QtCharts::QValueAxis *axisValue = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
+    axisValue = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
     axisValue->setMax(axisValue->max() * 1.01);
     axisValue->setMin(axisValue->min() * 0.99);
+
+    //axisDate = new QtCharts::QDateTimeAxis();
+    //axisDate->setFormat("dd-MM");
+    //axisDate->setTitleText("Дата");
+    //chart->addAxis(axisDate, Qt::AlignBottom);
+    //acmeSeries->attachAxis(axisDate);
 }
 
 
@@ -89,5 +106,5 @@ void CandleGraphBuilder::addCandleStickSet(qreal timestamp, qreal open, qreal cl
     candlestickset->setClose(close);
     list_candlestick_set.append(candlestickset);
     acmeSeries->append(candlestickset);
-    categories << QDateTime::fromMSecsSinceEpoch(candlestickset->timestamp()).toString("hh:mm");
+    categories << QDateTime::fromMSecsSinceEpoch(candlestickset->timestamp()).toString("MM.dd-hh:mm");
 }

@@ -48,6 +48,7 @@ private:
     CandleGraphBuilder *candle_graph;
     QGridLayout *main_layout_diagram;
     QWidget *diagram;
+    QJsonValue last_candle;
     TableModelTradeHistory *model;
 signals:
     void sendUserName(QString user_name);
@@ -56,6 +57,8 @@ public slots:
     void getChartData5Minutes();
     void getChartData15Minutes();
     void getChartData2Hours();
+    void getLastCandle();
+    void setLastCandle(QJsonDocument document);
     void getPriceCurrentPair();
     void setCurrentPair(QString pair);
     void setPriceToBuyEditTextBox(double base_price);
@@ -65,6 +68,8 @@ public slots:
 private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void update_visible_columns_candleChart();
     void clearFields();
     void init_table_coins();
     void on_btn_5_minutes_clicked();

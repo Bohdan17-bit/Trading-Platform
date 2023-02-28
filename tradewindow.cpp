@@ -28,8 +28,9 @@ TradeWindow::TradeWindow(QWidget *parent)
     update_balance_label();
     update_coins_balance_label();
     getPriceCurrentPair();
+    getChartGeneral();
 
-    connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getChartGeneral);
+    connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getLastCandle);
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
     connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
 
@@ -59,7 +60,7 @@ void TradeWindow::stopAllRequests()
 void TradeWindow::startAllRequests()
 {
     timer_refresh_price->start(1000);
-    timer_refresh_chart->start(10000);
+    timer_refresh_chart->start(10000); // перевірка оновлення графіку кожні 10 секунд
 }
 
 
@@ -294,11 +295,13 @@ void TradeWindow::getChartGeneral()
 
 void TradeWindow::getChartData5Minutes()
 {
-    QString api_address
-            = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                    TimeConverter::getOneAndHalfHourUnixTime(),
-                                                    TimeConverter::getCurrentUnixTime(),
-                                                    TimeConverter::get5MinuteInSeconds());
+    QString api_address;
+    api_address
+        = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                TimeConverter::getLastQuarterUnixTime(),
+                                                TimeConverter::getCurrentUnixTime(),
+                                                TimeConverter::get5MinuteInSeconds());
+
     QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
@@ -307,10 +310,11 @@ void TradeWindow::getChartData5Minutes()
 
 void TradeWindow::getChartData15Minutes()
 {
-    QString api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                          TimeConverter::getFourHoursUnixTime(),
-                                                          TimeConverter::getCurrentUnixTime(),
-                                                          TimeConverter::get15MinuteInSeconds());
+    QString api_address;
+    api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                      TimeConverter::getLastOneDayUnixTime(),
+                                                      TimeConverter::getCurrentUnixTime(),
+                                                      TimeConverter::get15MinuteInSeconds());
     QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
@@ -319,13 +323,63 @@ void TradeWindow::getChartData15Minutes()
 
 void TradeWindow::getChartData2Hours()
 {
-    QString api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                          TimeConverter::getLastOneDayUnixTime(),
-                                                          TimeConverter::getCurrentUnixTime(),
-                                                          TimeConverter::get2HourInSeconds());
+    QString api_address;
+    api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                      TimeConverter::getLastWeekUnixTime(),
+                                                      TimeConverter::getCurrentUnixTime(),
+                                                      TimeConverter::get2HourInSeconds());
     QJsonDocument json = ApiService::MakeRequest(api_address);
     qDebug() << api_address;
     parseJson(json);
+}
+
+
+void TradeWindow::getLastCandle()
+{
+    QString api_address;
+    switch(interval)
+    {
+    case FIVE_MINUTES:
+        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                          TimeConverter::getLast5MinuteInSeconds(),
+                                                          TimeConverter::getCurrentUnixTime(),
+                                                          TimeConverter::get5MinuteInSeconds());
+        break;
+    case FIFTEEN_MINUTES:
+        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                          TimeConverter::getLast15MinuteInSeconds(),
+                                                          TimeConverter::getCurrentUnixTime(),
+                                                          TimeConverter::get15MinuteInSeconds());
+        break;
+    case TWO_HOURS:
+        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
+                                                          TimeConverter::getLast2HourInSeconds(),
+                                                          TimeConverter::getCurrentUnixTime(),
+                                                          TimeConverter::get2HourInSeconds());
+        break;
+    }
+    qDebug() << api_address;
+    QJsonDocument json = ApiService::MakeRequest(api_address);
+    setLastCandle(json);
+}
+
+
+void TradeWindow::setLastCandle(QJsonDocument document)
+{
+    QJsonArray jsonArray = document.array();
+    QJsonValue new_last_candle = jsonArray.last();
+
+    QString date = new_last_candle.toObject().value("date").toString();
+    qreal high = new_last_candle.toObject().value("high").toString().toDouble();
+    qreal low = new_last_candle.toObject().value("low").toString().toDouble();
+    qreal open = new_last_candle.toObject().value("open").toString().toDouble();
+    qreal close = new_last_candle.toObject().value("close").toString().toDouble();
+
+    if(date != last_candle.toObject().value("date").toString())
+    {
+        candle_graph->addCandleStickSet(date.toDouble(), open, close, low, high);
+        getChartGeneral();
+    }
 }
 
 
@@ -342,6 +396,7 @@ void TradeWindow::parseJson(QJsonDocument document)
         qreal close = value.toObject().value("close").toString().toDouble();
         candle_graph->addCandleStickSet(date, open, close, low, high);
     }
+    last_candle = jsonArray.last();
     drawDiagram();
 }
 
@@ -349,6 +404,20 @@ void TradeWindow::parseJson(QJsonDocument document)
 void TradeWindow::drawDiagram()
 {
     candle_graph->createNewChart();
+    update_visible_columns_candleChart();
+}
+
+
+void TradeWindow::update_visible_columns_candleChart()
+{
+    qDebug() << candle_graph->getGraphChartView()->chart()->size().width();
+    candle_graph->setLimitPoints(candle_graph->getGraphChartView()->chart()->size().width() / 90); // 90 px для кожної колонки
+}
+
+
+void TradeWindow::resizeEvent(QResizeEvent *e)
+{
+    update_visible_columns_candleChart();
 }
 
 
