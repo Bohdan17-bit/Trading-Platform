@@ -6,7 +6,7 @@ CandleGraphBuilder::CandleGraphBuilder()
 {
     chart = nullptr;
     oldChart = nullptr;
-    chartView = new QtCharts::QChartView();
+    chartView = new ChartView();
     chartView->setRenderHint(QPainter::Antialiasing);
     initAcmeSeries();
 }
@@ -14,7 +14,7 @@ CandleGraphBuilder::CandleGraphBuilder()
 
 void CandleGraphBuilder::initChartSettings()
 {
-    chart->setAnimationOptions(QtCharts::QChart::AllAnimations);
+    //chart->setAnimationOptions(QtCharts::QChart::AnimationOption::SeriesAnimations);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignBottom);
 }
@@ -74,7 +74,7 @@ void CandleGraphBuilder::initAxes()
 }
 
 
-QtCharts::QChartView* CandleGraphBuilder::getGraphChartView()
+ChartView* CandleGraphBuilder::getGraphChartView()
 {
     return chartView;
 }
@@ -106,5 +106,5 @@ void CandleGraphBuilder::addCandleStickSet(qreal timestamp, qreal open, qreal cl
     candlestickset->setClose(close);
     list_candlestick_set.append(candlestickset);
     acmeSeries->append(candlestickset);
-    categories << QDateTime::fromMSecsSinceEpoch(candlestickset->timestamp()).toString("MM.dd-hh:mm");
+    categories << QDateTime::fromMSecsSinceEpoch(candlestickset->timestamp()).toString("dd.MM-hh:mm");
 }

@@ -8,6 +8,7 @@
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QDateTimeAxis>
+#include "chartview.h"
 
 
 class CandleGraphBuilder
@@ -18,12 +19,12 @@ public:
     void createNewChart();
     void setLimitPoints(int number_points);
     void addCandleStickSet(qreal timestamp, qreal open, qreal close, qreal low, qreal high);
-    QtCharts::QChartView* getGraphChartView();
+    ChartView* getGraphChartView();
 private:
     void initAcmeSeries();
     void initAxes();
     void initChartSettings();
-    QtCharts::QChartView *chartView;
+    ChartView *chartView;
     QtCharts::QChart *chart;
     QtCharts::QChart *oldChart;
     QtCharts::QCandlestickSeries *acmeSeries;

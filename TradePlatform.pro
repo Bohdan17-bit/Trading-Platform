@@ -12,6 +12,7 @@ SOURCES += \
     apiaddressbuilder.cpp \
     apiservice.cpp \
     candlegraphbuilder.cpp \
+    chartview.cpp \
     database.cpp \
     drilldownchart.cpp \
     drilldownslice.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     apiaddressbuilder.h \
     apiservice.h \
     candlegraphbuilder.h \
+    chartview.h \
     database.h \
     drilldownchart.h \
     drilldownslice.h \

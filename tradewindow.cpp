@@ -34,6 +34,9 @@ TradeWindow::TradeWindow(QWidget *parent)
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
     connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
 
+    connect(candle_graph->getGraphChartView(), &ChartView::mousePress, this, &TradeWindow::stopAllRequests);
+    connect(candle_graph->getGraphChartView(), &ChartView::mouseRelease, this, &TradeWindow::startAllRequests);
+
 }
 
 
