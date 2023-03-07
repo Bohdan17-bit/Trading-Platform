@@ -23,12 +23,13 @@ TradeWindow::TradeWindow(QWidget *parent)
     ui->widget->setLayout(main_layout_diagram);
 
     setDefaultSettings();
+    getChartGeneral();
     init_table_coins();
     initTableTradeHistory();
     update_balance_label();
     update_coins_balance_label();
     getPriceCurrentPair();
-    getChartGeneral();
+
 
     connect(timer_refresh_chart, &QTimer::timeout, this, &TradeWindow::getLastCandle);
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);

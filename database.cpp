@@ -1,15 +1,17 @@
 #include "database.h"
+#include <QDir>
 #include "qvariant.h"
 #include <QDebug>
 #include "txtreader.h"
 #include <QFileInfo>
-
+#include <QSslSocket>
 
 QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
 
 
 void Database::initDatabase()
 {
+    qDebug() << QSslSocket::supportsSsl() ;
     db.setDatabaseName("./db/database.db");
 }
 
