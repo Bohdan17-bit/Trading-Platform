@@ -8,6 +8,7 @@
 #include "database.h"
 #include "portfoliowindow.h"
 #include "tablemodeltradehistory.h"
+#include "apiserviceresponse.h"
 
 #include <QMainWindow>
 #include <QGridLayout>
@@ -64,7 +65,7 @@ public slots:
     void setPriceToBuyEditTextBox(double base_price);
     void setPriceToSellEditTextBox(double base_price);
     void drawDiagram();
-    void parseJson(QJsonDocument document);
+    void reDrawCandleChart(ApiServiceResponse response);
 private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;

@@ -1,10 +1,12 @@
 #include "tradewindow.h"
 #include "ui_tradewindow.h"
 #include "txtreader.h"
+#include "candlesticklistbuilder.h"
 
 #include <QGridLayout>
 #include <cmath>
 #include "singleuser.h"
+#include "apiserviceresponse.h"
 
 TradeWindow::TradeWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -306,9 +308,9 @@ void TradeWindow::getChartData5Minutes()
                                                 TimeConverter::getCurrentUnixTime(),
                                                 TimeConverter::get5MinuteInSeconds());
 
-    QJsonDocument json = ApiService::MakeRequest(api_address);
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
-    parseJson(json);
+    reDrawCandleChart(response);
 }
 
 
@@ -319,9 +321,9 @@ void TradeWindow::getChartData15Minutes()
                                                       TimeConverter::getLastOneDayUnixTime(),
                                                       TimeConverter::getCurrentUnixTime(),
                                                       TimeConverter::get15MinuteInSeconds());
-    QJsonDocument json = ApiService::MakeRequest(api_address);
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
-    parseJson(json);
+    reDrawCandleChart(response);
 }
 
 
@@ -332,9 +334,9 @@ void TradeWindow::getChartData2Hours()
                                                       TimeConverter::getLastWeekUnixTime(),
                                                       TimeConverter::getCurrentUnixTime(),
                                                       TimeConverter::get2HourInSeconds());
-    QJsonDocument json = ApiService::MakeRequest(api_address);
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
-    parseJson(json);
+    reDrawCandleChart(response);
 }
 
 
@@ -363,8 +365,8 @@ void TradeWindow::getLastCandle()
         break;
     }
     qDebug() << api_address;
-    QJsonDocument json = ApiService::MakeRequest(api_address);
-    setLastCandle(json);
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));
+    setLastCandle(response.get_response());
 }
 
 
@@ -374,34 +376,26 @@ void TradeWindow::setLastCandle(QJsonDocument document)
     QJsonValue new_last_candle = jsonArray.last();
 
     QString date = new_last_candle.toObject().value("date").toString();
-    qreal high = new_last_candle.toObject().value("high").toString().toDouble();
-    qreal low = new_last_candle.toObject().value("low").toString().toDouble();
-    qreal open = new_last_candle.toObject().value("open").toString().toDouble();
-    qreal close = new_last_candle.toObject().value("close").toString().toDouble();
 
     if(date != last_candle.toObject().value("date").toString())
     {
-        candle_graph->addCandleStickSet(date.toDouble(), open, close, low, high);
         getChartGeneral();
     }
 }
 
 
-void TradeWindow::parseJson(QJsonDocument document)
+void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
 {
     candle_graph->refresh_graph_builder();
-    QJsonArray jsonArray = document.array();
-    foreach(const QJsonValue &value, jsonArray)
-    {
-        qreal date = value.toObject().value("date").toString().toDouble();
-        qreal high = value.toObject().value("high").toString().toDouble();
-        qreal low = value.toObject().value("low").toString().toDouble();
-        qreal open = value.toObject().value("open").toString().toDouble();
-        qreal close = value.toObject().value("close").toString().toDouble();
-        candle_graph->addCandleStickSet(date, open, close, low, high);
-    }
-    last_candle = jsonArray.last();
+    // перестворюємо діаграму
+    candle_graph->CandleStickList = (CandleStickList*) new CandleStickListBuilder(response);
+    // створення адаптеру
+    candle_graph->addAllCandleStickSets(candle_graph->CandleStickList->get_list_candlestick());
+    // клієнт викликає адаптер і складає свічки
+    last_candle = response.get_response().array().last();
+    // запам'ятовуємо останню свічку для перевірок
     drawDiagram();
+    // перемальовуємо діаграму
 }
 
 

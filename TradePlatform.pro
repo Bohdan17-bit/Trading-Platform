@@ -11,7 +11,10 @@ CONFIG += c++17
 SOURCES += \
     apiaddressbuilder.cpp \
     apiservice.cpp \
+    apiserviceresponse.cpp \
     candlegraphbuilder.cpp \
+    candlesticklist.cpp \
+    candlesticklistbuilder.cpp \
     chartview.cpp \
     database.cpp \
     drilldownchart.cpp \
@@ -29,7 +32,10 @@ SOURCES += \
 HEADERS += \
     apiaddressbuilder.h \
     apiservice.h \
+    apiserviceresponse.h \
     candlegraphbuilder.h \
+    candlesticklist.h \
+    candlesticklistbuilder.h \
     chartview.h \
     database.h \
     drilldownchart.h \
@@ -60,4 +66,6 @@ DISTFILES += \
     images/arrow-right.png \
     images/exit.png \
     images/green_triangle.png \
+    images/icon.ico \
+    images/icon.png \
     images/red_triangle.png
