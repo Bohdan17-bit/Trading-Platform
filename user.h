@@ -28,6 +28,7 @@ public:
 
     QString discoverName();
     double discoverBalance();
+    QVector<QPair<QString, double>> getCoinsList();
 
     bool createNewUser(QString user_name);
     bool userIsExists(QString user_name);

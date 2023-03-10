@@ -7,6 +7,11 @@ void User::loadUserData()
     loadCoinsList();
 }
 
+QVector<QPair<QString, double>> User::getCoinsList()
+{
+    return coins_list;
+}
+
 QString User::discoverName()
 {
     return user_name;

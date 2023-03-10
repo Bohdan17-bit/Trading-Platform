@@ -51,8 +51,6 @@ private:
     QWidget *diagram;
     QJsonValue last_candle;
     TableModelTradeHistory *model;
-signals:
-    void sendUserName(QString user_name);
 public slots:
     void getChartGeneral();
     void getChartData5Minutes();

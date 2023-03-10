@@ -5,8 +5,6 @@
 #include <QtCharts/QLegend>
 #include <QtCharts/QPieSeries>
 #include <QtCore/QRandomGenerator>
-#include "database.h"
-#include "singleuser.h"
 
 
 PiechartWindow::PiechartWindow(QWidget *parent) :

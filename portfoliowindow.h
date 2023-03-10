@@ -2,9 +2,8 @@
 #define PORTFOLIOWINDOW_H
 
 #include <QWidget>
-#include "database.h"
 #include "piechartwindow.h"
-
+#include "user.h"
 
 namespace Ui {
     class PortfolioWindow;
@@ -27,10 +26,9 @@ class PortfolioWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit PortfolioWindow(QWidget *parent = nullptr);
+    explicit PortfolioWindow(User *user, QWidget *parent = nullptr);
     ~PortfolioWindow();
     QVector <DatabaseCryptocoinsData> list_cryptocoins;
-    void getUserName(QString user_name);
 
 signals:
     void tradeWindowShow();
@@ -54,7 +52,7 @@ signals:
 private:
     Ui::PortfolioWindow *ui;
     PiechartWindow *piechartWindow;
-    QString user_name;
+    User *user;
 };
 
 #endif // PORTFOLIOWINDOW_H

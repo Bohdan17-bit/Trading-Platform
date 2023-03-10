@@ -4,7 +4,6 @@
 #include "candlesticklistbuilder.h"
 
 #include <QGridLayout>
-#include "singleuser.h"
 #include "apiserviceresponse.h"
 
 TradeWindow::TradeWindow(User *user, QWidget *parent)
@@ -17,7 +16,7 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
 
     candle_graph = new CandleGraphBuilder();
     main_layout_diagram = new QGridLayout();
-    portfolioWindow = new PortfolioWindow();
+    portfolioWindow = new PortfolioWindow(user);
 
     diagram = candle_graph->getGraphChartView();
     main_layout_diagram->addWidget(diagram);
@@ -520,10 +519,8 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 
 void TradeWindow::on_to_portfolio_btn_clicked()
 {
-    connect(this, &TradeWindow::sendUserName, portfolioWindow, &PortfolioWindow::getUserName);
-    //emit sendUserName(user_name);
-    //portfolioWindow->show();
-    //this->close();
+    portfolioWindow->show();
+    this->close();
 }
 
 

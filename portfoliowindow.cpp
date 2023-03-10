@@ -3,17 +3,18 @@
 #include "apiaddressbuilder.h"
 #include "apiservice.h"
 #include "txtreader.h"
-#include "database.h"
 
 
-PortfolioWindow::PortfolioWindow(QWidget *parent) :
+PortfolioWindow::PortfolioWindow(User *user, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PortfolioWindow)
 {
     ui->setupUi(this);
     setWindowTitle("Портфоліо");
+    this->user = user;
     piechartWindow = new PiechartWindow();
     initSettingTablePortfolio();
+    initDataCryptocoins();
 }
 
 
@@ -49,13 +50,6 @@ void PortfolioWindow::getDataCryptocoinsFromAPI()
 }
 
 
-void PortfolioWindow::getUserName(QString user_name)
-{
-    this->user_name = user_name;
-    initDataCryptocoins();
-}
-
-
 void PortfolioWindow::initDataCryptocoins()
 {
     getDataCryptocoinsFromAPI();
@@ -80,7 +74,7 @@ void PortfolioWindow::showListCryptocoins()
 
 void PortfolioWindow::getDataCryptocoinsFromDatabase()
 {
-    QVector<QPair<QString, double>> coinsDatabase = Database::getNumberAllCryptocurrencies(user_name);
+    QVector<QPair<QString, double>> coinsDatabase = user->getCoinsList();
     for(int i = 0; i < list_cryptocoins.length(); i++)
     {
         for(int j = 0; j < coinsDatabase.length(); j++)
@@ -173,7 +167,7 @@ void PortfolioWindow::on_piechartWindow_button_clicked()
 void PortfolioWindow::prepare_data_to_pieChart()
 {
     QVector<QPair<QString, double>> coins_to_pieChart;
-    double balance = Database::getBalance(user_name);
+    double balance = user->discoverBalance();
     QPair<QString, double> balance_usdt;
     balance_usdt.first = "USD";
     balance_usdt.second = balance;
