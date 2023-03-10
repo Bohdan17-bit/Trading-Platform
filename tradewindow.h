@@ -14,6 +14,7 @@
 #include <QGridLayout>
 #include <QSqlTableModel>
 #include <QMessageBox>
+#include "user.h"
 
 enum Interval { FIVE_MINUTES, FIFTEEN_MINUTES, TWO_HOURS };
 
@@ -26,7 +27,7 @@ class TradeWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    TradeWindow(QWidget *parent = nullptr);
+    TradeWindow(User *user, QWidget *parent = nullptr);
     ~TradeWindow();
     void InitTimers();
     void setDefaultSettings();
@@ -40,8 +41,7 @@ private:
     double last_price = 0;
     QString current_pair;
     QString current_coin;
-    QString user_name;
-    double balance = 0;
+    User *user;
     QTimer *timer_refresh_chart;
     QTimer *timer_refresh_price;
     bool minutes_5_btn;
@@ -87,5 +87,6 @@ private slots:
     void refreshTableTradeHistory();
     void on_to_portfolio_btn_clicked();
     void on_exit_button_clicked();
+    void update_gui_after_transaction();
 };
 #endif // TRADEWINDOW_H

@@ -4,16 +4,15 @@
 #include "candlesticklistbuilder.h"
 
 #include <QGridLayout>
-#include <cmath>
 #include "singleuser.h"
 #include "apiserviceresponse.h"
 
-TradeWindow::TradeWindow(QWidget *parent)
+TradeWindow::TradeWindow(User *user, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TradeWindow)
 {
     ui->setupUi(this);
-    user_name = SingleUser::GetInstance()->getActiveUser();
+    this->user = user;
     setWindowTitle("Головне вікно");
 
     candle_graph = new CandleGraphBuilder();
@@ -75,7 +74,7 @@ void TradeWindow::initTableTradeHistory()
     model = new TableModelTradeHistory(this);
     model->setTable("TradeHistory");
 
-    model->setFilter("name = '"+ user_name + "'");
+    model->setFilter("name = '"+ user->discoverName() + "'");
     model->select();
 
     //model->setHeaderData(1, Qt::Horizontal, "Дія", Qt::DisplayRole);
@@ -156,9 +155,7 @@ void TradeWindow::setDefaultSettings()
 
 void TradeWindow::update_balance_label()
 {
-    balance = Database::getBalance(user_name);
-    ui->balance_label->setText("Баланс : " + QString::number(balance));
-    qDebug() << balance;
+    ui->balance_label->setText("Баланс : " + QString::number(user->discoverBalance()));
 }
 
 
@@ -170,8 +167,7 @@ void TradeWindow::update_coins_balance_label()
         current_column = 0;
     }
     QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
-    double number_coins = Database::getNumberCryptocurrency(user_name, cryptocurrency);
-    ui->coins_balance_label->setText("Монети: " + QString::number(number_coins));
+    ui->coins_balance_label->setText("Монети: " + QString::number(user->getNumberOfCoin(cryptocurrency)));
 }
 
 
@@ -210,7 +206,6 @@ void TradeWindow::getPriceCurrentPair()
         ui->price_label->setStyleSheet("color: red;");
     }
     last_price = price.toDouble();
-    //last_price = round(last_price*100)/100;
     ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
     setPriceToBuyEditTextBox(last_price);
     setPriceToSellEditTextBox(last_price);
@@ -459,27 +454,32 @@ void TradeWindow::on_table_coins_cellClicked(int row, int column)
 }
 
 
+void TradeWindow::update_gui_after_transaction()
+{
+    refreshTableTradeHistory();
+    update_coins_balance_label();
+    update_balance_label();
+}
+
+
 void TradeWindow::on_btn_buy_cryptocurrency_clicked()
 {
-    double total = ui->lineEdit_total_to_buy->text().toDouble();
+    double total_usd_spend = ui->lineEdit_total_to_buy->text().toDouble();
     double number_crypto = ui->lineEdit_count_buy->text().toDouble();
-    if(balance >= total)
+    double price = ui->linedEdit_price_buy->text().toDouble();
+
+    int current_column = ui->table_coins->currentColumn();
+    if(current_column < 0)
     {
-        balance = balance - total;
-        Database::rewriteBalance(user_name, balance);
-        update_balance_label();
-        int current_column = ui->table_coins->currentColumn();
-        if(current_column < 0)
-        {
-            current_column = 0;
-        }
-        QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
-        Database::updateNumberCryptocurrencyPlus(user_name, number_crypto, cryptocurrency);
-        double price = ui->linedEdit_price_buy->text().toDouble();
-        total = round(total*100)/100;
-        Database::writeRecordToHistory(user_name, "buy", cryptocurrency, number_crypto, price, total);
-        refreshTableTradeHistory();
-        update_coins_balance_label();
+        current_column = 0;
+    }
+
+    QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
+
+    if(user->HaveEnoughMoney(total_usd_spend))
+    {
+        user->buyCoin(cryptocurrency, number_crypto, price, total_usd_spend);
+        update_gui_after_transaction();
     }
     else
     {
@@ -492,26 +492,22 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
 
 void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 {
+    double count_usd_to_get = ui->lineEdit_total_to_sell->text().toDouble();
+    double price = ui->linedEdit_price_sell->text().toDouble();
+    double count_cryptocurrency_to_sell = ui->lineEdit_count_sell->text().toDouble();
+
     int current_column = ui->table_coins->currentColumn();
     if(current_column < 0)
     {
         current_column = 0;
     }
+
     QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
-    double old_number_cryptocurrency = Database::getNumberCryptocurrency(user_name, cryptocurrency);
-    double count_cryptocurrency_to_sell = ui->lineEdit_count_sell->text().toDouble();
-    if(old_number_cryptocurrency >= count_cryptocurrency_to_sell)
+
+    if(user->HaveEnoughCoins(cryptocurrency, count_cryptocurrency_to_sell))
     {
-        double total_usd_to_get = ui->lineEdit_total_to_sell->text().toDouble();
-        double price = ui->linedEdit_price_sell->text().toDouble();
-        balance += total_usd_to_get;
-        Database::rewriteBalance(user_name, balance);
-        update_balance_label();
-        Database::updateNumberCryptocurrencyMinus(user_name, count_cryptocurrency_to_sell, cryptocurrency);
-        total_usd_to_get = round(total_usd_to_get*100)/100;
-        Database::writeRecordToHistory(user_name, "sell", cryptocurrency, count_cryptocurrency_to_sell, price, total_usd_to_get);
-        refreshTableTradeHistory();
-        update_coins_balance_label();
+        user->sellCoin(cryptocurrency, count_cryptocurrency_to_sell, price, count_usd_to_get);
+        update_gui_after_transaction();
     }
     else
     {
@@ -525,9 +521,9 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 void TradeWindow::on_to_portfolio_btn_clicked()
 {
     connect(this, &TradeWindow::sendUserName, portfolioWindow, &PortfolioWindow::getUserName);
-    emit sendUserName(user_name);
-    portfolioWindow->show();
-    this->close();
+    //emit sendUserName(user_name);
+    //portfolioWindow->show();
+    //this->close();
 }
 
 

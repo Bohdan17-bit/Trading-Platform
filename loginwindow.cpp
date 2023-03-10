@@ -1,6 +1,5 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
-#include "singleuser.h"
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QWidget(parent),
@@ -8,6 +7,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Вхід");
+    user = new User();
 }
 
 
@@ -21,14 +21,17 @@ LoginWindow::~LoginWindow()
 
 void LoginWindow::on_btn_login_clicked()
 {
-    QString user = ui->lineEdit_username->text();
-    if(Database::userIsExist(user))
+    QString user_name = ui->lineEdit_username->text();
+
+    if(user->userIsExists(user_name))
     {
-        SingleUser *singleUser = SingleUser::CreateInstance(user);
-        tradeWindow = new TradeWindow();
+        user->setUsername(user_name);
+        user->loadUserData();
+        tradeWindow = new TradeWindow(user);
         tradeWindow->show();
         this->close();
     }
+
     else
     {
         QMessageBox message;
@@ -40,6 +43,8 @@ void LoginWindow::on_btn_login_clicked()
 
 void LoginWindow::on_btn_new_account_clicked()
 {
+    QString user_name = ui->lineEdit_username->text();
+
     if(ui->lineEdit_username->text().isEmpty())
     {
         QMessageBox message;
@@ -47,8 +52,8 @@ void LoginWindow::on_btn_new_account_clicked()
         message.exec();
         return;
     }
-    QString user = ui->lineEdit_username->text();
-    if(Database::userIsExist(user))
+
+    if(user->userIsExists(user_name))
     {
         QMessageBox message;
         message.setText("Користувач з таким ім'ям вже існує!");
@@ -57,10 +62,9 @@ void LoginWindow::on_btn_new_account_clicked()
     else // якщо не існує
     {
         QMessageBox message;
-        if(Database::accountIsCreated(user))
+        if(user->createNewUser(user_name))
         {
-            Database::createEmptyFieldsPortfolio(user);
-            message.setText("Створено нового користувача: " + user);
+            message.setText("Створено нового користувача: " + user_name);
             message.exec();
         }
         else

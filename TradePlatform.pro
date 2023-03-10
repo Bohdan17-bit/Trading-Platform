@@ -23,11 +23,11 @@ SOURCES += \
     main.cpp \
     piechartwindow.cpp \
     portfoliowindow.cpp \
-    singleuser.cpp \
     tablemodeltradehistory.cpp \
     timeconverter.cpp \
     tradewindow.cpp \
-    txtreader.cpp
+    txtreader.cpp \
+    user.cpp
 
 HEADERS += \
     apiaddressbuilder.h \
@@ -43,11 +43,11 @@ HEADERS += \
     loginwindow.h \
     piechartwindow.h \
     portfoliowindow.h \
-    singleuser.h \
     tablemodeltradehistory.h \
     timeconverter.h \
     tradewindow.h \
-    txtreader.h
+    txtreader.h \
+    user.h
 
 FORMS += \
     loginwindow.ui \
