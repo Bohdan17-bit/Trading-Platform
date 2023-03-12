@@ -410,6 +410,9 @@
                 <height>40</height>
                </size>
               </property>
+              <property name="soundPath" stdset="0">
+               <string/>
+              </property>
              </widget>
             </item>
             <item>
@@ -692,6 +695,9 @@
             <width>16777215</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
           </property>
           <property name="styleSheet">
            <string notr="true">QTableWidget::item{

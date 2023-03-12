@@ -1,4 +1,4 @@
-QT       += core gui charts sql
+QT       += core gui charts sql multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets network
 
@@ -23,6 +23,7 @@ SOURCES += \
     main.cpp \
     piechartwindow.cpp \
     portfoliowindow.cpp \
+    sound.cpp \
     tablemodeltradehistory.cpp \
     timeconverter.cpp \
     tradewindow.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     loginwindow.h \
     piechartwindow.h \
     portfoliowindow.h \
+    sound.h \
     tablemodeltradehistory.h \
     timeconverter.h \
     tradewindow.h \
@@ -71,4 +73,11 @@ DISTFILES += \
     images/green_triangle.png \
     images/icon.ico \
     images/icon.png \
-    images/red_triangle.png
+    images/loading.gif \
+    images/red_triangle.png \
+    sound/click-error.wav \
+    sound/closing_effect.wav \
+    sound/interface-hover.wav \
+    sound/interface_click.wav \
+    sound/joystick_trigger.wav \
+    sound/process_complete.wav

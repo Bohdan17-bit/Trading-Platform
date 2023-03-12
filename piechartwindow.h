@@ -5,6 +5,7 @@
 #include "drilldownchart.h"
 #include "drilldownslice.h"
 #include <QtCharts/QChartView>
+#include "sound.h"
 
 namespace Ui {
 class PiechartWindow;
@@ -18,6 +19,8 @@ public:
     explicit PiechartWindow(QWidget *parent = nullptr);
     ~PiechartWindow();
     void getCoins(QVector<QPair<QString, double>> coins);
+    void getSoundObj(Sound *sound);
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void initSettingsChart();
@@ -29,6 +32,7 @@ private:
     DrillDownChart *chart;
     QPieSeries *coinSeries;
     QChartView *chartView;
+    Sound *sound;
 };
 
 #endif // PIECHARTWINDOW_H

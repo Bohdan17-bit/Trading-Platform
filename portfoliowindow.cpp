@@ -12,15 +12,20 @@ PortfolioWindow::PortfolioWindow(User *user, QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("Портфоліо");
     this->user = user;
-    piechartWindow = new PiechartWindow();
     initSettingTablePortfolio();
-    initDataCryptocoins();
 }
 
 
 PortfolioWindow::~PortfolioWindow()
 {
     delete ui;
+}
+
+
+void PortfolioWindow::showEvent(QShowEvent *event)
+{
+    piechartWindow = new PiechartWindow();
+    initDataCryptocoins();
 }
 
 
@@ -151,6 +156,7 @@ void PortfolioWindow::initTablePortfolio()
 
 void PortfolioWindow::on_tradeWindow_button_clicked()
 {
+    sound->transitionOnAnotherWindow();
     emit tradeWindowShow();
     this->close();
 }
@@ -158,9 +164,18 @@ void PortfolioWindow::on_tradeWindow_button_clicked()
 
 void PortfolioWindow::on_piechartWindow_button_clicked()
 {
+    sound->transitionOnAnotherWindow();
     connect(this, &PortfolioWindow::sendCoinsData, piechartWindow, &PiechartWindow::getCoins);
+    connect(this, &PortfolioWindow::sendSoundObj, piechartWindow, &PiechartWindow::getSoundObj);
+    emit sendSoundObj(sound);
     prepare_data_to_pieChart();
     piechartWindow->show();
+}
+
+
+void PortfolioWindow::getSoundObj(Sound *sound)
+{
+    this->sound = sound;
 }
 
 

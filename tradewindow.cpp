@@ -13,13 +13,21 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     ui->setupUi(this);
     this->user = user;
     setWindowTitle("Головне вікно");
+    no_internet_connection = false;
 
     candle_graph = new CandleGraphBuilder();
-    main_layout_diagram = new QGridLayout();
+    main_layout_diagram = new QBoxLayout(QBoxLayout::RightToLeft);
+
+    initLoading();
+
     portfolioWindow = new PortfolioWindow(user);
 
     diagram = candle_graph->getGraphChartView();
+
     main_layout_diagram->addWidget(diagram);
+    main_layout_diagram->addWidget(label_process, Qt::AlignCenter);
+    label_process->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     ui->widget->setLayout(main_layout_diagram);
 
     setDefaultSettings();
@@ -64,7 +72,7 @@ void TradeWindow::stopAllRequests()
 void TradeWindow::startAllRequests()
 {
     timer_refresh_price->start(1000);
-    timer_refresh_chart->start(10000); // перевірка оновлення графіку кожні 10 секунд
+    timer_refresh_chart->start(5000); // перевірка оновлення графіку кожні 10 секунд
 }
 
 
@@ -103,6 +111,12 @@ TradeWindow::~TradeWindow()
     delete main_layout_diagram;
     delete candle_graph;
     delete ui;
+}
+
+
+void TradeWindow::getSoundObj(Sound *sound)
+{
+    this->sound = sound;
 }
 
 
@@ -206,8 +220,37 @@ void TradeWindow::getPriceCurrentPair()
     }
     last_price = price.toDouble();
     ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
+    if(last_price == 0)
+    {
+        no_internet_connection = true;
+        disabledBuySellAction();
+        return;
+    }
+    else
+    {
+        no_internet_connection = false;
+        enableBuySellAction();
+    }
     setPriceToBuyEditTextBox(last_price);
     setPriceToSellEditTextBox(last_price);
+}
+
+
+void TradeWindow::enableBuySellAction()
+{
+    ui->lineEdit_count_buy->setDisabled(false);
+    ui->lineEdit_count_sell->setDisabled(false);
+    ui->btn_buy_cryptocurrency->setDisabled(false);
+    ui->btn_sell_cryptocurrency->setDisabled(false);
+}
+
+
+void TradeWindow::disabledBuySellAction()
+{
+    ui->lineEdit_count_buy->setDisabled(true);
+    ui->lineEdit_count_sell->setDisabled(true);
+    ui->btn_buy_cryptocurrency->setDisabled(true);
+    ui->btn_sell_cryptocurrency->setDisabled(true);
 }
 
 
@@ -273,6 +316,31 @@ void TradeWindow::on_lineEdit_count_sell_textEdited(const QString &arg1)
         double total = price * number;
         ui->lineEdit_total_to_sell->setText(QString::number(total));
     }
+}
+
+
+void TradeWindow::initLoading()
+{
+    movie_loading = new QMovie("./images/loading.gif");
+    movie_loading->setScaledSize(QSize(150, 150));
+    label_process = new QLabel();
+    label_process->setAlignment(Qt::AlignCenter);
+    label_process->setMovie(movie_loading);
+    movie_loading->start();
+}
+
+
+void TradeWindow::setDiragramInsteadLoading()
+{
+    label_process->hide();
+    diagram->show();
+}
+
+
+void TradeWindow::setLoadingInsteadDiagram()
+{
+    diagram->hide();
+    label_process->show();
 }
 
 
@@ -360,6 +428,13 @@ void TradeWindow::getLastCandle()
     }
     qDebug() << api_address;
     ApiServiceResponse response(ApiService::MakeRequest(api_address));
+    qDebug() << QString::fromStdString(response.get_response().toJson().toStdString());
+    if(response.get_response().isArray() == false)
+    {
+        setLoadingInsteadDiagram();
+        return;
+    }
+    setDiragramInsteadLoading();
     setLastCandle(response.get_response());
 }
 
@@ -380,6 +455,14 @@ void TradeWindow::setLastCandle(QJsonDocument document)
 
 void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
 {
+    qDebug() << QString::fromStdString(response.get_response().toJson().toStdString());
+
+    if(response.get_response().isArray() == false)
+    {
+        setLoadingInsteadDiagram();
+        return;
+    }
+    setDiragramInsteadLoading();
     candle_graph->refresh_graph_builder();
     // перестворюємо діаграму
     candle_graph->CandleStickList = (CandleStickList*) new CandleStickListBuilder(response);
@@ -415,6 +498,7 @@ void TradeWindow::resizeEvent(QResizeEvent *e)
 
 void TradeWindow::on_btn_5_minutes_clicked()
 {
+    sound->simpleClick();
     setCurrentInterval(Interval::FIVE_MINUTES);
     ui->btn_5_minutes->setStyleSheet("border: 2px solid green;	background: greenyellow; height: 40px; width: 40px; border-radius: 5px;");
     ui->btn_2_hours->setStyleSheet("background:#92E2F1; border: 2px solid #158094; height: 40px; width: 40px; border-radius: 5px;");
@@ -425,6 +509,7 @@ void TradeWindow::on_btn_5_minutes_clicked()
 
 void TradeWindow::on_btn_15_minutes_clicked()
 {
+    sound->simpleClick();
     setCurrentInterval(Interval::FIFTEEN_MINUTES);
     ui->btn_15_minutes->setStyleSheet("border: 2px solid green; background: greenyellow; height: 40px; width: 40px; border-radius: 5px;");
     ui->btn_2_hours->setStyleSheet("background:#92E2F1; border: 2px solid #158094; height: 40px; width: 40px; border-radius: 5px;");
@@ -435,6 +520,7 @@ void TradeWindow::on_btn_15_minutes_clicked()
 
 void TradeWindow::on_btn_2_hours_clicked()
 {
+    sound->simpleClick();
     setCurrentInterval(Interval::TWO_HOURS);
     ui->btn_2_hours->setStyleSheet("border: 2px solid green; background: greenyellow; height: 40px; width: 40px; border-radius: 5px;");
     ui->btn_15_minutes->setStyleSheet("background:#92E2F1; border: 2px solid #158094; height: 40px; width: 40px; border-radius: 5px;");
@@ -467,6 +553,15 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
     double number_crypto = ui->lineEdit_count_buy->text().toDouble();
     double price = ui->linedEdit_price_buy->text().toDouble();
 
+    if(ui->lineEdit_count_buy->text() == "0" || ui->lineEdit_count_buy->text() == "")
+    {
+        sound->error();
+        QMessageBox message;
+        message.setText("Введіть число криптовалюти!");
+        message.exec();
+        return;
+    }
+
     int current_column = ui->table_coins->currentColumn();
     if(current_column < 0)
     {
@@ -482,6 +577,7 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
     }
     else
     {
+        sound->error();
         QMessageBox message;
         message.setText("У вас недостатньо коштів!");
         message.exec();
@@ -491,6 +587,15 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
 
 void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 {
+    if(ui->lineEdit_count_sell->text() == "0" || ui->lineEdit_count_sell->text() == "")
+    {
+        sound->error();
+        QMessageBox message;
+        message.setText("Введіть число криптовалюти!");
+        message.exec();
+        return;
+    }
+
     double count_usd_to_get = ui->lineEdit_total_to_sell->text().toDouble();
     double price = ui->linedEdit_price_sell->text().toDouble();
     double count_cryptocurrency_to_sell = ui->lineEdit_count_sell->text().toDouble();
@@ -510,6 +615,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
     }
     else
     {
+        sound->error();
         QMessageBox message;
         message.setText("У вас недостатньо криптовалюти!");
         message.exec();
@@ -519,13 +625,32 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 
 void TradeWindow::on_to_portfolio_btn_clicked()
 {
-    portfolioWindow->show();
-    this->close();
+    if(no_internet_connection)
+    {
+        sound->error();
+        QMessageBox message;
+        message.setText("Неможливо переглянути портфель!\nВідсутнє підключення до мережі Інтернет!");
+        sound->error();
+        message.exec();
+    }
+    else
+    {
+        sound->transitionOnAnotherWindow();
+        connect(this, &TradeWindow::sendSoundObj, portfolioWindow, &PortfolioWindow::getSoundObj);
+        emit sendSoundObj(sound);
+        portfolioWindow->show();
+        this->close();
+    }
 }
 
 
 void TradeWindow::on_exit_button_clicked()
 {
-    qApp->exit();
+    sound->close();
+    QTimer::singleShot(1000, this, SLOT(closeApp()));
 }
 
+void TradeWindow::closeApp()
+{
+    qApp->exit();
+}

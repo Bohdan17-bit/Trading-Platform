@@ -2,6 +2,8 @@
 #include "qdebug.h"
 #include "ui_piechartwindow.h"
 
+#include <QThread>
+#include <QTimer>
 #include <QtCharts/QLegend>
 #include <QtCharts/QPieSeries>
 #include <QtCore/QRandomGenerator>
@@ -20,6 +22,12 @@ PiechartWindow::PiechartWindow(QWidget *parent) :
 PiechartWindow::~PiechartWindow()
 {
     delete ui;
+}
+
+
+void PiechartWindow::closeEvent(QCloseEvent *event)
+{
+    sound->close();
 }
 
 
@@ -50,6 +58,11 @@ void PiechartWindow::initSettingsChart()
     chart->legend()->setAlignment(Qt::AlignRight);
 }
 
+
+void PiechartWindow::getSoundObj(Sound *sound)
+{
+    this->sound = sound;
+}
 
 void PiechartWindow::initSettingsPieSeries()
 {

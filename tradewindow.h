@@ -5,7 +5,6 @@
 #include "apiservice.h"
 #include "apiaddressbuilder.h"
 #include "candlegraphbuilder.h"
-#include "database.h"
 #include "portfoliowindow.h"
 #include "tablemodeltradehistory.h"
 #include "apiserviceresponse.h"
@@ -15,6 +14,7 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 #include "user.h"
+#include "sound.h"
 
 enum Interval { FIVE_MINUTES, FIFTEEN_MINUTES, TWO_HOURS };
 
@@ -35,22 +35,29 @@ public:
     void changeCryptoPair(QString pair);
     void stopAllRequests();
     void startAllRequests();
+    void getSoundObj(Sound *sound);
 private:
     Ui::TradeWindow *ui;
     PortfolioWindow *portfolioWindow;
+    QLabel *label_process;
+    bool no_internet_connection;
     double last_price = 0;
     QString current_pair;
     QString current_coin;
     User *user;
+    Sound *sound;
     QTimer *timer_refresh_chart;
     QTimer *timer_refresh_price;
     bool minutes_5_btn;
     Interval interval;
     CandleGraphBuilder *candle_graph;
-    QGridLayout *main_layout_diagram;
+    QBoxLayout *main_layout_diagram;
     QWidget *diagram;
+    QMovie *movie_loading;
     QJsonValue last_candle;
     TableModelTradeHistory *model;
+signals:
+    void sendSoundObj(Sound *sound);
 public slots:
     void getChartGeneral();
     void getChartData5Minutes();
@@ -68,6 +75,7 @@ private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void resizeEvent(QResizeEvent *e) override;
+    void closeApp();
     void update_visible_columns_candleChart();
     void clearFields();
     void init_table_coins();
@@ -86,5 +94,10 @@ private slots:
     void on_to_portfolio_btn_clicked();
     void on_exit_button_clicked();
     void update_gui_after_transaction();
+    void setLoadingInsteadDiagram();
+    void setDiragramInsteadLoading();
+    void initLoading();
+    void disabledBuySellAction();
+    void enableBuySellAction();
 };
 #endif // TRADEWINDOW_H
