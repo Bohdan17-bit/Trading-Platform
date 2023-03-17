@@ -99,5 +99,6 @@ private slots:
     void initLoading();
     void disabledBuySellAction();
     void enableBuySellAction();
+    void on_table_coins_cellEntered(int row, int column);
 };
 #endif // TRADEWINDOW_H

@@ -72,7 +72,7 @@ void TradeWindow::stopAllRequests()
 void TradeWindow::startAllRequests()
 {
     timer_refresh_price->start(1000);
-    timer_refresh_chart->start(5000); // перевірка оновлення графіку кожні 10 секунд
+    timer_refresh_chart->start(10000); // перевірка оновлення графіку кожні 10 секунд
 }
 
 
@@ -228,6 +228,10 @@ void TradeWindow::getPriceCurrentPair()
     }
     else
     {
+        if(no_internet_connection == true)
+        {
+            getChartGeneral();
+        }
         no_internet_connection = false;
         enableBuySellAction();
     }
@@ -428,7 +432,6 @@ void TradeWindow::getLastCandle()
     }
     qDebug() << api_address;
     ApiServiceResponse response(ApiService::MakeRequest(api_address));
-    qDebug() << QString::fromStdString(response.get_response().toJson().toStdString());
     if(response.get_response().isArray() == false)
     {
         setLoadingInsteadDiagram();
@@ -455,8 +458,6 @@ void TradeWindow::setLastCandle(QJsonDocument document)
 
 void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
 {
-    qDebug() << QString::fromStdString(response.get_response().toJson().toStdString());
-
     if(response.get_response().isArray() == false)
     {
         setLoadingInsteadDiagram();
@@ -654,3 +655,9 @@ void TradeWindow::closeApp()
 {
     qApp->exit();
 }
+
+void TradeWindow::on_table_coins_cellEntered(int row, int column)
+{
+    sound->hover();
+}
+

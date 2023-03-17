@@ -701,8 +701,14 @@
           </property>
           <property name="styleSheet">
            <string notr="true">QTableWidget::item{
- selection-background-color: greenyellow;
-selection-color: black;
+ 	selection-background-color: greenyellow;
+	selection-color: black;
+}
+QTableWidget::item:hover{
+	 background: greenyellow;
+	 color: black;
+	 border: 2px solid green; 
+	 border-radius: 5px;
 }</string>
           </property>
           <property name="selectionMode">
