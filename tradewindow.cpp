@@ -573,6 +573,7 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
 
     if(user->HaveEnoughMoney(total_usd_spend))
     {
+        sound->processComplete();
         user->buyCoin(cryptocurrency, number_crypto, price, total_usd_spend);
         update_gui_after_transaction();
     }
@@ -611,6 +612,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
 
     if(user->HaveEnoughCoins(cryptocurrency, count_cryptocurrency_to_sell))
     {
+        sound->processComplete();
         user->sellCoin(cryptocurrency, count_cryptocurrency_to_sell, price, count_usd_to_get);
         update_gui_after_transaction();
     }
