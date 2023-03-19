@@ -222,18 +222,22 @@ void TradeWindow::getPriceCurrentPair()
     ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
     if(last_price == 0)
     {
-        no_internet_connection = true;
-        disabledBuySellAction();
-        return;
+        if(no_internet_connection == false)
+        {
+            no_internet_connection = true;
+            disabledBuySellAction();
+            setLoadingInsteadDiagram();
+            return;
+        }
     }
     else
     {
         if(no_internet_connection == true)
         {
             getChartGeneral();
+            no_internet_connection = false;
+            enableBuySellAction();
         }
-        no_internet_connection = false;
-        enableBuySellAction();
     }
     setPriceToBuyEditTextBox(last_price);
     setPriceToSellEditTextBox(last_price);
