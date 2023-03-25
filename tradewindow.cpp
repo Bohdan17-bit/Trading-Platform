@@ -46,6 +46,7 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
 
     connect(candle_graph->getGraphChartView(), &ChartView::mousePress, this, &TradeWindow::stopAllRequests);
     connect(candle_graph->getGraphChartView(), &ChartView::mouseRelease, this, &TradeWindow::startAllRequests);
+    update_visible_columns_candleChart();
 
 }
 

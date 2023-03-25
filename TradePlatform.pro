@@ -63,6 +63,9 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+INCLUDEPATH += ../dlls/openssl_x32
+INCLUDEPATH += ../dlls/openssl_x64
+
 DISTFILES += \
     images/arrow-left.png \
     images/arrow-right.png \
