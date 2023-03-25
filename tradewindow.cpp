@@ -2,6 +2,7 @@
 #include "ui_tradewindow.h"
 #include "txtreader.h"
 #include "candlesticklistbuilder.h"
+#include <QSslSocket>
 
 #include <QGridLayout>
 #include "apiserviceresponse.h"
@@ -491,7 +492,7 @@ void TradeWindow::drawDiagram()
 void TradeWindow::update_visible_columns_candleChart()
 {
     qDebug() << candle_graph->getGraphChartView()->chart()->size().width();
-    candle_graph->setLimitPoints(candle_graph->getGraphChartView()->chart()->size().width() / 90); // 90 px для кожної колонки
+    candle_graph->setLimitPoints(candle_graph->getGraphChartView()->chart()->size().width() / 100); // 100 px для кожної колонки
 }
 
 

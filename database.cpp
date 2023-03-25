@@ -5,6 +5,7 @@
 #include "txtreader.h"
 #include <QFileInfo>
 #include <QSslSocket>
+#include <QMessageBox>
 
 QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
 
