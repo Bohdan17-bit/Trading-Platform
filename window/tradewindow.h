@@ -6,14 +6,14 @@
 #include "api/apiaddressbuilder.h"
 #include "candles/candlegraphbuilder.h"
 #include "window/portfoliowindow.h"
-#include "tablemodeltradehistory.h"
+#include "tablemodel/tablemodeltradehistory.h"
 #include "api/apiserviceresponse.h"
 
 #include <QMainWindow>
 #include <QGridLayout>
 #include <QSqlTableModel>
 #include <QMessageBox>
-#include "user.h"
+#include "visitor/user.h"
 #include "utils/sound.h"
 
 enum Interval { FIVE_MINUTES, FIFTEEN_MINUTES, TWO_HOURS };

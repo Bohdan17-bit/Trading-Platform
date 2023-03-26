@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "window/piechartwindow.h"
-#include "user.h"
+#include "visitor/user.h"
 #include "utils/sound.h"
 
 namespace Ui {

@@ -8,7 +8,7 @@
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QDateTimeAxis>
-#include "chartview.h"
+#include "candles/chartview.h"
 #include "candles/candlesticklist.h"
 
 

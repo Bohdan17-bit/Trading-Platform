@@ -2,7 +2,7 @@
 #include "window/ui_portfoliowindow.h"
 #include "api/apiaddressbuilder.h"
 #include "api/apiservice.h"
-#include "txtreader.h"
+#include "utils/txtreader.h"
 
 
 PortfolioWindow::PortfolioWindow(User *user, QWidget *parent) :

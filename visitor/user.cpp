@@ -1,4 +1,4 @@
-#include "user.h"
+#include "visitor/user.h"
 #include <QDebug>
 
 void User::loadUserData()

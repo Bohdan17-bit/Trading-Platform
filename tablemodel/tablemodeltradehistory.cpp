@@ -1,4 +1,4 @@
-#include "tablemodeltradehistory.h"
+#include "tablemodel/tablemodeltradehistory.h"
 #include <QBrush>
 
 TableModelTradeHistory::TableModelTradeHistory(QObject *parent)

@@ -1,8 +1,8 @@
-#include "database.h"
+#include "storage/database.h"
 #include <QDir>
 #include "qvariant.h"
 #include <QDebug>
-#include "txtreader.h"
+#include "utils/txtreader.h"
 #include <QFileInfo>
 #include <QSslSocket>
 #include <QMessageBox>

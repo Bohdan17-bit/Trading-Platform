@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "window/tradewindow.h"
-#include "user.h"
+#include "visitor/user.h"
 #include <QMessageBox>
 #include "utils/sound.h"
 

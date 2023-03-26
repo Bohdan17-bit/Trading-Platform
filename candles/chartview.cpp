@@ -1,4 +1,4 @@
-#include "chartview.h"
+#include "candles/chartview.h"
 #include <QtCharts/QChartView>
 #include <QApplication>
 #include <QDebug>

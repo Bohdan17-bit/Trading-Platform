@@ -15,16 +15,16 @@ SOURCES += \
     candles/candlegraphbuilder.cpp \
     candles/candlesticklist.cpp \
     candles/candlesticklistbuilder.cpp \
-    chartview.cpp \
-    database.cpp \
+    candles/chartview.cpp \
     main.cpp \
     piechart/drilldownchart.cpp \
     piechart/drilldownslice.cpp \
-    tablemodeltradehistory.cpp \
-    txtreader.cpp \
-    user.cpp \
+    storage/database.cpp \
+    tablemodel/tablemodeltradehistory.cpp \
     utils/sound.cpp \
     utils/timeconverter.cpp \
+    utils/txtreader.cpp \
+    visitor/user.cpp \
     window/loginwindow.cpp \
     window/piechartwindow.cpp \
     window/portfoliowindow.cpp \
@@ -37,15 +37,15 @@ HEADERS += \
     candles/candlegraphbuilder.h \
     candles/candlesticklist.h \
     candles/candlesticklistbuilder.h \
-    chartview.h \
-    database.h \
+    candles/chartview.h \
     piechart/drilldownchart.h \
     piechart/drilldownslice.h \
-    tablemodeltradehistory.h \
-    txtreader.h \
-    user.h \
+    storage/database.h \
+    tablemodel/tablemodeltradehistory.h \
     utils/sound.h \
     utils/timeconverter.h \
+    utils/txtreader.h \
+    visitor/user.h \
     window/loginwindow.h \
     window/piechartwindow.h \
     window/portfoliowindow.h \
