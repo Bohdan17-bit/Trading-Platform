@@ -2,12 +2,12 @@
 #define TRADEWINDOW_H
 
 #include "timeconverter.h"
-#include "apiservice.h"
-#include "apiaddressbuilder.h"
-#include "candlegraphbuilder.h"
+#include "api/apiservice.h"
+#include "api/apiaddressbuilder.h"
+#include "candles/candlegraphbuilder.h"
 #include "portfoliowindow.h"
 #include "tablemodeltradehistory.h"
-#include "apiserviceresponse.h"
+#include "api/apiserviceresponse.h"
 
 #include <QMainWindow>
 #include <QGridLayout>

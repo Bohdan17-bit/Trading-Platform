@@ -1,11 +1,11 @@
 #include "tradewindow.h"
 #include "ui_tradewindow.h"
 #include "txtreader.h"
-#include "candlesticklistbuilder.h"
+#include "candles/candlesticklistbuilder.h"
 #include <QSslSocket>
 
 #include <QGridLayout>
-#include "apiserviceresponse.h"
+#include "api/apiserviceresponse.h"
 
 TradeWindow::TradeWindow(User *user, QWidget *parent)
     : QMainWindow(parent)

@@ -1,7 +1,7 @@
 #include "portfoliowindow.h"
 #include "ui_portfoliowindow.h"
-#include "apiaddressbuilder.h"
-#include "apiservice.h"
+#include "api/apiaddressbuilder.h"
+#include "api/apiservice.h"
 #include "txtreader.h"
 
 

@@ -9,12 +9,12 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    apiaddressbuilder.cpp \
-    apiservice.cpp \
-    apiserviceresponse.cpp \
-    candlegraphbuilder.cpp \
-    candlesticklist.cpp \
-    candlesticklistbuilder.cpp \
+    api/apiaddressbuilder.cpp \
+    api/apiservice.cpp \
+    api/apiserviceresponse.cpp \
+    candles/candlegraphbuilder.cpp \
+    candles/candlesticklist.cpp \
+    candles/candlesticklistbuilder.cpp \
     chartview.cpp \
     database.cpp \
     drilldownchart.cpp \
@@ -31,12 +31,13 @@ SOURCES += \
     user.cpp
 
 HEADERS += \
-    apiaddressbuilder.h \
-    apiservice.h \
-    apiserviceresponse.h \
-    candlegraphbuilder.h \
-    candlesticklist.h \
-    candlesticklistbuilder.h \
+    api/apiaddressbuilder.h \
+    api/apiservice.h \
+    api/apiserviceresponse.h \
+    candles/candlegraphbuilder.h \
+    candles/candlegraphbuilder.h \
+    candles/candlesticklist.h \
+    candles/candlesticklistbuilder.h \
     chartview.h \
     database.h \
     drilldownchart.h \
@@ -63,6 +64,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+INCLUDEPATH += ../api
 INCLUDEPATH += ../dlls/openssl_x32
 INCLUDEPATH += ../dlls/openssl_x64
 

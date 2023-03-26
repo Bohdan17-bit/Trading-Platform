@@ -9,7 +9,7 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QDateTimeAxis>
 #include "chartview.h"
-#include "candlesticklist.h"
+#include "candles/candlesticklist.h"
 
 
 class CandleGraphBuilder
