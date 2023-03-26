@@ -1,5 +1,5 @@
-#include "tradewindow.h"
-#include "ui_tradewindow.h"
+#include "window/tradewindow.h"
+#include "window/ui_tradewindow.h"
 #include "txtreader.h"
 #include "candles/candlesticklistbuilder.h"
 #include <QSslSocket>

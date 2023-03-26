@@ -19,22 +19,21 @@ SOURCES += \
     database.cpp \
     drilldownchart.cpp \
     drilldownslice.cpp \
-    loginwindow.cpp \
     main.cpp \
-    piechartwindow.cpp \
-    portfoliowindow.cpp \
     sound.cpp \
     tablemodeltradehistory.cpp \
     timeconverter.cpp \
-    tradewindow.cpp \
     txtreader.cpp \
-    user.cpp
+    user.cpp \
+    window/loginwindow.cpp \
+    window/piechartwindow.cpp \
+    window/portfoliowindow.cpp \
+    window/tradewindow.cpp
 
 HEADERS += \
     api/apiaddressbuilder.h \
     api/apiservice.h \
     api/apiserviceresponse.h \
-    candles/candlegraphbuilder.h \
     candles/candlegraphbuilder.h \
     candles/candlesticklist.h \
     candles/candlesticklistbuilder.h \
@@ -42,21 +41,25 @@ HEADERS += \
     database.h \
     drilldownchart.h \
     drilldownslice.h \
-    loginwindow.h \
-    piechartwindow.h \
-    portfoliowindow.h \
     sound.h \
     tablemodeltradehistory.h \
     timeconverter.h \
-    tradewindow.h \
     txtreader.h \
-    user.h
+    user.h \
+    window/loginwindow.h \
+    window/piechartwindow.h \
+    window/portfoliowindow.h \
+    window/tradewindow.h \
+    window/ui_loginwindow.h \
+    window/ui_piechartwindow.h \
+    window/ui_portfoliowindow.h \
+    window/ui_tradewindow.h
 
 FORMS += \
-    loginwindow.ui \
-    piechartwindow.ui \
-    portfoliowindow.ui \
-    tradewindow.ui
+    window/loginwindow.ui \
+    window/piechartwindow.ui \
+    window/portfoliowindow.ui \
+    window/tradewindow.ui
 
 
 # Default rules for deployment.

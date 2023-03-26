@@ -1,6 +1,6 @@
-#include "piechartwindow.h"
+#include "window/piechartwindow.h"
 #include "qdebug.h"
-#include "ui_piechartwindow.h"
+#include "window/ui_piechartwindow.h"
 
 #include <QThread>
 #include <QTimer>

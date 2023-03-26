@@ -2,7 +2,7 @@
 #define LOGINWINDOW_H
 
 #include <QWidget>
-#include "tradewindow.h"
+#include "window/tradewindow.h"
 #include "user.h"
 #include <QMessageBox>
 #include "sound.h"

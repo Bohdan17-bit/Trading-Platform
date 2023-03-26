@@ -2,7 +2,7 @@
 #define PORTFOLIOWINDOW_H
 
 #include <QWidget>
-#include "piechartwindow.h"
+#include "window/piechartwindow.h"
 #include "user.h"
 #include "sound.h"
 

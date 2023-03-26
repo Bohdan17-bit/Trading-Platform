@@ -5,7 +5,7 @@
 #include "api/apiservice.h"
 #include "api/apiaddressbuilder.h"
 #include "candles/candlegraphbuilder.h"
-#include "portfoliowindow.h"
+#include "window/portfoliowindow.h"
 #include "tablemodeltradehistory.h"
 #include "api/apiserviceresponse.h"
 
