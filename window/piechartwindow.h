@@ -2,10 +2,10 @@
 #define PIECHARTWINDOW_H
 
 #include <QMainWindow>
-#include "drilldownchart.h"
-#include "drilldownslice.h"
+#include "piechart/drilldownchart.h"
+#include "piechart/drilldownslice.h"
 #include <QtCharts/QChartView>
-#include "sound.h"
+#include "utils/sound.h"
 
 namespace Ui {
 class PiechartWindow;

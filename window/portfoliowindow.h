@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "window/piechartwindow.h"
 #include "user.h"
-#include "sound.h"
+#include "utils/sound.h"
 
 namespace Ui {
     class PortfolioWindow;

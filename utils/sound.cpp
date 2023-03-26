@@ -1,4 +1,4 @@
-#include "sound.h"
+#include "utils/sound.h"
 #include "QUrl"
 
 Sound::Sound()

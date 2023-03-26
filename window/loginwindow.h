@@ -5,7 +5,7 @@
 #include "window/tradewindow.h"
 #include "user.h"
 #include <QMessageBox>
-#include "sound.h"
+#include "utils/sound.h"
 
 namespace Ui {
 class LoginWindow;

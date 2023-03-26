@@ -1,5 +1,5 @@
-#include "drilldownchart.h"
-#include "drilldownslice.h"
+#include "piechart/drilldownchart.h"
+#include "piechart/drilldownslice.h"
 
 QT_CHARTS_USE_NAMESPACE
 

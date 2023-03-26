@@ -1,7 +1,7 @@
 #ifndef TRADEWINDOW_H
 #define TRADEWINDOW_H
 
-#include "timeconverter.h"
+#include "utils/timeconverter.h"
 #include "api/apiservice.h"
 #include "api/apiaddressbuilder.h"
 #include "candles/candlegraphbuilder.h"
@@ -14,7 +14,7 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 #include "user.h"
-#include "sound.h"
+#include "utils/sound.h"
 
 enum Interval { FIVE_MINUTES, FIFTEEN_MINUTES, TWO_HOURS };
 
