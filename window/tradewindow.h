@@ -54,7 +54,7 @@ private:
     QBoxLayout *main_layout_diagram;
     QWidget *diagram;
     QMovie *movie_loading;
-    QJsonValue last_candle;
+    QJsonArray last_candle;
     TableModelTradeHistory *model;
 signals:
     void sendSoundObj(Sound *sound);

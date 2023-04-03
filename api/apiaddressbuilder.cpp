@@ -1,23 +1,22 @@
 #include "apiaddressbuilder.h"
 
 
-QString ApiAddressBuilder::getChartData(QString currency_pair, QString start, QString end, QString period)
+QString ApiAddressBuilder::getChartData(QString currency_pair, QString period, QString limit)
 {
-    return QString("https://poloniex.com/public?") + QString("command=") + QString("returnChartData")
-           + "&currencyPair=" + currency_pair
-           + "&start=" + start
-           + "&end=" + end
-           + "&period=" + period;
+    return QString("https://api.poloniex.com/markets/") + currency_pair + QString("/candles?")
+            + QString("interval=") + period
+            + QString("&limit=")
+            + limit;
 }
 
 
 QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
 {
-    return QString("https://api.poloniex.com/") + QString("markets/") + pair + QString("/markPrice");
+    return QString("https://api.poloniex.com/markets/") + pair + QString("/markPrice");
 }
 
 
 QString ApiAddressBuilder::getDataAllCryptoPairs()
 {
-    return QString("https://api.poloniex.com/") + QString("markets/") + QString("price");
+    QString("https://api.poloniex.com/markets/") + QString("price");
 }

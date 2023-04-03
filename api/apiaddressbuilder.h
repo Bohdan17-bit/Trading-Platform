@@ -10,7 +10,7 @@ class ApiAddressBuilder
 private:
     ApiAddressBuilder();
 public:
-    static QString getChartData(QString currency_pair, QString start, QString end, QString period);
+    static QString getChartData(QString currency_pair, QString period, QString limit);
     static QString getPriceCryptoPair(QString pair);
     static QString getDataAllCryptoPairs();
 };

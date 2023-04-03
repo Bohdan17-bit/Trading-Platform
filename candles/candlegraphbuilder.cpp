@@ -98,6 +98,15 @@ void CandleGraphBuilder::initAcmeSeries()
 }
 
 
+void CandleGraphBuilder::refreshLastCandle(qreal open, qreal close, qreal high, qreal low)
+{
+    list_candlestick_set.last()->setClose(close);
+    list_candlestick_set.last()->setHigh(high);
+    list_candlestick_set.last()->setOpen(open);
+    list_candlestick_set.last()->setLow(low);
+}
+
+
 void CandleGraphBuilder::addAllCandleStickSets(QList<QtCharts::QCandlestickSet*> list)
 {
     for(QtCharts::QCandlestickSet* candlestickset : list)

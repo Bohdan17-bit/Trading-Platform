@@ -32,7 +32,6 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     ui->widget->setLayout(main_layout_diagram);
 
     setDefaultSettings();
-    getChartGeneral();
     init_table_coins();
     initTableTradeHistory();
     update_balance_label();
@@ -374,11 +373,7 @@ void TradeWindow::getChartGeneral()
 void TradeWindow::getChartData5Minutes()
 {
     QString api_address;
-    api_address
-        = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                TimeConverter::getLastQuarterUnixTime(),
-                                                TimeConverter::getCurrentUnixTime(),
-                                                TimeConverter::get5MinuteInSeconds());
+    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_5", "150");
 
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
@@ -389,10 +384,7 @@ void TradeWindow::getChartData5Minutes()
 void TradeWindow::getChartData15Minutes()
 {
     QString api_address;
-    api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                      TimeConverter::getLastOneDayUnixTime(),
-                                                      TimeConverter::getCurrentUnixTime(),
-                                                      TimeConverter::get15MinuteInSeconds());
+    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_15", "125");
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
     reDrawCandleChart(response);
@@ -402,10 +394,7 @@ void TradeWindow::getChartData15Minutes()
 void TradeWindow::getChartData2Hours()
 {
     QString api_address;
-    api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                      TimeConverter::getLastWeekUnixTime(),
-                                                      TimeConverter::getCurrentUnixTime(),
-                                                      TimeConverter::get2HourInSeconds());
+    api_address = ApiAddressBuilder::getChartData(current_pair, "HOUR_2", "100");
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
     reDrawCandleChart(response);
@@ -418,22 +407,15 @@ void TradeWindow::getLastCandle()
     switch(interval)
     {
     case FIVE_MINUTES:
-        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                          TimeConverter::getLast5MinuteInSeconds(),
-                                                          TimeConverter::getCurrentUnixTime(),
-                                                          TimeConverter::get5MinuteInSeconds());
+        api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_5", "1");
+
         break;
     case FIFTEEN_MINUTES:
-        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                          TimeConverter::getLast15MinuteInSeconds(),
-                                                          TimeConverter::getCurrentUnixTime(),
-                                                          TimeConverter::get15MinuteInSeconds());
+        api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_15", "1");
+
         break;
     case TWO_HOURS:
-        api_address = ApiAddressBuilder::getChartData("USDT_" + current_coin,
-                                                          TimeConverter::getLast2HourInSeconds(),
-                                                          TimeConverter::getCurrentUnixTime(),
-                                                          TimeConverter::get2HourInSeconds());
+        api_address = ApiAddressBuilder::getChartData(current_pair, "HOUR_2", "1");
         break;
     }
     qDebug() << api_address;
@@ -451,14 +433,23 @@ void TradeWindow::getLastCandle()
 void TradeWindow::setLastCandle(QJsonDocument document)
 {
     QJsonArray jsonArray = document.array();
-    QJsonValue new_last_candle = jsonArray.last();
+    QJsonArray nested_json = jsonArray.at(0).toArray();
 
-    QString date = new_last_candle.toObject().value("date").toString();
+    qreal low = nested_json.at(0).toString().toDouble();
+    qreal high = nested_json.at(1).toString().toDouble();
+    qreal open = nested_json.at(2).toString().toDouble();
+    qreal close = nested_json.at(3).toString().toDouble();
+    qreal date = nested_json.at(12).toDouble();
 
-    if(date != last_candle.toObject().value("date").toString())
+    if(date != last_candle.at(12).toDouble())
     {
         getChartGeneral();
     }
+    else
+    {
+        candle_graph->refreshLastCandle(open, close, high, low);
+    }
+
 }
 
 
@@ -476,7 +467,10 @@ void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
     // створення адаптеру
     candle_graph->addAllCandleStickSets(candle_graph->CandleStickList->get_list_candlestick());
     // клієнт викликає адаптер і складає свічки
-    last_candle = response.get_response().array().last();
+    QJsonArray jsonArray = response.get_response().array();
+    QJsonArray nested_json = jsonArray.last().toArray();
+    qDebug() << nested_json;
+    last_candle = nested_json;
     // запам'ятовуємо останню свічку для перевірок
     drawDiagram();
     // перемальовуємо діаграму
