@@ -21,21 +21,21 @@ void Database::createAllTables()
 {
     QSqlQuery query_create_table_User ("CREATE TABLE User"
                          "(name TEXT NOT NULL UNIQUE PRIMARY KEY,"
-                         "total_money NUMERIC NOT NULL);");
+                         "total_money REAL NOT NULL);");
 
     QSqlQuery query_create_table_Portfolio ("CREATE TABLE Portfolio"
                               "(name TEXT NOT NULL,"
                               "cryptocurrency TEXT NOT NULL,"
-                              "number NUMERIC NOT NULL,"
+                              "number REAL NOT NULL,"
                               "FOREIGN KEY(name) REFERENCES User(name));");
 
     QSqlQuery query_create_table_TradeHistory ("CREATE TABLE TradeHistory"
                                  "(name TEXT NOT NULL,"
                                  "action TEXT NOT NULL,"
                                  "cryptocurrency TEXT NOT NULL,"
-                                 "number NUMERIC NOT NULL,"
-                                 "price NUMERIC NOT NULL,"
-                                 "usd NUMERIC NOT NULL,"
+                                 "number REAL NOT NULL,"
+                                 "price REAL NOT NULL,"
+                                 "usd REAL NOT NULL,"
                                  "FOREIGN KEY(name) REFERENCES User(name));");
 
     query_create_table_User.exec();

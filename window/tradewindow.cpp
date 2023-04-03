@@ -638,11 +638,14 @@ void TradeWindow::on_to_portfolio_btn_clicked()
     }
     else
     {
+        qDebug() << "here";
         sound->transitionOnAnotherWindow();
         connect(this, &TradeWindow::sendSoundObj, portfolioWindow, &PortfolioWindow::getSoundObj);
         emit sendSoundObj(sound);
+        qDebug() << "here 2";
         portfolioWindow->show();
         this->close();
+        qDebug() << "here 3";
     }
 }
 
