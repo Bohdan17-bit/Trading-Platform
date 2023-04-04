@@ -52,12 +52,14 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
 
 void TradeWindow::showEvent(QShowEvent *event)
 {
+    Database::openDatabase();
     startAllRequests();
 }
 
 
 void TradeWindow::closeEvent(QCloseEvent *event)
 {
+    Database::closeDatabase();
     stopAllRequests();
 }
 

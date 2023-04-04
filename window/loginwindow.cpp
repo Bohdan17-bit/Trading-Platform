@@ -10,14 +10,19 @@ LoginWindow::LoginWindow(QWidget *parent) :
     setWindowTitle("Вхід");
     user = new User();
     sound = new Sound();
+    Database::openDatabase();
 }
 
 
 LoginWindow::~LoginWindow()
 {
     delete ui;
-    if(tradeWindow != nullptr)
-        delete tradeWindow;
+}
+
+
+void LoginWindow::closeEvent(QCloseEvent *event)
+{
+    Database::closeDatabase();
 }
 
 
@@ -57,10 +62,11 @@ void LoginWindow::on_btn_login_clicked()
 
         connect(this, &LoginWindow::sendSoundObj, tradeWindow, &TradeWindow::getSoundObj);
         emit sendSoundObj(sound);
-        tradeWindow->show();
 
         this->close();
         loading_window->close();
+        tradeWindow->show();
+
     }
 
     else

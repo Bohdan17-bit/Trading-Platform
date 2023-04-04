@@ -14,7 +14,6 @@ QList<QtCharts::QCandlestickSet*> CandleStickListBuilder::get_list_candlestick()
         qreal close = nested_json.at(3).toString().toDouble();
         qreal date = nested_json.at(12).toDouble();
         list.append(this->createCandleStickSet(date, open, close, low, high));
-        qDebug() << list.size();
     }
     return list;
 }

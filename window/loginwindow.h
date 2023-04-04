@@ -24,6 +24,7 @@ signals:
     void sendSoundObj(Sound *sound);
 
 private slots:
+    void closeEvent(QCloseEvent *event) override;
     void on_btn_new_account_clicked();
     void on_btn_login_clicked();
 

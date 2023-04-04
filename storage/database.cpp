@@ -12,7 +12,7 @@ QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
 
 void Database::initDatabase()
 {
-    qDebug() << QSslSocket::supportsSsl() ;
+    //qDebug() << QSslSocket::supportsSsl() ;
     db.setDatabaseName("./db/database.db");
 }
 
@@ -46,12 +46,28 @@ void Database::createAllTables()
 
 void Database::openDatabase()
 {
+    initDatabase();
     bool db_file_exist = QFileInfo::exists("./db/database.db");
     db.open();
+    if(db.isOpen())
+    {
+        qDebug() << "database is open now!";
+    }
+    else
+    {
+        qDebug() << "database can not open!";
+    }
     if(db_file_exist == false)
     {
         createAllTables();
     }
+}
+
+
+void Database::closeDatabase()
+{
+    db.close();
+    qDebug() << "database was closed!";
 }
 
 

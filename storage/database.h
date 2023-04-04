@@ -11,6 +11,7 @@ class Database
 public:
     static void initDatabase();
     static void openDatabase();
+    static void closeDatabase();
 
     static bool userIsExist(QString user_name);
     static bool accountIsCreated(QString user_name);
