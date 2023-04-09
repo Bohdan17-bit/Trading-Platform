@@ -22,7 +22,6 @@ SOURCES += \
     storage/database.cpp \
     tablemodel/tablemodeltradehistory.cpp \
     utils/sound.cpp \
-    utils/timeconverter.cpp \
     utils/txtreader.cpp \
     visitor/user.cpp \
     window/loginwindow.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
     storage/database.h \
     tablemodel/tablemodeltradehistory.h \
     utils/sound.h \
-    utils/timeconverter.h \
     utils/txtreader.h \
     visitor/user.h \
     window/loginwindow.h \
