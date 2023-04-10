@@ -18,6 +18,7 @@ PortfolioWindow::PortfolioWindow(User *user, QWidget *parent) :
 
 PortfolioWindow::~PortfolioWindow()
 {
+    qDebug() << "destructor PortfolioWindow";
     delete ui;
 }
 
@@ -59,7 +60,7 @@ void PortfolioWindow::initDataCryptocoins()
 {
     getDataCryptocoinsFromAPI();
     getDataCryptocoinsFromDatabase();
-    showListCryptocoins();
+    //showListCryptocoins();
     initTablePortfolio();
 }
 

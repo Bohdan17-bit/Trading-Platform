@@ -1,7 +1,6 @@
 #ifndef TRADEWINDOW_H
 #define TRADEWINDOW_H
 
-#include "utils/timeconverter.h"
 #include "api/apiservice.h"
 #include "api/apiaddressbuilder.h"
 #include "candles/candlegraphbuilder.h"

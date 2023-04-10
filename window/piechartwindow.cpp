@@ -21,6 +21,7 @@ PiechartWindow::PiechartWindow(QWidget *parent) :
 
 PiechartWindow::~PiechartWindow()
 {
+    qDebug() <<"destructor PiechartWindow";
     delete ui;
 }
 

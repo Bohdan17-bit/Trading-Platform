@@ -2,21 +2,23 @@
 #include "window/ui_loginwindow.h"
 
 
-LoginWindow::LoginWindow(QWidget *parent) :
+LoginWindow::LoginWindow(Sound *sound, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
     setWindowTitle("Вхід");
     user = new User();
-    sound = new Sound();
+    this->sound = sound;
     Database::openDatabase();
 }
 
 
 LoginWindow::~LoginWindow()
 {
+    qDebug() << "destructor LoginWindow";
     delete ui;
+    delete tradeWindow;
 }
 
 

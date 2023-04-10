@@ -110,6 +110,7 @@ void TradeWindow::refreshTableTradeHistory()
 
 TradeWindow::~TradeWindow()
 {
+    qDebug() << "destructor TradeWindow";
     delete diagram;
     delete main_layout_diagram;
     delete candle_graph;

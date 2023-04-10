@@ -16,7 +16,7 @@ class LoginWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit LoginWindow(QWidget *parent = nullptr);
+    explicit LoginWindow(Sound *sound, QWidget *parent = nullptr);
     ~LoginWindow();
     void showDialogLoading();
 
