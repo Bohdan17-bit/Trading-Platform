@@ -6,6 +6,7 @@
 
 #include <QGridLayout>
 #include "api/apiserviceresponse.h"
+#include "storage/database.h"
 
 TradeWindow::TradeWindow(User *user, QWidget *parent)
     : QMainWindow(parent)
@@ -46,6 +47,9 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     connect(candle_graph->getGraphChartView(), &ChartView::mousePress, this, &TradeWindow::stopAllRequests);
     connect(candle_graph->getGraphChartView(), &ChartView::mouseRelease, this, &TradeWindow::startAllRequests);
     update_visible_columns_candleChart();
+
+    ui->lineEdit_count_sell->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
+    ui->lineEdit_count_buy->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
 
 }
 
@@ -272,7 +276,7 @@ void TradeWindow::setPriceToBuyEditTextBox(double base_price)
     if(ui->lineEdit_count_buy->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_buy->text().toDouble();
-        ui->lineEdit_total_to_buy->setText(QString::number(final_price * number));
+        ui->lineEdit_total_to_buy->setText(QString::number(final_price * number, 'f', 2));
     }
     ui->linedEdit_price_buy->setText(QString::number(final_price));
 }
@@ -284,7 +288,7 @@ void TradeWindow::setPriceToSellEditTextBox(double base_price)
     if(ui->lineEdit_count_sell->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_sell->text().toDouble();
-        ui->lineEdit_total_to_sell->setText(QString::number(final_price * number));
+        ui->lineEdit_total_to_sell->setText(QString::number(final_price * number, 'f', 2));
     }
     ui->linedEdit_price_sell->setText(QString::number(final_price));
 }
@@ -310,7 +314,7 @@ void TradeWindow::on_lineEdit_count_buy_textEdited(const QString &arg1)
         double price = ui->linedEdit_price_buy->text().toDouble();
         double number = ui->lineEdit_count_buy->text().toDouble();
         double total = price * number;
-        ui->lineEdit_total_to_buy->setText(QString::number(total));
+        ui->lineEdit_total_to_buy->setText(QString::number(total, 'f', 2));
     }
 }
 
@@ -326,7 +330,7 @@ void TradeWindow::on_lineEdit_count_sell_textEdited(const QString &arg1)
         double price = ui->linedEdit_price_sell->text().toDouble();
         double number = ui->lineEdit_count_sell->text().toDouble();
         double total = price * number;
-        ui->lineEdit_total_to_sell->setText(QString::number(total));
+        ui->lineEdit_total_to_sell->setText(QString::number(total, 'f', 2));
     }
 }
 
@@ -617,6 +621,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
     {
         sound->processComplete();
         user->sellCoin(cryptocurrency, count_cryptocurrency_to_sell, price, count_usd_to_get);
+        qDebug() << "DICKS " << count_usd_to_get;
         update_gui_after_transaction();
     }
     else
@@ -636,19 +641,15 @@ void TradeWindow::on_to_portfolio_btn_clicked()
         sound->error();
         QMessageBox message;
         message.setText("Неможливо переглянути портфель!\nВідсутнє підключення до мережі Інтернет!");
-        sound->error();
         message.exec();
     }
     else
     {
-        qDebug() << "here";
         sound->transitionOnAnotherWindow();
         connect(this, &TradeWindow::sendSoundObj, portfolioWindow, &PortfolioWindow::getSoundObj);
         emit sendSoundObj(sound);
-        qDebug() << "here 2";
         portfolioWindow->show();
         this->close();
-        qDebug() << "here 3";
     }
 }
 

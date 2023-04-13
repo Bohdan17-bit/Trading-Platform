@@ -1,5 +1,6 @@
 #include "window/loginwindow.h"
 #include "window/ui_loginwindow.h"
+#include "storage/database.h"
 
 
 LoginWindow::LoginWindow(Sound *sound, QWidget *parent) :

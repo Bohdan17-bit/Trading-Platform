@@ -6,13 +6,13 @@
 #include <QFileInfo>
 #include <QSslSocket>
 #include <QMessageBox>
+#include <utils/moneyconverter.h>
 
 QSqlDatabase Database::db = QSqlDatabase::addDatabase("QSQLITE");
 
 
 void Database::initDatabase()
 {
-    //qDebug() << QSslSocket::supportsSsl() ;
     db.setDatabaseName("./db/database.db");
 }
 
@@ -21,12 +21,12 @@ void Database::createAllTables()
 {
     QSqlQuery query_create_table_User ("CREATE TABLE User"
                          "(name TEXT NOT NULL UNIQUE PRIMARY KEY,"
-                         "total_money REAL NOT NULL);");
+                         "total_money INTEGER NOT NULL);");
 
     QSqlQuery query_create_table_Portfolio ("CREATE TABLE Portfolio"
                               "(name TEXT NOT NULL,"
                               "cryptocurrency TEXT NOT NULL,"
-                              "number REAL NOT NULL,"
+                              "number INTEGER NOT NULL,"
                               "FOREIGN KEY(name) REFERENCES User(name));");
 
     QSqlQuery query_create_table_TradeHistory ("CREATE TABLE TradeHistory"
@@ -95,7 +95,7 @@ bool Database::accountIsCreated(QString user_name)
     query.prepare("INSERT INTO User (name, total_money)"
                   "VALUES (:name, :total_money)");
     query.bindValue(":name", user_name);
-    query.bindValue(":total_money", 40000);
+    query.bindValue(":total_money", 4000000);// 40 k usd
     return query.exec();
 }
 
@@ -142,7 +142,7 @@ bool Database::rewriteBalance(QString user_name, double balance)
 {
     QSqlQuery query;
     query.prepare("UPDATE User SET total_money=? WHERE name=?");
-    query.bindValue(0, balance);
+    query.bindValue(0, MoneyConverter::doubleUsdToInteger(balance));
     query.bindValue(1, user_name);
     return query.exec();
 }
@@ -151,7 +151,7 @@ bool Database::rewriteBalance(QString user_name, double balance)
 bool Database::updateNumberCryptocurrencyPlus(QString user_name, double number, QString crypto_name)
 {
     QSqlQuery query;
-    double new_number_crypto = number + getNumberCryptocurrency(user_name, crypto_name);
+    int new_number_crypto = MoneyConverter::doubleCryptoToInteger(number) + MoneyConverter::doubleCryptoToInteger(getNumberCryptocurrency(user_name, crypto_name));
     query.prepare("UPDATE Portfolio SET number=? WHERE name=? AND cryptocurrency=?");
     query.bindValue(0, new_number_crypto);
     query.bindValue(1, user_name);
@@ -163,7 +163,7 @@ bool Database::updateNumberCryptocurrencyPlus(QString user_name, double number, 
 bool Database::updateNumberCryptocurrencyMinus(QString user_name, double number, QString crypto_name)
 {
     QSqlQuery query;
-    double new_number_crypto = getNumberCryptocurrency(user_name, crypto_name) - number;
+    int new_number_crypto = MoneyConverter::doubleCryptoToInteger(getNumberCryptocurrency(user_name, crypto_name)) - MoneyConverter::doubleCryptoToInteger(number);
     query.prepare("UPDATE Portfolio SET number=? WHERE name=? AND cryptocurrency=?");
     query.bindValue(0, new_number_crypto);
     query.bindValue(1, user_name);
@@ -180,8 +180,9 @@ double Database::getNumberCryptocurrency(QString user_name, QString crypto_name)
     query.exec();
     while(query.next())
     {
-        return query.value(2).toDouble();
+        return MoneyConverter::integerCryptoToDouble(query.value(2).toInt());
     }
+    return 0.0;
 }
 
 
@@ -196,7 +197,7 @@ QVector<QPair<QString, double>> Database::getNumberAllCryptocurrencies(QString u
     {
         QPair<QString, double> coin;
         coin.first = query.value(1).toString();
-        coin.second = query.value(2).toDouble();
+        coin.second = MoneyConverter::integerCryptoToDouble(query.value(2).toInt());
         coins.append(coin);
     }
     return coins;
@@ -211,6 +212,7 @@ double Database::getBalance(QString user_name)
     query.exec();
     while(query.next())
     {
-        return query.value(1).toDouble();
+        return MoneyConverter::integerUsdToDouble(query.value(1).toInt());
     }
+    return 0.0;
 }

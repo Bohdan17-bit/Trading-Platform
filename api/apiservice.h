@@ -13,7 +13,6 @@ private:
     ApiService(){};
     static QNetworkAccessManager *accessManager;
 public:
-    static QJsonDocument extracted();
     static QJsonDocument MakeRequest(QString requestStr);
 };
 

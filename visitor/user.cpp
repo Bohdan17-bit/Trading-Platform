@@ -1,5 +1,7 @@
 #include "visitor/user.h"
+#include "storage/database.h"
 #include <QDebug>
+#include "utils/moneyconverter.h"
 
 void User::loadUserData()
 {
@@ -20,7 +22,6 @@ QString User::discoverName()
 double User::discoverBalance()
 {
     return balance_usd;
-    //return round(balance_usd * 100) / 100;
 }
 
 void User::loadCoinsList()
@@ -28,10 +29,9 @@ void User::loadCoinsList()
     coins_list = Database::getNumberAllCryptocurrencies(user_name);
 }
 
-void User::updateBalanceUsd(double new_balance)
+void User::updateBalanceUsd()
 {
-    balance_usd = new_balance;
-    Database::rewriteBalance(this->user_name, new_balance);
+    balance_usd = Database::getBalance(user_name);
 }
 
 void User::setUsername(QString user_name)
@@ -39,15 +39,10 @@ void User::setUsername(QString user_name)
     this->user_name = user_name;
 }
 
-void User::updateNumberOfCoin(QString coin_name, double new_value)
+void User::updateNumberOfCoins()
 {
-    for(int i = 0; i < this->coins_list.size(); i++)
-    {
-        if(coins_list[i].first == coin_name)
-        {
-            coins_list[i].second = new_value;
-        }
-    }
+    coins_list.clear();
+    loadCoinsList();
 }
 
 bool User::userIsExists(QString user_name)
@@ -78,22 +73,30 @@ void User::saveTransaction(QString action_name, QString name_cryptocurrency, dou
 void User::buyCoin(QString name_cryptocurrency, double number_cryptocurrency, double price, double total_usd)
 {
     Database::updateNumberCryptocurrencyPlus(user_name, number_cryptocurrency, name_cryptocurrency);
-    updateNumberOfCoin(name_cryptocurrency, getNumberOfCoin(name_cryptocurrency) + number_cryptocurrency);
+
+    int total_to_write = MoneyConverter::doubleUsdToInteger(Database::getBalance(user_name)) - MoneyConverter::doubleUsdToInteger(total_usd);
+    qDebug() << "HUI : " << total_to_write;
+    qDebug() << "HUI : " << MoneyConverter::integerUsdToDouble(total_to_write);
+    Database::rewriteBalance(user_name, MoneyConverter::integerUsdToDouble(total_to_write));
+
     // оновили кількість монеток в базі даних + в об'єкті User
     saveTransaction("buy", name_cryptocurrency, number_cryptocurrency, price, total_usd);
     // записали дію в історію транзакцій
-    updateBalanceUsd(balance_usd - total_usd);
+    updateBalanceUsd();
+    updateNumberOfCoins();
     // перезаписали в БД + в об'єкті User
 }
 
 void User::sellCoin(QString name_cryptocurrency, double number_cryptocurrency, double price, double total_usd)
 {
     Database::updateNumberCryptocurrencyMinus(user_name, number_cryptocurrency, name_cryptocurrency);
-    updateNumberOfCoin(name_cryptocurrency, getNumberOfCoin(name_cryptocurrency) - number_cryptocurrency);
+    int total_to_write = MoneyConverter::doubleUsdToInteger(Database::getBalance(user_name)) + MoneyConverter::doubleUsdToInteger(total_usd);
+    Database::rewriteBalance(user_name, MoneyConverter::integerUsdToDouble(total_to_write));
     // оновили кількість монеток в базі даних + в об'єкті User
     saveTransaction("sell", name_cryptocurrency, number_cryptocurrency, price, total_usd);
     // записали дію в історію транзакцій
-    updateBalanceUsd(balance_usd + total_usd);
+    updateBalanceUsd();
+    updateNumberOfCoins();
     // перезаписали в БД + в об'єкті User
 }
 
@@ -124,5 +127,4 @@ double User::getNumberOfCoin(QString name_coin)
             return coin.second;
         }
     }
-    return 0.0;
 }

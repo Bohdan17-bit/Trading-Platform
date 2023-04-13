@@ -4,8 +4,6 @@
 #include <QString>
 #include <QPair>
 #include <QVector>
-#include "storage/database.h"
-#include <cmath>
 
 class User
 {
@@ -16,8 +14,8 @@ private:
     QVector<QPair<QString, double>> coins_list;
 
     void loadCoinsList();
-    void updateBalanceUsd(double new_balance);
-    void updateNumberOfCoin(QString coin_name, double new_value);
+    void updateBalanceUsd();
+    void updateNumberOfCoins();
 
 public:
 

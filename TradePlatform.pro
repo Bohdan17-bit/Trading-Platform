@@ -21,6 +21,7 @@ SOURCES += \
     piechart/drilldownslice.cpp \
     storage/database.cpp \
     tablemodel/tablemodeltradehistory.cpp \
+    utils/moneyconverter.cpp \
     utils/sound.cpp \
     utils/txtreader.cpp \
     visitor/user.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     piechart/drilldownslice.h \
     storage/database.h \
     tablemodel/tablemodeltradehistory.h \
+    utils/moneyconverter.h \
     utils/sound.h \
     utils/txtreader.h \
     visitor/user.h \
@@ -65,7 +67,6 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-INCLUDEPATH += ../api
 INCLUDEPATH += ../dlls/openssl_x32
 INCLUDEPATH += ../dlls/openssl_x64
 
