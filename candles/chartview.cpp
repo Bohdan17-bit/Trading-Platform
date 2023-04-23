@@ -39,3 +39,11 @@ void ChartView::mouseReleaseEvent(QMouseEvent *event)
     emit mouseRelease();
     //QChartView::mouseReleaseEvent(event);
 }
+
+void ChartView::wheelEvent(QWheelEvent *event)
+{
+    qreal factor = event->angleDelta().y() > 0? 2: 0.5;
+    chart()->zoom(factor);
+    event->accept();
+    QtCharts::QChartView::wheelEvent(event);
+}

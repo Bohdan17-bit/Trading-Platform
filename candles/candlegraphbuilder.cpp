@@ -64,8 +64,11 @@ void CandleGraphBuilder::initAxes()
     axisTime->setTitleText("Час");
 
     axisValue = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
-    axisValue->setMax(axisValue->max() * 1.01);
-    axisValue->setMin(axisValue->min() * 0.99);
+    axisValue->setMax(axisValue->max() * 1.001);
+    axisValue->setMin(axisValue->min() * 0.999);
+
+    qreal minimum = axisValue->min();
+    qreal maximum = axisValue->max();
 
     //axisDate = new QtCharts::QDateTimeAxis();
     //axisDate->setFormat("dd-MM");
