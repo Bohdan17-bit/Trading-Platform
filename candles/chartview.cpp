@@ -1,7 +1,10 @@
 #include "candles/chartview.h"
 #include <QtCharts/QChartView>
 #include <QApplication>
+#include <QDateTime>
+#include <QDateTimeAxis>
 #include <QDebug>
+#include <QValueAxis>
 
 void ChartView::mousePressEvent(QMouseEvent *event)
 {
@@ -22,8 +25,8 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
     {
 
         auto dPos = event->pos() - m_lastMousePos;
-        chart()->scroll(-dPos.x(), 0);
-
+        chart()->scroll(-dPos.x(), dPos.y());
+        //
         m_lastMousePos = event->pos();
         event->accept();
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -32,6 +35,59 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
 
     QChartView::mouseMoveEvent(event);
 }
+
+
+void ChartView::scaleInWidth(qreal kf)
+{
+    QtCharts::QDateTimeAxis *axisX = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
+    if (axisX)
+    {
+        // Отримуємо поточний діапазон дат
+        const QDateTime minDate = axisX->min();
+        const QDateTime maxDate = axisX->max();
+
+        // Розраховуємо новий діапазон дат
+        const qint64 diff = maxDate.toMSecsSinceEpoch() - minDate.toMSecsSinceEpoch();
+        const qint64 newDiff = diff * kf;
+        const qint64 delta = (newDiff - diff) / 2;
+        const QDateTime newMinDate = minDate.addMSecs(-delta);
+        const QDateTime newMaxDate = maxDate.addMSecs(delta);
+
+        // Встановлюємо новий діапазон дат
+        axisX->setRange(newMinDate, newMaxDate);
+    }
+}
+
+
+bool ChartView::maxScopeRiched()
+{
+    QRectF plotArea = chart()->plotArea();
+    QtCharts::QValueAxis *yAxis = qobject_cast<QtCharts::QValueAxis *>(chart()->axisY());
+    qreal xRange = yAxis->max() - yAxis->min();
+    QSizeF plotSize = plotArea.size();
+    qreal xScale = plotSize.height() / xRange;
+    if(xScale > 0.6)
+    {
+        return false;
+    }
+    return true;
+}
+
+
+bool ChartView::minScopeRiched()
+{
+    QRectF plotArea = chart()->plotArea();
+    QtCharts::QValueAxis *yAxis = qobject_cast<QtCharts::QValueAxis *>(chart()->axisY());
+    qreal xRange = yAxis->max() - yAxis->min();
+    QSizeF plotSize = plotArea.size();
+    qreal xScale = plotSize.height() / xRange;
+    if(xScale < 2.4)
+    {
+        return false;
+    }
+    return true;
+}
+
 
 void ChartView::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -42,8 +98,23 @@ void ChartView::mouseReleaseEvent(QMouseEvent *event)
 
 void ChartView::wheelEvent(QWheelEvent *event)
 {
-    qreal factor = event->angleDelta().y() > 0? 2: 0.5;
-    chart()->zoom(factor);
+    qreal factor = 1;
+    if(event->angleDelta().y() > 0)
+    {
+        factor = 1.4;
+        if(minScopeRiched() == false)
+        {
+            chart()->zoom(factor);
+        }
+    }
+    else
+    {
+        factor = 0.8;
+        if(maxScopeRiched() == false)
+        {
+            chart()->zoom(factor);
+        }
+    }
     event->accept();
     QtCharts::QChartView::wheelEvent(event);
 }

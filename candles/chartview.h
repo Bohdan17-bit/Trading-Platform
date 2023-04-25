@@ -19,6 +19,9 @@ protected:
     virtual void wheelEvent(QWheelEvent *event) override;
 private:
     QPointF m_lastMousePos;
+    void scaleInWidth(qreal cf);
+    bool maxScopeRiched();
+    bool minScopeRiched();
 
 signals:
     void mousePress();

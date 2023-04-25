@@ -44,9 +44,7 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     connect(timer_refresh_price, &QTimer::timeout, this, &TradeWindow::getPriceCurrentPair);
     connect(portfolioWindow, &PortfolioWindow::tradeWindowShow, this, &TradeWindow::show);
 
-    connect(candle_graph->getGraphChartView(), &ChartView::mousePress, this, &TradeWindow::stopAllRequests);
     connect(candle_graph->getGraphChartView(), &ChartView::mouseRelease, this, &TradeWindow::startAllRequests);
-    update_visible_columns_candleChart();
 
     ui->lineEdit_count_sell->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
     ui->lineEdit_count_buy->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
@@ -79,7 +77,7 @@ void TradeWindow::stopAllRequests()
 void TradeWindow::startAllRequests()
 {
     timer_refresh_price->start(1000);
-    timer_refresh_chart->start(10000); // перевірка оновлення графіку кожні 10 секунд
+    timer_refresh_chart->start(5000); // перевірка оновлення графіку кожні 5 секунд
 }
 
 
@@ -380,7 +378,7 @@ void TradeWindow::getChartGeneral()
 void TradeWindow::getChartData5Minutes()
 {
     QString api_address;
-    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_5", "150");
+    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_5", "500");
 
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
@@ -391,7 +389,7 @@ void TradeWindow::getChartData5Minutes()
 void TradeWindow::getChartData15Minutes()
 {
     QString api_address;
-    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_15", "125");
+    api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_15", "400");
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
     reDrawCandleChart(response);
@@ -401,7 +399,7 @@ void TradeWindow::getChartData15Minutes()
 void TradeWindow::getChartData2Hours()
 {
     QString api_address;
-    api_address = ApiAddressBuilder::getChartData(current_pair, "HOUR_2", "100");
+    api_address = ApiAddressBuilder::getChartData(current_pair, "HOUR_2", "300");
     ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
     qDebug() << api_address;
     reDrawCandleChart(response);
@@ -450,7 +448,8 @@ void TradeWindow::setLastCandle(QJsonDocument document)
 
     if(date != last_candle.at(12).toDouble())
     {
-        getChartGeneral();
+        last_candle = nested_json;
+        candle_graph->insertLastCandle(date, open, close, high, low);
     }
     else
     {
@@ -487,20 +486,18 @@ void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
 void TradeWindow::drawDiagram()
 {
     candle_graph->createNewChart();
-    update_visible_columns_candleChart();
 }
 
 
-void TradeWindow::update_visible_columns_candleChart()
+void TradeWindow::update_visible_columns_candleChart(QResizeEvent *e)
 {
-    qDebug() << candle_graph->getGraphChartView()->chart()->size().width();
-    candle_graph->setLimitPoints(candle_graph->getGraphChartView()->chart()->size().width() / 100); // 100 px для кожної колонки
+    // TODO
 }
 
 
 void TradeWindow::resizeEvent(QResizeEvent *e)
 {
-    update_visible_columns_candleChart();
+    update_visible_columns_candleChart(e);
 }
 
 

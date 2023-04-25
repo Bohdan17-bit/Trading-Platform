@@ -18,9 +18,9 @@ public:
     CandleGraphBuilder();
     void refresh_graph_builder();
     void createNewChart();
-    void refreshLastCandle(qreal open, qreal close, qreal high, qreal low);
-    void setLimitPoints(int number_points);
     void addAllCandleStickSets(QList<QtCharts::QCandlestickSet*> list);
+    void refreshLastCandle(qreal open, qreal close, qreal high, qreal low);
+    void insertLastCandle(qreal timestamp, qreal open, qreal close, qreal high, qreal low);
     ChartView* getGraphChartView();
     CandleStickList *CandleStickList; // adapter
 private:
@@ -31,16 +31,9 @@ private:
     QtCharts::QChart *chart;
     QtCharts::QChart *oldChart;
     QtCharts::QCandlestickSeries *acmeSeries;
-    QtCharts::QBarCategoryAxis *axisTime;
     QtCharts::QDateTimeAxis *axisDate;
     QtCharts::QValueAxis *axisValue;
     QList<QtCharts::QCandlestickSet*> list_candlestick_set;
-    QStringList categories;
-    QList<double> timestamp;
-    QList<double> open;
-    QList<double> close;
-    QList<double> low;
-    QList<double> high;
 };
 
 #endif // CANDLEGRAPHBUILDER_H

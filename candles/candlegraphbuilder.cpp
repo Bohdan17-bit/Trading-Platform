@@ -6,8 +6,8 @@ CandleGraphBuilder::CandleGraphBuilder()
 {
     chart = nullptr;
     oldChart = nullptr;
-    CandleStickList = nullptr; // adapter
     chartView = new ChartView();
+    CandleStickList = nullptr; // adapter
     chartView->setRenderHint(QPainter::Antialiasing);
     initAcmeSeries();
 }
@@ -15,26 +15,14 @@ CandleGraphBuilder::CandleGraphBuilder()
 
 void CandleGraphBuilder::initChartSettings()
 {
-    //chart->setAnimationOptions(QtCharts::QChart::AnimationOption::SeriesAnimations);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignBottom);
-}
-
-
-void CandleGraphBuilder::setLimitPoints(int number_points)
-{
-    if(categories.isEmpty())
-        return;
-    int id_time_last_element = categories.size() - 1;
-    qDebug() << categories.at(id_time_last_element - number_points + 1) << " and " << categories.at(id_time_last_element);
-    axisTime->setRange(categories.at(id_time_last_element - number_points + 1), categories.at(id_time_last_element));
 }
 
 
 void CandleGraphBuilder::createNewChart()
 {
     oldChart = chart;
-
     chart = new QtCharts::QChart();
 
     chart->addSeries(acmeSeries);
@@ -43,12 +31,11 @@ void CandleGraphBuilder::createNewChart()
 
     initAxes();
 
-    initAcmeSeries();
-
     chartView->setChart(chart);
     chartView->update();
 
-    if(oldChart != nullptr) {
+    if(oldChart != nullptr)
+    {
         oldChart->removeAllSeries();
         delete oldChart;
     }
@@ -57,24 +44,22 @@ void CandleGraphBuilder::createNewChart()
 
 void CandleGraphBuilder::initAxes()
 {
-    chart->createDefaultAxes();
+    axisValue = new QValueAxis;
+    axisDate = new QDateTimeAxis;
 
-    axisTime = qobject_cast<QtCharts::QBarCategoryAxis *>(chart->axes(Qt::Horizontal).at(0));
-    axisTime->setCategories(categories);
-    axisTime->setTitleText("Час");
+    chart->addAxis(axisValue, Qt::AlignLeft);
+    chart->addAxis(axisDate, Qt::AlignBottom);
 
-    axisValue = qobject_cast<QtCharts::QValueAxis *>(chart->axes(Qt::Vertical).at(0));
+    acmeSeries->attachAxis(axisDate);
+    acmeSeries->attachAxis(axisValue);
+
+    axisDate->setFormat("dd.MM-hh:mm");
+    axisDate->setTitleText("Дата");
+
+    axisValue->setTitleText("Ціна");
     axisValue->setMax(axisValue->max() * 1.001);
     axisValue->setMin(axisValue->min() * 0.999);
 
-    qreal minimum = axisValue->min();
-    qreal maximum = axisValue->max();
-
-    //axisDate = new QtCharts::QDateTimeAxis();
-    //axisDate->setFormat("dd-MM");
-    //axisDate->setTitleText("Дата");
-    //chart->addAxis(axisDate, Qt::AlignBottom);
-    //acmeSeries->attachAxis(axisDate);
 }
 
 
@@ -88,7 +73,32 @@ void CandleGraphBuilder::refresh_graph_builder()
 {
     acmeSeries->clear();
     list_candlestick_set.clear();
-    categories.clear();
+}
+
+void CandleGraphBuilder::refreshLastCandle(qreal open, qreal close, qreal high, qreal low)
+{
+    list_candlestick_set.last()->setClose(close);
+    list_candlestick_set.last()->setHigh(high);
+    list_candlestick_set.last()->setOpen(open);
+    list_candlestick_set.last()->setLow(low);
+    qDebug() << "length : after refresh" << list_candlestick_set.length();
+    chartView->chart()->update();
+    chartView->update();
+}
+
+
+void CandleGraphBuilder::insertLastCandle(qreal timestamp, qreal open, qreal close, qreal high, qreal low)
+{
+    QtCharts::QCandlestickSet * last_set = new QtCharts::QCandlestickSet(timestamp);
+    last_set->setOpen(open);
+    last_set->setClose(close);
+    last_set->setHigh(high);
+    last_set->setLow(low);
+    acmeSeries->append(last_set);
+    list_candlestick_set.append(last_set);
+    chartView->chart()->update();
+    chartView->update();
+    qDebug() << "length : after insert" << list_candlestick_set.length();
 }
 
 
@@ -101,21 +111,12 @@ void CandleGraphBuilder::initAcmeSeries()
 }
 
 
-void CandleGraphBuilder::refreshLastCandle(qreal open, qreal close, qreal high, qreal low)
-{
-    list_candlestick_set.last()->setClose(close);
-    list_candlestick_set.last()->setHigh(high);
-    list_candlestick_set.last()->setOpen(open);
-    list_candlestick_set.last()->setLow(low);
-}
-
-
 void CandleGraphBuilder::addAllCandleStickSets(QList<QtCharts::QCandlestickSet*> list)
 {
+    initAcmeSeries();
     for(QtCharts::QCandlestickSet* candlestickset : list)
-    {
-        list_candlestick_set.append(candlestickset);
-        acmeSeries->append(candlestickset);
-        categories << QDateTime::fromMSecsSinceEpoch(candlestickset->timestamp()).toString("dd.MM-hh:mm");
-    }
+      {
+          acmeSeries->append(candlestickset);
+          list_candlestick_set.append(candlestickset);
+      }
 }
