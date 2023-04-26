@@ -245,8 +245,20 @@ void TradeWindow::getPriceCurrentPair()
             enableBuySellAction();
         }
     }
-    setPriceToBuyEditTextBox(last_price);
-    setPriceToSellEditTextBox(last_price);
+
+    QString api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_1", "1");
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));
+
+    QJsonDocument jsonDoc = response.get_response();
+    QJsonArray jsonArray = jsonDoc.array();
+    QJsonArray nested_json = jsonArray.at(0).toArray();
+
+    qreal low = nested_json.at(0).toString().toDouble();
+    qreal high = nested_json.at(1).toString().toDouble();
+
+    setPriceToBuyEditTextBox(high);
+    setPriceToSellEditTextBox(low);
+
 }
 
 
@@ -270,7 +282,7 @@ void TradeWindow::disabledBuySellAction()
 
 void TradeWindow::setPriceToBuyEditTextBox(double base_price)
 {
-    double final_price = base_price * 1.002;
+    double final_price = base_price + 1.0;
     if(ui->lineEdit_count_buy->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_buy->text().toDouble();
@@ -282,7 +294,7 @@ void TradeWindow::setPriceToBuyEditTextBox(double base_price)
 
 void TradeWindow::setPriceToSellEditTextBox(double base_price)
 {
-    double final_price = base_price * 0.998;
+    double final_price = base_price;
     if(ui->lineEdit_count_sell->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_sell->text().toDouble();
@@ -475,8 +487,8 @@ void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
     // клієнт викликає адаптер і складає свічки
     QJsonArray jsonArray = response.get_response().array();
     QJsonArray nested_json = jsonArray.last().toArray();
-    qDebug() << nested_json;
     last_candle = nested_json;
+
     // запам'ятовуємо останню свічку для перевірок
     drawDiagram();
     // перемальовуємо діаграму
@@ -486,18 +498,6 @@ void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
 void TradeWindow::drawDiagram()
 {
     candle_graph->createNewChart();
-}
-
-
-void TradeWindow::update_visible_columns_candleChart(QResizeEvent *e)
-{
-    // TODO
-}
-
-
-void TradeWindow::resizeEvent(QResizeEvent *e)
-{
-    update_visible_columns_candleChart(e);
 }
 
 
@@ -618,7 +618,6 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
     {
         sound->processComplete();
         user->sellCoin(cryptocurrency, count_cryptocurrency_to_sell, price, count_usd_to_get);
-        qDebug() << "DICKS " << count_usd_to_get;
         update_gui_after_transaction();
     }
     else

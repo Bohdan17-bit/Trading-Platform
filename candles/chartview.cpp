@@ -101,19 +101,13 @@ void ChartView::wheelEvent(QWheelEvent *event)
     qreal factor = 1;
     if(event->angleDelta().y() > 0)
     {
-        factor = 1.4;
-        if(minScopeRiched() == false)
-        {
-            chart()->zoom(factor);
-        }
+        factor = 1.3;
+        chart()->zoom(factor);
     }
     else
     {
-        factor = 0.8;
-        if(maxScopeRiched() == false)
-        {
-            chart()->zoom(factor);
-        }
+        factor = 0.9;
+        chart()->zoom(factor);
     }
     event->accept();
     QtCharts::QChartView::wheelEvent(event);

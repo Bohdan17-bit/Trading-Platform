@@ -73,9 +73,7 @@ public slots:
 private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
-    void resizeEvent(QResizeEvent *e) override;
     void closeApp();
-    void update_visible_columns_candleChart(QResizeEvent *e);
     void clearFields();
     void init_table_coins();
     void on_btn_5_minutes_clicked();
