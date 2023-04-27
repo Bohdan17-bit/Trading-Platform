@@ -39,6 +39,13 @@ void CandleGraphBuilder::createNewChart()
         oldChart->removeAllSeries();
         delete oldChart;
     }
+
+    QGraphicsSimpleTextItem *candle = new QGraphicsSimpleTextItem("");
+    QFont font("Verdana", 10);
+    candle->setPos(105, 45);
+    candle->setFont(font);
+    chart->scene()->addItem(candle);
+
 }
 
 
@@ -59,7 +66,6 @@ void CandleGraphBuilder::initAxes()
     axisValue->setTitleText("Ціна");
     axisValue->setMax(axisValue->max() * 1.001);
     axisValue->setMin(axisValue->min() * 0.999);
-
 }
 
 
@@ -81,7 +87,6 @@ void CandleGraphBuilder::refreshLastCandle(qreal open, qreal close, qreal high, 
     chartView->list_candlestick_set.last()->setHigh(high);
     chartView->list_candlestick_set.last()->setOpen(open);
     chartView->list_candlestick_set.last()->setLow(low);
-    qDebug() << "length : after refresh" << chartView->list_candlestick_set.length();
     chartView->chart()->update();
     chartView->update();
 }

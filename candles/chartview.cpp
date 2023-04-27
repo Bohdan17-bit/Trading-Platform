@@ -34,8 +34,29 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
 
             if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm") == dateTime)
             {
-                qDebug() << "Candle time: " << QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm");
-                qDebug() << "datetime: " << dateTime;
+                QGraphicsSimpleTextItem *label = dynamic_cast<QGraphicsSimpleTextItem*>(chart()->scene()->items().at(0));
+
+                QBrush red_color_brush(Qt::red);
+                QBrush green_color_brush(Qt::darkGreen);
+
+                if(list_candlestick_set.at(i)->open() > list_candlestick_set.at(i)->close())
+                {
+                    label->setBrush(red_color_brush);
+                }
+                else
+                {
+                    label->setBrush(green_color_brush);
+                }
+
+                QString label_changed =
+                        "open : " + QString::number(list_candlestick_set.at(i)->open()) + "   " +
+                        "close : " + QString::number(list_candlestick_set.at(i)->close()) + "   " +
+                        "high : " + QString::number(list_candlestick_set.at(i)->high()) + "   " +
+                        "low : " + QString::number(list_candlestick_set.at(i)->low()) + "   " +
+                        "time : " + dateTime;
+
+                label->setText(label_changed);
+
                 return;
             }
         }

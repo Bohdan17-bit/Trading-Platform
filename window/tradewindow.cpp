@@ -255,6 +255,10 @@ void TradeWindow::getPriceCurrentPair()
 
     qreal low = nested_json.at(0).toString().toDouble();
     qreal high = nested_json.at(1).toString().toDouble();
+    if(low == high)
+    {
+        low -= 0.01;
+    }
 
     setPriceToBuyEditTextBox(high);
     setPriceToSellEditTextBox(low);
