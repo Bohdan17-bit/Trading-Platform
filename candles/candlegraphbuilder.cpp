@@ -34,6 +34,10 @@ void CandleGraphBuilder::createNewChart()
     chartView->setChart(chart);
     chartView->update();
 
+    //axisDate->setRange
+    //        (QDateTime::fromMSecsSinceEpoch(chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 10)->timestamp()),
+    //         QDateTime::fromMSecsSinceEpoch(chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 1)->timestamp()));
+
     if(oldChart != nullptr)
     {
         oldChart->removeAllSeries();

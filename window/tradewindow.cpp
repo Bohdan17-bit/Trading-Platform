@@ -257,7 +257,7 @@ void TradeWindow::getPriceCurrentPair()
     qreal high = nested_json.at(1).toString().toDouble();
     if(low == high)
     {
-        low -= 0.01;
+        low -= 0.1;
     }
 
     setPriceToBuyEditTextBox(high);
@@ -291,7 +291,7 @@ void TradeWindow::setPriceToBuyEditTextBox(double base_price)
         double number = ui->lineEdit_count_buy->text().toDouble();
         ui->lineEdit_total_to_buy->setText(QString::number(base_price * number, 'f', 2));
     }
-    ui->linedEdit_price_buy->setText(QString::number(base_price));
+    ui->linedEdit_price_buy->setText(QString::number(base_price + 0.01));
 }
 
 
@@ -377,12 +377,15 @@ void TradeWindow::getChartGeneral()
     switch(interval)
     {
     case FIVE_MINUTES:
+        candle_graph->getGraphChartView()->mode = "5_MINUTES";
         getChartData5Minutes();
         break;
     case FIFTEEN_MINUTES:
+        candle_graph->getGraphChartView()->mode = "15_MINUTES";
         getChartData15Minutes();
         break;
     case TWO_HOURS:
+        candle_graph->getGraphChartView()->mode = "2_HOURS";
         getChartData2Hours();
         break;
     }

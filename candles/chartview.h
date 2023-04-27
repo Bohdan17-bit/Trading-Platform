@@ -11,10 +11,12 @@ class ChartView : public QtCharts::QChartView
 public:
     ChartView()
     {
+        mode = "15_MINUTES";
         m_lastMousePos.setX(0);
         m_lastMousePos.setY(0);
     }
     QList<QtCharts::QCandlestickSet*> list_candlestick_set;
+    QString mode;
 
 protected:
     virtual void mousePressEvent(QMouseEvent *event) override;
@@ -23,7 +25,6 @@ protected:
     virtual void wheelEvent(QWheelEvent *event) override;
 private:
     QPointF m_lastMousePos;
-    void scaleInWidth(qreal cf);
     bool maxScopeRiched();
     bool minScopeRiched();
 

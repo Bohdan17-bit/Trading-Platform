@@ -76,7 +76,7 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
 }
 
 
-void ChartView::scaleInWidth(qreal kf)
+bool ChartView::maxScopeRiched()
 {
     QtCharts::QDateTimeAxis *axisX = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
     if (axisX)
@@ -85,46 +85,64 @@ void ChartView::scaleInWidth(qreal kf)
         const QDateTime minDate = axisX->min();
         const QDateTime maxDate = axisX->max();
 
-        // Розраховуємо новий діапазон дат
-        const qint64 diff = maxDate.toMSecsSinceEpoch() - minDate.toMSecsSinceEpoch();
-        const qint64 newDiff = diff * kf;
-        const qint64 delta = (newDiff - diff) / 2;
-        const QDateTime newMinDate = minDate.addMSecs(-delta);
-        const QDateTime newMaxDate = maxDate.addMSecs(delta);
-
-        // Встановлюємо новий діапазон дат
-        axisX->setRange(newMinDate, newMaxDate);
-    }
-}
-
-
-bool ChartView::maxScopeRiched()
-{
-    QRectF plotArea = chart()->plotArea();
-    QtCharts::QValueAxis *yAxis = qobject_cast<QtCharts::QValueAxis *>(chart()->axisY());
-    qreal xRange = yAxis->max() - yAxis->min();
-    QSizeF plotSize = plotArea.size();
-    qreal xScale = plotSize.height() / xRange;
-    if(xScale > 0.6)
-    {
+        if(mode == "15_MINUTES")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() < 36 * 60 * 60) // 36 hours range
+            {
+                return true;
+            }
+        }
+        else if(mode == "2_HOURS")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() < 10 * 24 * 60 * 60) // 10 days range
+            {
+                return true;
+            }
+        }
+        else if(mode == "5_MINUTES")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() < 10 * 60 * 60) // 10 hours range
+            {
+                return true;
+            }
+        }
         return false;
     }
-    return true;
 }
 
 
 bool ChartView::minScopeRiched()
 {
-    QRectF plotArea = chart()->plotArea();
-    QtCharts::QValueAxis *yAxis = qobject_cast<QtCharts::QValueAxis *>(chart()->axisY());
-    qreal xRange = yAxis->max() - yAxis->min();
-    QSizeF plotSize = plotArea.size();
-    qreal xScale = plotSize.height() / xRange;
-    if(xScale < 2.4)
+    QtCharts::QDateTimeAxis *axisX = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
+    if (axisX)
     {
+        // Отримуємо поточний діапазон дат
+        const QDateTime minDate = axisX->min();
+        const QDateTime maxDate = axisX->max();
+
+        if(mode == "15_MINUTES")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() > 12 * 60 * 60) // 5 hours range
+            {
+                return true;
+            }
+        }
+        else if(mode == "2_HOURS")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() > 4 * 24 * 60 * 60) // 4 days range
+            {
+                return true;
+            }
+        }
+        else if(mode == "5_MINUTES")
+        {
+            if(maxDate.toSecsSinceEpoch() - minDate.toSecsSinceEpoch() > 4 * 60 * 60) // 4 hours range
+            {
+                return true;
+            }
+        }
         return false;
     }
-    return true;
 }
 
 
@@ -140,13 +158,19 @@ void ChartView::wheelEvent(QWheelEvent *event)
     qreal factor = 1;
     if(event->angleDelta().y() > 0)
     {
-        factor = 1.3;
-        chart()->zoom(factor);
+        if(minScopeRiched())
+        {
+            factor = 1.2;
+            chart()->zoom(factor);
+        }
     }
     else
     {
-        factor = 0.9;
-        chart()->zoom(factor);
+        if(maxScopeRiched())
+        {
+            factor = 0.9;
+            chart()->zoom(factor);
+        }
     }
     event->accept();
     QtCharts::QChartView::wheelEvent(event);
