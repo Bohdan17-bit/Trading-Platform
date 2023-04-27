@@ -33,7 +33,6 @@ private:
     QtCharts::QCandlestickSeries *acmeSeries;
     QtCharts::QDateTimeAxis *axisDate;
     QtCharts::QValueAxis *axisValue;
-    QList<QtCharts::QCandlestickSet*> list_candlestick_set;
 };
 
 #endif // CANDLEGRAPHBUILDER_H

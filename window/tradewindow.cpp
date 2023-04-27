@@ -282,25 +282,23 @@ void TradeWindow::disabledBuySellAction()
 
 void TradeWindow::setPriceToBuyEditTextBox(double base_price)
 {
-    double final_price = base_price + 1.0;
     if(ui->lineEdit_count_buy->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_buy->text().toDouble();
-        ui->lineEdit_total_to_buy->setText(QString::number(final_price * number, 'f', 2));
+        ui->lineEdit_total_to_buy->setText(QString::number(base_price * number, 'f', 2));
     }
-    ui->linedEdit_price_buy->setText(QString::number(final_price));
+    ui->linedEdit_price_buy->setText(QString::number(base_price));
 }
 
 
 void TradeWindow::setPriceToSellEditTextBox(double base_price)
 {
-    double final_price = base_price;
     if(ui->lineEdit_count_sell->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_sell->text().toDouble();
-        ui->lineEdit_total_to_sell->setText(QString::number(final_price * number, 'f', 2));
+        ui->lineEdit_total_to_sell->setText(QString::number(base_price * number, 'f', 2));
     }
-    ui->linedEdit_price_sell->setText(QString::number(final_price));
+    ui->linedEdit_price_sell->setText(QString::number(base_price));
 }
 
 
@@ -323,7 +321,7 @@ void TradeWindow::on_lineEdit_count_buy_textEdited(const QString &arg1)
     {
         double price = ui->linedEdit_price_buy->text().toDouble();
         double number = ui->lineEdit_count_buy->text().toDouble();
-        double total = price * number;
+        double total = price * number + 1.0;
         ui->lineEdit_total_to_buy->setText(QString::number(total, 'f', 2));
     }
 }

@@ -72,16 +72,16 @@ ChartView* CandleGraphBuilder::getGraphChartView()
 void CandleGraphBuilder::refresh_graph_builder()
 {
     acmeSeries->clear();
-    list_candlestick_set.clear();
+    chartView->list_candlestick_set.clear();
 }
 
 void CandleGraphBuilder::refreshLastCandle(qreal open, qreal close, qreal high, qreal low)
 {
-    list_candlestick_set.last()->setClose(close);
-    list_candlestick_set.last()->setHigh(high);
-    list_candlestick_set.last()->setOpen(open);
-    list_candlestick_set.last()->setLow(low);
-    qDebug() << "length : after refresh" << list_candlestick_set.length();
+    chartView->list_candlestick_set.last()->setClose(close);
+    chartView->list_candlestick_set.last()->setHigh(high);
+    chartView->list_candlestick_set.last()->setOpen(open);
+    chartView->list_candlestick_set.last()->setLow(low);
+    qDebug() << "length : after refresh" << chartView->list_candlestick_set.length();
     chartView->chart()->update();
     chartView->update();
 }
@@ -95,10 +95,9 @@ void CandleGraphBuilder::insertLastCandle(qreal timestamp, qreal open, qreal clo
     last_set->setHigh(high);
     last_set->setLow(low);
     acmeSeries->append(last_set);
-    list_candlestick_set.append(last_set);
+    chartView->list_candlestick_set.append(last_set);
     chartView->chart()->update();
     chartView->update();
-    qDebug() << "length : after insert" << list_candlestick_set.length();
 }
 
 
@@ -117,6 +116,6 @@ void CandleGraphBuilder::addAllCandleStickSets(QList<QtCharts::QCandlestickSet*>
     for(QtCharts::QCandlestickSet* candlestickset : list)
       {
           acmeSeries->append(candlestickset);
-          list_candlestick_set.append(candlestickset);
+          chartView->list_candlestick_set.append(candlestickset);
       }
 }

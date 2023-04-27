@@ -3,6 +3,8 @@
 
 #include <QtCharts/QChartView>
 
+#include <QCandlestickSet>
+
 class ChartView : public QtCharts::QChartView
 {
     Q_OBJECT
@@ -12,6 +14,8 @@ public:
         m_lastMousePos.setX(0);
         m_lastMousePos.setY(0);
     }
+    QList<QtCharts::QCandlestickSet*> list_candlestick_set;
+
 protected:
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;

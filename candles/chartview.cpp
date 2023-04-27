@@ -1,6 +1,8 @@
 #include "candles/chartview.h"
 #include <QtCharts/QChartView>
 #include <QApplication>
+#include <QCandlestickSeries>
+#include <QCandlestickSet>>
 #include <QDateTime>
 #include <QDateTimeAxis>
 #include <QDebug>
@@ -21,6 +23,23 @@ void ChartView::mousePressEvent(QMouseEvent *event)
 
 void ChartView::mouseMoveEvent(QMouseEvent *event)
 {
+    QPointF mousePoint = this->mapFromGlobal(QCursor::pos());
+    QtCharts::QDateTimeAxis *xAxis = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
+
+    if (xAxis) {
+        QPointF mappedPoint = chart()->mapToValue(mousePoint);
+        QString dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:mm");
+        for(int i = list_candlestick_set.count() - 1; i > 0; i--)
+        {
+
+            if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm") == dateTime)
+            {
+                qDebug() << "Candle time: " << QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm");
+                qDebug() << "datetime: " << dateTime;
+                return;
+            }
+        }
+    }
     if (event->buttons() & Qt::LeftButton)
     {
 
@@ -30,7 +49,6 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
         m_lastMousePos = event->pos();
         event->accept();
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-
     }
 
     QChartView::mouseMoveEvent(event);
