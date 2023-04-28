@@ -34,9 +34,13 @@ void CandleGraphBuilder::createNewChart()
     chartView->setChart(chart);
     chartView->update();
 
-    //axisDate->setRange
-    //        (QDateTime::fromMSecsSinceEpoch(chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 10)->timestamp()),
-    //         QDateTime::fromMSecsSinceEpoch(chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 1)->timestamp()));
+
+    axisDate->setMin(QDateTime::fromMSecsSinceEpoch
+                     (chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 50)->timestamp()));
+    axisDate->setMax(QDateTime::fromMSecsSinceEpoch
+                     (chartView->list_candlestick_set.at(chartView->list_candlestick_set.count() - 1)->timestamp()));
+
+    chartView->setRangeForValueAxis();
 
     if(oldChart != nullptr)
     {
@@ -68,8 +72,7 @@ void CandleGraphBuilder::initAxes()
     axisDate->setTitleText("Дата");
 
     axisValue->setTitleText("Ціна");
-    axisValue->setMax(axisValue->max() * 1.001);
-    axisValue->setMin(axisValue->min() * 0.999);
+
 }
 
 

@@ -21,6 +21,33 @@ void ChartView::mousePressEvent(QMouseEvent *event)
      QChartView::mousePressEvent(event);
 }
 
+void ChartView::setNewLabel(QtCharts::QCandlestickSet *set, QString dateTime)
+{
+    QGraphicsSimpleTextItem *label = dynamic_cast<QGraphicsSimpleTextItem*>(chart()->scene()->items().at(0));
+
+    QBrush red_color_brush(Qt::red);
+    QBrush green_color_brush(Qt::darkGreen);
+
+    if(set->open() > set->close())
+    {
+        label->setBrush(red_color_brush);
+    }
+    else
+    {
+        label->setBrush(green_color_brush);
+    }
+
+    QString label_changed =
+            "open : " + QString::number(set->open()) + "   " +
+            "close : " + QString::number(set->close()) + "   " +
+            "high : " + QString::number(set->high()) + "   " +
+            "low : " + QString::number(set->low()) + "   " +
+            "time : " + dateTime;
+
+    label->setText(label_changed);
+}
+
+
 void ChartView::mouseMoveEvent(QMouseEvent *event)
 {
     QPointF mousePoint = this->mapFromGlobal(QCursor::pos());
@@ -28,51 +55,89 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
 
     if (xAxis) {
         QPointF mappedPoint = chart()->mapToValue(mousePoint);
-        QString dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:mm");
+        QString dateTime;
+        if(mode == "2_HOURS")
+        {
+            dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:00");
+        }
+        else
+        {
+            dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:mm");
+        }
         for(int i = list_candlestick_set.count() - 1; i > 0; i--)
         {
-
-            if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm") == dateTime)
+            if(mode == "2_HOURS")
             {
-                QGraphicsSimpleTextItem *label = dynamic_cast<QGraphicsSimpleTextItem*>(chart()->scene()->items().at(0));
-
-                QBrush red_color_brush(Qt::red);
-                QBrush green_color_brush(Qt::darkGreen);
-
-                if(list_candlestick_set.at(i)->open() > list_candlestick_set.at(i)->close())
+                if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:00") == dateTime)
                 {
-                    label->setBrush(red_color_brush);
+                    setNewLabel(list_candlestick_set.at(i), dateTime);
+                    return;
                 }
-                else
+            }
+            else
+            {
+                if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm") == dateTime)
                 {
-                    label->setBrush(green_color_brush);
+                    setNewLabel(list_candlestick_set.at(i), dateTime);
+                    return;
                 }
-
-                QString label_changed =
-                        "open : " + QString::number(list_candlestick_set.at(i)->open()) + "   " +
-                        "close : " + QString::number(list_candlestick_set.at(i)->close()) + "   " +
-                        "high : " + QString::number(list_candlestick_set.at(i)->high()) + "   " +
-                        "low : " + QString::number(list_candlestick_set.at(i)->low()) + "   " +
-                        "time : " + dateTime;
-
-                label->setText(label_changed);
-
-                return;
             }
         }
     }
-    if (event->buttons() & Qt::LeftButton)
-    {
 
-        auto dPos = event->pos() - m_lastMousePos;
-        chart()->scroll(-dPos.x(), dPos.y());
-        //
-        m_lastMousePos = event->pos();
-        event->accept();
-        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    if (event->buttons() & Qt::LeftButton)
+       {
+
+           auto dPos = event->pos() - m_lastMousePos;
+           chart()->scroll(-dPos.x(), dPos.y());
+           setRangeForValueAxis();
+           m_lastMousePos = event->pos();
+           event->accept();
+           qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+       }
+
+       QChartView::mouseMoveEvent(event);
+}
+
+
+void ChartView::setRangeForValueAxis()
+{
+    QtCharts::QValueAxis *axisY = qobject_cast<QtCharts::QValueAxis *>(chart()->axisY());
+
+    qreal min = list_candlestick_set.last()->low();
+    qreal max = list_candlestick_set.last()->high();
+
+    QtCharts::QDateTimeAxis *xAxis = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
+    QDateTime min_x = xAxis->min();
+    QDateTime max_x = xAxis->max();
+
+
+    for(int i = list_candlestick_set.count() - 1; i > 0; i--)
+    {
+        if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()) > min_x
+                && QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()) < max_x)
+        {
+            if(list_candlestick_set.at(i)->high() > max)
+            {
+                max = list_candlestick_set.at(i)->high();
+            }
+            if(list_candlestick_set.at(i)->low() < min)
+            {
+                min = list_candlestick_set.at(i)->low();
+            }
+        }
     }
 
-    QChartView::mouseMoveEvent(event);
+    qDebug() << "new max : " << max;
+    qDebug() << "new min: " << min;
+
+    qreal delta = (max - min) * 0.05;
+    min -= delta ;
+    max += delta;
+    qDebug() << "new max after sub : " << max;
+    qDebug() << "new min after sub: " << min;
+
+    axisY->setRange(min, max);
 }
 
 
@@ -160,8 +225,9 @@ void ChartView::wheelEvent(QWheelEvent *event)
     {
         if(minScopeRiched())
         {
-            factor = 1.2;
+            factor = 1.1;
             chart()->zoom(factor);
+            setRangeForValueAxis();
         }
     }
     else
@@ -170,6 +236,7 @@ void ChartView::wheelEvent(QWheelEvent *event)
         {
             factor = 0.9;
             chart()->zoom(factor);
+            setRangeForValueAxis();
         }
     }
     event->accept();
