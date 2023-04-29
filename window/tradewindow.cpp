@@ -255,10 +255,6 @@ void TradeWindow::getPriceCurrentPair()
 
     qreal low = nested_json.at(0).toString().toDouble();
     qreal high = nested_json.at(1).toString().toDouble();
-    if(low == high && low != 0)
-    {
-        low -= 0.1;
-    }
 
     setPriceToBuyEditTextBox(high);
     setPriceToSellEditTextBox(low);
@@ -289,9 +285,9 @@ void TradeWindow::setPriceToBuyEditTextBox(double base_price)
     if(ui->lineEdit_count_buy->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_buy->text().toDouble();
-        ui->lineEdit_total_to_buy->setText(QString::number(base_price * number, 'f', 2));
+        ui->lineEdit_total_to_buy->setText(QString::number(base_price * number, 'f', 3));
     }
-    ui->linedEdit_price_buy->setText(QString::number(base_price + 0.01));
+    ui->linedEdit_price_buy->setText(QString::number(base_price));
 }
 
 
@@ -300,9 +296,9 @@ void TradeWindow::setPriceToSellEditTextBox(double base_price)
     if(ui->lineEdit_count_sell->text().isEmpty() == false)
     {
         double number = ui->lineEdit_count_sell->text().toDouble();
-        ui->lineEdit_total_to_sell->setText(QString::number(base_price * number, 'f', 2));
+        ui->lineEdit_total_to_sell->setText(QString::number(base_price * number, 'f', 3));
     }
-    ui->linedEdit_price_sell->setText(QString::number(base_price));
+    ui->linedEdit_price_sell->setText(QString::number(base_price * 0.99999));
 }
 
 
