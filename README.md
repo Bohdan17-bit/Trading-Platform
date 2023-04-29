@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/MinGW-8.1.0-lightgrey">
   <img src="https://img.shields.io/badge/OpenSSL-1.1.1t-yellowgreen">
   <img src="https://img.shields.io/badge/SQLite-3.33.0-important">
+  <img src="https://img.shields.io/badge/License-MIT-blueviolet">
 </p>
 
 ## About
