@@ -11,3 +11,27 @@
 ## About
 Desktop application that provides opportunities to work out trading strategies and analyze the situation on the cryptocurrency market in "online" mode using a demo account. 
 All market data on available cryptocurrencies is received using the Poloniex API (Public Endpoints).
+
+## OpenSSL
+The OpenSSL library has been included to make and send API requests, various dlls have been added to the pro file:
+<br>
+~~~~~~~~~~pro
+INCLUDEPATH += ../dlls/openssl_x32
+INCLUDEPATH += ../dlls/openssl_x64
+~~~~~~~~~~
+How its looks like:
+```
+├── dlls
+|   ├── openssl_x32
+|     ├── libcrypto-1_1.dll
+|     ├── libeay32.dll
+|     ├── libgcc_s_dw2-1.dll
+|     └── libssl-1_1.dll
+|   ├── openssl_x64
+|     ├── libcrypto-1_1-x64.dll
+|     ├── libgcc_s_seh-1.dll
+|     └── libssl-1_1-x64.dll
+```
+## Links
+1. OpenSSL - https://www.openssl.org/source/
+2. Poloniex API - https://docs.poloniex.com/
