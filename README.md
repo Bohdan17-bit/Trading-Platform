@@ -12,6 +12,11 @@
 Desktop application that provides opportunities to work out trading strategies and analyze the situation on the cryptocurrency market in "online" mode using a demo account. 
 All market data on available cryptocurrencies is received using the Poloniex API (Public Endpoints).
 
+## Coming soon
+Application localization 
+- English (default);
+- Ukrainian.
+
 ## OpenSSL
 The OpenSSL library has been included to make and send API requests, various dlls have been added to the pro file:
 <br>
