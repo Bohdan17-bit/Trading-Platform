@@ -75,7 +75,6 @@ bool Database::userIsExist(QString user_name)
 {
     QSqlQuery query;
     query.exec("SELECT * from User");
-    qDebug() << "База даних перевіряє, чи існує користувач";
     while(query.next())
     {
         QString temp_name = query.value(0).toString();

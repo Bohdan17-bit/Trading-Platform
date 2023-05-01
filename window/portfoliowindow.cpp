@@ -37,7 +37,7 @@ void PortfolioWindow::getDataCryptocoinsFromAPI()
 
     QStringList list_coins = TXTReader::getListCryptocoins();
 
-    QJsonArray arrayJsonCoins = json.array(); // масив об'єктів криптомонет
+    QJsonArray arrayJsonCoins = json.array();
     list_cryptocoins.clear();
     foreach(const QJsonValue &coin, arrayJsonCoins)
     {
@@ -60,7 +60,6 @@ void PortfolioWindow::initDataCryptocoins()
 {
     getDataCryptocoinsFromAPI();
     getDataCryptocoinsFromDatabase();
-    //showListCryptocoins();
     initTablePortfolio();
 }
 

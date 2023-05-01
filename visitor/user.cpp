@@ -75,16 +75,10 @@ void User::buyCoin(QString name_cryptocurrency, double number_cryptocurrency, do
     Database::updateNumberCryptocurrencyPlus(user_name, number_cryptocurrency, name_cryptocurrency);
 
     int total_to_write = MoneyConverter::doubleUsdToInteger(Database::getBalance(user_name)) - MoneyConverter::doubleUsdToInteger(total_usd);
-    qDebug() << "HUI : " << total_to_write;
-    qDebug() << "HUI : " << MoneyConverter::integerUsdToDouble(total_to_write);
     Database::rewriteBalance(user_name, MoneyConverter::integerUsdToDouble(total_to_write));
-
-    // оновили кількість монеток в базі даних + в об'єкті User
     saveTransaction("buy", name_cryptocurrency, number_cryptocurrency, price, total_usd);
-    // записали дію в історію транзакцій
     updateBalanceUsd();
     updateNumberOfCoins();
-    // перезаписали в БД + в об'єкті User
 }
 
 void User::sellCoin(QString name_cryptocurrency, double number_cryptocurrency, double price, double total_usd)
@@ -92,12 +86,9 @@ void User::sellCoin(QString name_cryptocurrency, double number_cryptocurrency, d
     Database::updateNumberCryptocurrencyMinus(user_name, number_cryptocurrency, name_cryptocurrency);
     int total_to_write = MoneyConverter::doubleUsdToInteger(Database::getBalance(user_name)) + MoneyConverter::doubleUsdToInteger(total_usd);
     Database::rewriteBalance(user_name, MoneyConverter::integerUsdToDouble(total_to_write));
-    // оновили кількість монеток в базі даних + в об'єкті User
     saveTransaction("sell", name_cryptocurrency, number_cryptocurrency, price, total_usd);
-    // записали дію в історію транзакцій
     updateBalanceUsd();
     updateNumberOfCoins();
-    // перезаписали в БД + в об'єкті User
 }
 
 bool User::HaveEnoughCoins(QString name_coin, double value)

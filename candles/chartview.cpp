@@ -128,14 +128,9 @@ void ChartView::setRangeForValueAxis()
         }
     }
 
-    qDebug() << "new max : " << max;
-    qDebug() << "new min: " << min;
-
     qreal delta = (max - min) * 0.05;
     min -= delta ;
     max += delta;
-    qDebug() << "new max after sub : " << max;
-    qDebug() << "new min after sub: " << min;
 
     axisY->setRange(min, max);
 }
@@ -146,7 +141,6 @@ bool ChartView::maxScopeRiched()
     QtCharts::QDateTimeAxis *axisX = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
     if (axisX)
     {
-        // Отримуємо поточний діапазон дат
         const QDateTime minDate = axisX->min();
         const QDateTime maxDate = axisX->max();
 
@@ -181,7 +175,6 @@ bool ChartView::minScopeRiched()
     QtCharts::QDateTimeAxis *axisX = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
     if (axisX)
     {
-        // Отримуємо поточний діапазон дат
         const QDateTime minDate = axisX->min();
         const QDateTime maxDate = axisX->max();
 
@@ -215,7 +208,7 @@ void ChartView::mouseReleaseEvent(QMouseEvent *event)
 {
     QApplication::restoreOverrideCursor();
     emit mouseRelease();
-    //QChartView::mouseReleaseEvent(event);
+    QChartView::mouseReleaseEvent(event);
 }
 
 void ChartView::wheelEvent(QWheelEvent *event)

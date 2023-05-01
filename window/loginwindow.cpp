@@ -102,7 +102,7 @@ void LoginWindow::on_btn_new_account_clicked()
         sound->error();
         message.exec();
     }
-    else // якщо не існує
+    else
     {
         QMessageBox message;
         if(user->createNewUser(user_name))
