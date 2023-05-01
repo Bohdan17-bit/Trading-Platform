@@ -52,6 +52,12 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
 }
 
 
+void TradeWindow::hideEvent(QHideEvent *event)
+{
+    Database::closeDatabase();
+}
+
+
 void TradeWindow::showEvent(QShowEvent *event)
 {
     Database::openDatabase();
@@ -70,14 +76,14 @@ void TradeWindow::stopAllRequests()
 {
     timer_refresh_chart->stop();
     timer_refresh_price->stop();
-    qDebug() << "Зупинка усіх запитів!";
+    qDebug() << "Stop all requests!";
 }
 
 
 void TradeWindow::startAllRequests()
 {
     timer_refresh_price->start(1000);
-    timer_refresh_chart->start(5000); // перевірка оновлення графіку кожні 5 секунд
+    timer_refresh_chart->start(5000);
 }
 
 
@@ -147,7 +153,7 @@ void TradeWindow::init_table_coins()
         ui->table_coins->setItem(0, i, new QTableWidgetItem(list_coins.at(i)));
     }
 
-    ui->table_coins->setEditTriggers(0); // заборона редагування ячеєк таблиці
+    ui->table_coins->setEditTriggers(0);
     ui->table_coins->horizontalHeader()->hide();
     ui->table_coins->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->table_coins->verticalHeader()->hide();
@@ -393,7 +399,7 @@ void TradeWindow::getChartData5Minutes()
     QString api_address;
     api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_5", "500");
 
-    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));
     qDebug() << api_address;
     reDrawCandleChart(response);
 }
@@ -403,7 +409,7 @@ void TradeWindow::getChartData15Minutes()
 {
     QString api_address;
     api_address = ApiAddressBuilder::getChartData(current_pair, "MINUTE_15", "400");
-    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));
     qDebug() << api_address;
     reDrawCandleChart(response);
 }
@@ -413,7 +419,7 @@ void TradeWindow::getChartData2Hours()
 {
     QString api_address;
     api_address = ApiAddressBuilder::getChartData(current_pair, "HOUR_2", "300");
-    ApiServiceResponse response(ApiService::MakeRequest(api_address));    // об'єкт сервісу
+    ApiServiceResponse response(ApiService::MakeRequest(api_address));
     qDebug() << api_address;
     reDrawCandleChart(response);
 }
@@ -481,18 +487,12 @@ void TradeWindow::reDrawCandleChart(ApiServiceResponse response)
     }
     setDiragramInsteadLoading();
     candle_graph->refresh_graph_builder();
-    // перестворюємо діаграму
     candle_graph->CandleStickList = (CandleStickList*) new CandleStickListBuilder(response);
-    // створення адаптеру
     candle_graph->addAllCandleStickSets(candle_graph->CandleStickList->get_list_candlestick());
-    // клієнт викликає адаптер і складає свічки
     QJsonArray jsonArray = response.get_response().array();
     QJsonArray nested_json = jsonArray.last().toArray();
     last_candle = nested_json;
-
-    // запам'ятовуємо останню свічку для перевірок
     drawDiagram();
-    // перемальовуємо діаграму
 }
 
 

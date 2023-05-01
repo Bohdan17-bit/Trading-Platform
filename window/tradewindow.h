@@ -73,6 +73,7 @@ public slots:
 private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
     void closeApp();
     void clearFields();
     void init_table_coins();
