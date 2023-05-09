@@ -1,5 +1,5 @@
 #include "window/loginwindow.h"
-#include "window/ui_loginwindow.h"
+#include "ui_loginwindow.h"
 #include "storage/database.h"
 
 

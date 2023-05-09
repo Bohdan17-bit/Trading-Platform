@@ -50,10 +50,10 @@ HEADERS += \
     window/piechartwindow.h \
     window/portfoliowindow.h \
     window/tradewindow.h \
-    window/ui_loginwindow.h \
-    window/ui_piechartwindow.h \
-    window/ui_portfoliowindow.h \
-    window/ui_tradewindow.h
+    ui_loginwindow.h \
+    ui_piechartwindow.h \
+    ui_portfoliowindow.h \
+    ui_tradewindow.h
 
 FORMS += \
     window/loginwindow.ui \
