@@ -49,6 +49,16 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     ui->lineEdit_count_sell->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
     ui->lineEdit_count_buy->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
 
+    setComboBox();
+
+}
+
+
+void TradeWindow::setComboBox()
+{
+    ui->comboBox->setIconSize(QSize(32, 32));
+    ui->comboBox->addItem(QIcon("./images/en.png"), "English");
+    ui->comboBox->addItem(QIcon("./images/ua.png"), "Ukrainian");
 }
 
 

@@ -76,12 +76,14 @@ DISTFILES += \
     images/candlestick.png \
     images/chart.png \
     images/economics.png \
+    images/en.png \
     images/exit.png \
     images/green_triangle.png \
     images/icon.ico \
     images/icon.png \
     images/loading.gif \
     images/red_triangle.png \
+    images/ua.png \
     sound/click-error.wav \
     sound/closing_effect.wav \
     sound/interface-hover.wav \
