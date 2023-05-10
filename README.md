@@ -13,9 +13,13 @@ Desktop application that provides opportunities to work out trading strategies a
 All market data on available cryptocurrencies is received using the Poloniex API (Public Endpoints).
 
 ## Coming soon
-Application localization 
-- English (default);
-- Ukrainian.
+Screenshots and gifs that represents of all functionality and features!
+
+## How to develop the project further
+1. Give this project a star.
+2. Fork this repository.
+3. Keep improving the project.
+
 
 ## OpenSSL
 The OpenSSL library has been included to make and send API requests, various dlls have been added to the pro file:
