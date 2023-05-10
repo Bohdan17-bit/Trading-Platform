@@ -6,7 +6,7 @@
 #include "visitor/user.h"
 #include <QMessageBox>
 #include "utils/sound.h"
-
+#include <QTranslator>
 namespace Ui {
 class LoginWindow;
 }
@@ -16,7 +16,7 @@ class LoginWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit LoginWindow(Sound *sound, QWidget *parent = nullptr);
+    explicit LoginWindow(Sound *sound, QTranslator *translator, QWidget *parent = nullptr);
     ~LoginWindow();
     void showDialogLoading();
 
@@ -33,6 +33,7 @@ private:
     TradeWindow *tradeWindow;
     User *user;
     Sound *sound;
+    QTranslator *translator;
     QWidget *loading_window;
 };
 

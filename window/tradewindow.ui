@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>851</width>
+    <width>918</width>
     <height>546</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="buy_coins_label">
                 <property name="font">
                  <font>
                   <family>Times New Roman</family>
@@ -70,7 +70,7 @@
               <item>
                <layout class="QFormLayout" name="formLayout">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_3">
+                 <widget class="QLabel" name="price_label_buy">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -98,7 +98,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_4">
+                 <widget class="QLabel" name="amount_buy_label">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -123,7 +123,7 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLabel" name="label_5">
+                 <widget class="QLabel" name="total_buy_label">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -199,7 +199,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QLabel" name="label_6">
+               <widget class="QLabel" name="sell_coins_label">
                 <property name="font">
                  <font>
                   <family>Times New Roman</family>
@@ -217,7 +217,7 @@
               <item>
                <layout class="QFormLayout" name="formLayout_2">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_9">
+                 <widget class="QLabel" name="price_label_sell">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -245,7 +245,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_8">
+                 <widget class="QLabel" name="amount_sell_label">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -270,7 +270,7 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLabel" name="label_7">
+                 <widget class="QLabel" name="total_sell_label">
                   <property name="font">
                    <font>
                     <family>Times New Roman</family>
@@ -350,7 +350,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="trade_history_label">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -467,7 +467,7 @@
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QLabel" name="label_10">
+           <widget class="QLabel" name="current_crypto_label">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -818,7 +818,7 @@ QTableWidget::item:hover{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>851</width>
+     <width>918</width>
      <height>22</height>
     </rect>
    </property>

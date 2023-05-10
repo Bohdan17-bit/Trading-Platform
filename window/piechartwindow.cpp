@@ -14,7 +14,7 @@ PiechartWindow::PiechartWindow(QWidget *parent) :
     ui(new Ui::PiechartWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Кругова діаграма");
+    setWindowTitle(tr("Кругова діаграма"));
     initSettingsChart();
     initSettingsPieSeries();
 }
@@ -68,7 +68,7 @@ void PiechartWindow::getSoundObj(Sound *sound)
 void PiechartWindow::initSettingsPieSeries()
 {
     coinSeries = new QPieSeries();
-    coinSeries->setName("Кругова діаграма розподілу портфоліо");
+    coinSeries->setName(tr("Кругова діаграма розподілу портфоліо"));
 }
 
 

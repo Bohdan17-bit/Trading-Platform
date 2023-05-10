@@ -3,14 +3,15 @@
 #include "storage/database.h"
 
 
-LoginWindow::LoginWindow(Sound *sound, QWidget *parent) :
+LoginWindow::LoginWindow(Sound *sound, QTranslator *translator, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Вхід");
+    setWindowTitle(tr("Вхід"));
     user = new User();
     this->sound = sound;
+    this->translator = translator;
     Database::openDatabase();
 }
 
@@ -19,7 +20,6 @@ LoginWindow::~LoginWindow()
 {
     qDebug() << "destructor LoginWindow";
     delete ui;
-    delete tradeWindow;
 }
 
 
@@ -43,7 +43,7 @@ void LoginWindow::showDialogLoading()
 
     loading_window->setAttribute(Qt::WA_TranslucentBackground );
     loading_window->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-    loading_window->setWindowTitle("Завантаження...");
+    loading_window->setWindowTitle(tr("Завантаження..."));
 
     loading_window->show();
 }
@@ -61,7 +61,7 @@ void LoginWindow::on_btn_login_clicked()
         user->loadUserData();
         showDialogLoading();
 
-        tradeWindow = new TradeWindow(user);
+        tradeWindow = new TradeWindow(user, translator);
 
         connect(this, &LoginWindow::sendSoundObj, tradeWindow, &TradeWindow::getSoundObj);
         emit sendSoundObj(sound);
@@ -75,7 +75,7 @@ void LoginWindow::on_btn_login_clicked()
     else
     {
         QMessageBox message;
-        message.setText("Не знайдено користувача з таким ім'ям!");
+        message.setText(tr("Не знайдено користувача з таким ім'ям!"));
         sound->error();
         message.exec();
     }
@@ -89,7 +89,7 @@ void LoginWindow::on_btn_new_account_clicked()
     if(ui->lineEdit_username->text().isEmpty())
     {
         QMessageBox message;
-        message.setText("Введіть ім'я користувача!");
+        message.setText(tr("Введіть ім'я користувача!"));
         sound->error();
         message.exec();
         return;
@@ -98,7 +98,7 @@ void LoginWindow::on_btn_new_account_clicked()
     if(user->userIsExists(user_name))
     {
         QMessageBox message;
-        message.setText("Користувач з таким ім'ям вже існує!");
+        message.setText(tr("Користувач з таким ім'ям вже існує!"));
         sound->error();
         message.exec();
     }
@@ -107,13 +107,13 @@ void LoginWindow::on_btn_new_account_clicked()
         QMessageBox message;
         if(user->createNewUser(user_name))
         {
-            message.setText("Створено нового користувача: " + user_name);
+            message.setText(tr("Створено нового користувача: ") + user_name);
             sound->processComplete();
             message.exec();
         }
         else
         {
-            message.setText("Щось пішло не так!");
+            message.setText(tr("Щось пішло не так!"));
             sound->error();
             message.exec();
         }

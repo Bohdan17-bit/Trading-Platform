@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include "visitor/user.h"
 #include "utils/sound.h"
+#include <QTranslator>
 
 enum Interval { FIVE_MINUTES, FIFTEEN_MINUTES, TWO_HOURS };
 
@@ -26,7 +27,7 @@ class TradeWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    TradeWindow(User *user, QWidget *parent = nullptr);
+    TradeWindow(User *user, QTranslator *translator, QWidget *parent = nullptr);
     ~TradeWindow();
     void InitTimers();
     void setDefaultSettings();
@@ -55,6 +56,7 @@ private:
     QMovie *movie_loading;
     QJsonArray last_candle;
     TableModelTradeHistory *model;
+    QTranslator *translator;
 signals:
     void sendSoundObj(Sound *sound);
 public slots:
@@ -74,6 +76,7 @@ private slots:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    void changeEvent(QEvent *event) override;
     void setComboBox();
     void closeApp();
     void clearFields();
@@ -99,5 +102,6 @@ private slots:
     void disabledBuySellAction();
     void enableBuySellAction();
     void on_table_coins_cellEntered(int row, int column);
+    void on_comboBox_currentTextChanged(const QString &arg1);
 };
 #endif // TRADEWINDOW_H

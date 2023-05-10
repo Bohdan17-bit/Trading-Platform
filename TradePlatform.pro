@@ -71,6 +71,7 @@ INCLUDEPATH += ../dlls/openssl_x32
 INCLUDEPATH += ../dlls/openssl_x64
 
 DISTFILES += \
+    TradePlatform_en.ts \
     images/arrow-left.png \
     images/arrow-right.png \
     images/candlestick.png \
@@ -90,3 +91,5 @@ DISTFILES += \
     sound/interface_click.wav \
     sound/joystick_trigger.wav \
     sound/process_complete.wav
+
+TRANSLATIONS += TradePlatform_en.ts

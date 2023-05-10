@@ -10,7 +10,7 @@ PortfolioWindow::PortfolioWindow(User *user, QWidget *parent) :
     ui(new Ui::PortfolioWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Портфоліо");
+    setWindowTitle(tr("Портфоліо"));
     this->user = user;
     initSettingTablePortfolio();
 }
@@ -102,8 +102,22 @@ void PortfolioWindow::initSettingTablePortfolio()
     ui->portfolioTableWidget->setColumnCount(4);
 
     QStringList headers;
-    headers << "Назва" << "Кількість" << "В доларах" << "Зміна за день %";
+    headers << tr("Назва") << tr("Кількість") << tr("В доларах") << tr("Зміна за день %");
     ui->portfolioTableWidget->setHorizontalHeaderLabels(headers);
+}
+
+
+void PortfolioWindow::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+
+        QStringList headers;
+        headers << tr("Назва") << tr("Кількість") << tr("В доларах") << tr("Зміна за день %");
+        ui->portfolioTableWidget->setHorizontalHeaderLabels(headers);
+        setWindowTitle(tr("Портфоліо"));
+        ui->portfolio_label->setText(tr("Моє портфоліо"));
+    }
 }
 
 

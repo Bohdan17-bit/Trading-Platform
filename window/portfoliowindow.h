@@ -32,6 +32,7 @@ public:
     QVector <DatabaseCryptocoinsData> list_cryptocoins;
     void getDataCryptocoinsFromAPI();
     void getSoundObj(Sound *sound);
+    void changeEvent(QEvent *event) override;
 
 signals:
     void tradeWindowShow();

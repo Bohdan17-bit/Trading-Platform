@@ -8,13 +8,15 @@
 #include "api/apiserviceresponse.h"
 #include "storage/database.h"
 
-TradeWindow::TradeWindow(User *user, QWidget *parent)
+TradeWindow::TradeWindow(User *user, QTranslator *translator, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TradeWindow)
 {
-    ui->setupUi(this);
     this->user = user;
-    setWindowTitle("Головне вікно");
+    this->translator = translator;
+    QApplication::removeTranslator(translator);
+    ui->setupUi(this);
+    setWindowTitle(tr("Головне вікно"));
     no_internet_connection = false;
 
     candle_graph = new CandleGraphBuilder();
@@ -35,8 +37,6 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     setDefaultSettings();
     init_table_coins();
     initTableTradeHistory();
-    update_balance_label();
-    update_coins_balance_label();
     getPriceCurrentPair();
 
 
@@ -50,15 +50,100 @@ TradeWindow::TradeWindow(User *user, QWidget *parent)
     ui->lineEdit_count_buy->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}(\\.\\d{0,2}[1-9])?$"), this));
 
     setComboBox();
+    update_balance_label();
+    update_coins_balance_label();
+}
 
+
+void TradeWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+    QApplication::removeTranslator(translator);
+
+    translator = new QTranslator(this);
+    translator->load(QApplication::applicationName() + "_" + arg1);
+    qDebug() << QApplication::applicationName() + "_" + arg1;
+
+    QApplication::installTranslator(translator);
+
+    if(sound && this->isVisible())
+        sound->simpleClick();
+
+    QSettings *settings = new QSettings("preferences.ini", QSettings::IniFormat);
+    settings->setValue("settings/language", arg1);
+    settings->sync();
 }
 
 
 void TradeWindow::setComboBox()
 {
     ui->comboBox->setIconSize(QSize(32, 32));
-    ui->comboBox->addItem(QIcon("./images/en.png"), "English");
-    ui->comboBox->addItem(QIcon("./images/ua.png"), "Ukrainian");
+
+    QSettings *settings = new QSettings("preferences.ini", QSettings::IniFormat);
+
+    QString current_lang = settings->value("settings/language", "en").toString();
+
+    QList<QPair<QIcon, QString>> langs;
+    langs.append(QPair<QIcon, QString>(QIcon("./images/en.png"), "en"));
+    langs.append(QPair<QIcon, QString>(QIcon("./images/ua.png"), "ua"));
+
+    for(int i = 0; i < langs.count(); i++)
+    {
+        if(current_lang == langs[i].second)
+        {
+            qDebug() << "current lang: " + current_lang;
+            langs.swapItemsAt(0, i);
+            break;
+        }
+    }
+
+    for(int i = 0; i < langs.count(); i++)
+    {
+        ui->comboBox->addItem(langs[i].first, langs[i].second);
+    }
+
+}
+
+
+void TradeWindow::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+        setWindowTitle(tr("Головне вікно"));
+
+        ui->buy_coins_label->setText(tr("Купити монети"));
+        ui->sell_coins_label->setText(tr("Продати монети"));
+
+        ui->price_label_buy->setText(tr("Ціна"));
+        ui->price_label_sell->setText(tr("Ціна"));
+
+        ui->total_buy_label->setText(tr("До сплати"));
+        ui->total_sell_label->setText(tr("Отримано"));
+
+        ui->amount_buy_label->setText(tr("Кількість"));
+        ui->amount_sell_label->setText(tr("Кількість"));
+
+        ui->btn_buy_cryptocurrency->setText(tr("Купити"));
+        ui->btn_sell_cryptocurrency->setText(tr("Продати"));
+
+        ui->trade_history_label->setText(tr("Історія торгів"));
+
+        ui->current_crypto_label->setText(tr("Обрана монета :"));
+
+        update_balance_label();
+
+        if(this->isVisible())
+        {
+            update_coins_balance_label();
+            model->setHeaderData(2, Qt::Horizontal, tr("Монета"), Qt::DisplayRole);
+            model->setHeaderData(3, Qt::Horizontal, tr("Число"), Qt::DisplayRole);
+            model->setHeaderData(4, Qt::Horizontal, tr("Ціна"), Qt::DisplayRole);
+            model->setHeaderData(5, Qt::Horizontal, tr("Долари"), Qt::DisplayRole);
+        }
+    }
+    else
+    {
+        QMainWindow::changeEvent(event);
+    }
 }
 
 
@@ -100,16 +185,16 @@ void TradeWindow::startAllRequests()
 void TradeWindow::initTableTradeHistory()
 {
     model = new TableModelTradeHistory(this);
-    model->setTable("TradeHistory");
+    model->setTable(tr("TradeHistory"));
 
     model->setFilter("name = '"+ user->discoverName() + "'");
     model->select();
 
     //model->setHeaderData(1, Qt::Horizontal, "Дія", Qt::DisplayRole);
-    model->setHeaderData(2, Qt::Horizontal, "Монета", Qt::DisplayRole);
-    model->setHeaderData(3, Qt::Horizontal, "Число", Qt::DisplayRole);
-    model->setHeaderData(4, Qt::Horizontal, "Ціна", Qt::DisplayRole);
-    model->setHeaderData(5, Qt::Horizontal, "Долари", Qt::DisplayRole);
+    model->setHeaderData(2, Qt::Horizontal, tr("Монета"), Qt::DisplayRole);
+    model->setHeaderData(3, Qt::Horizontal, tr("Число"), Qt::DisplayRole);
+    model->setHeaderData(4, Qt::Horizontal, tr("Ціна"), Qt::DisplayRole);
+    model->setHeaderData(5, Qt::Horizontal, tr("Долари"), Qt::DisplayRole);
 
 
     ui->tableView_trade_history->setModel(model);
@@ -172,7 +257,6 @@ void TradeWindow::init_table_coins()
         ui->table_coins->item(0, i)->setTextAlignment(Qt::AlignCenter);
     }
     ui->table_coins->item(0, 0)->setSelected(true);
-    QTableWidgetItem item;
 }
 
 
@@ -190,7 +274,7 @@ void TradeWindow::setDefaultSettings()
 
 void TradeWindow::update_balance_label()
 {
-    ui->balance_label->setText("Баланс : " + QString::number(user->discoverBalance()));
+    ui->balance_label->setText(tr("Баланс : ") + QString::number(user->discoverBalance()) + "$");
 }
 
 
@@ -202,7 +286,7 @@ void TradeWindow::update_coins_balance_label()
         current_column = 0;
     }
     QString cryptocurrency = ui->table_coins->item(0, current_column)->text();
-    ui->coins_balance_label->setText("Монети: " + QString::number(user->getNumberOfCoin(cryptocurrency)));
+    ui->coins_balance_label->setText(tr("Монети: ") + QString::number(user->getNumberOfCoin(cryptocurrency)));
 }
 
 
@@ -241,7 +325,7 @@ void TradeWindow::getPriceCurrentPair()
         ui->price_label->setStyleSheet("color: red;");
     }
     last_price = price.toDouble();
-    ui->price_label->setText("Ціна : " + QString::number(last_price) + "$");
+    ui->price_label->setText(tr("Ціна : ") + QString::number(last_price) + "$");
     if(last_price == 0)
     {
         if(no_internet_connection == false)
@@ -573,7 +657,7 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
     {
         sound->error();
         QMessageBox message;
-        message.setText("Введіть число криптовалюти!");
+        message.setText(tr("Введіть число криптовалюти!"));
         message.exec();
         return;
     }
@@ -596,7 +680,7 @@ void TradeWindow::on_btn_buy_cryptocurrency_clicked()
     {
         sound->error();
         QMessageBox message;
-        message.setText("У вас недостатньо коштів!");
+        message.setText(tr("У вас недостатньо коштів!"));
         message.exec();
     }
 }
@@ -608,7 +692,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
     {
         sound->error();
         QMessageBox message;
-        message.setText("Введіть число криптовалюти!");
+        message.setText(tr("Введіть число криптовалюти!"));
         message.exec();
         return;
     }
@@ -635,7 +719,7 @@ void TradeWindow::on_btn_sell_cryptocurrency_clicked()
     {
         sound->error();
         QMessageBox message;
-        message.setText("У вас недостатньо криптовалюти!");
+        message.setText(tr("У вас недостатньо криптовалюти!"));
         message.exec();
     }
 }
@@ -647,7 +731,7 @@ void TradeWindow::on_to_portfolio_btn_clicked()
     {
         sound->error();
         QMessageBox message;
-        message.setText("Неможливо переглянути портфель!\nВідсутнє підключення до мережі Інтернет!");
+        message.setText(tr("Неможливо переглянути портфель!\nВідсутнє підключення до мережі Інтернет!"));
         message.exec();
     }
     else

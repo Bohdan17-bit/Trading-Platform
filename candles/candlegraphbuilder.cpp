@@ -69,9 +69,9 @@ void CandleGraphBuilder::initAxes()
     acmeSeries->attachAxis(axisValue);
 
     axisDate->setFormat("dd.MM-hh:mm");
-    axisDate->setTitleText("Дата");
+    axisDate->setTitleText("Date");
 
-    axisValue->setTitleText("Ціна");
+    axisValue->setTitleText("Price");
 
 }
 
@@ -116,7 +116,7 @@ void CandleGraphBuilder::insertLastCandle(qreal timestamp, qreal open, qreal clo
 void CandleGraphBuilder::initAcmeSeries()
 {
     acmeSeries = new QtCharts::QCandlestickSeries();
-    acmeSeries->setName("Графік змінення ціни монети");
+    acmeSeries->setName("Coin price chart");
     acmeSeries->setIncreasingColor(QColor(Qt::green));
     acmeSeries->setDecreasingColor(QColor(Qt::red));
 }
