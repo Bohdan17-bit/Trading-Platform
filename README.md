@@ -12,8 +12,39 @@
 Desktop application that provides opportunities to work out trading strategies and analyze the situation on the cryptocurrency market in "online" mode using a demo account. 
 All market data on available cryptocurrencies is received using the Poloniex API (Public Endpoints).
 
-## Coming soon
-Screenshots and gifs that represents of all functionality and features!
+## Features and Functionality
+
+### Login Form
+
+- Create an unlimited number of demo accounts!
+
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/login_window.jpg">
+
+### Trading Form
+- Scale your Candlestick chart!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/zoom.gif" width="600">
+
+- Freely move the graph!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/moving_chart_candles.gif" width="600">
+
+- Wait for internet connection with animation!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/waiting_for_internet.gif" width="600">
+
+- Change localization in second!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/language_changed.gif" width="600">
+
+### Portfolio Form
+
+- Your portfolio when it's empty:
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/portfolio_empty.jpg" width="500">
+
+- Your complete portfolio:
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/portfolio_full.jpg" width="500">
+
+### Piechart Form
+
+- Your portfolio is a pie chart!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/diagram_piechart.gif" width="600">
 
 ## How to develop the project further
 1. Give this project a star.
