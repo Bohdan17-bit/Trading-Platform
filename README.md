@@ -27,6 +27,12 @@ Create an unlimited number of demo accounts!
 - Freely move the graph!
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/moving_chart_candles.gif" width="600">
 
+- Buy as many coins as you need!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/buy_coins.gif" width="600">
+
+- Sell coins as much as you have!
+<img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/sell_coins.gif" width="600">
+
 - Wait for internet connection with animation!
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/waiting_for_internet.gif" width="600">
 
