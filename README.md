@@ -16,8 +16,7 @@ All market data on available cryptocurrencies is received using the Poloniex API
 ## Features and Functionality
 
 ### Login Form
-
-- Create an unlimited number of demo accounts!
+Create an unlimited number of demo accounts!
 
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/login_window.jpg">
 
@@ -43,8 +42,8 @@ All market data on available cryptocurrencies is received using the Poloniex API
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/portfolio_full.jpg" width="500">
 
 ### Piechart Form
+Your portfolio is a pie chart!
 
-- Your portfolio is a pie chart!
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/diagram_piechart.gif" width="600">
 
 ## How to develop the project further
