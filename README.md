@@ -13,6 +13,19 @@
 Desktop application that provides opportunities to work out trading strategies and analyze the situation on the cryptocurrency market in "online" mode using a demo account. 
 All market data on available cryptocurrencies is received using the Poloniex API (Public Endpoints).
 
+The platform provides: 
+- 3 time frames for building chart (15 min / 30 min / 2 hours);
+- 2 languages to switch (English, Ukrainian);
+- 10 cryptocurrencies (BTC, XRP, ETH, DASH, DOGE, LTC, BNB, SOL, UNI, TRX).
+- 40 thousands dollars on a Demo Account.
+
+If you want to add new cryptocurrencies, time frame or language, go to the Discussions tab and suggest your own options!
+
+## How to develop the project further
+1. Give this project a star.
+2. Fork this repository.
+3. Keep improving the project.
+
 ## Features and Functionality
 
 ### Login Form
@@ -51,12 +64,6 @@ Create an unlimited number of demo accounts!
 Your portfolio is a pie chart!
 
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/diagram_piechart.gif" width="600">
-
-## How to develop the project further
-1. Give this project a star.
-2. Fork this repository.
-3. Keep improving the project.
-
 
 ## OpenSSL
 The OpenSSL library has been included to make and send API requests, various dlls have been added to the pro file:
