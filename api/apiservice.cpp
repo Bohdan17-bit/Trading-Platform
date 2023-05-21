@@ -12,7 +12,6 @@ QJsonDocument ApiService::MakeRequest(QString requestStr)
     QNetworkReply *reply = accessManager->get(request);
     while (!reply->isFinished())
     {
-        // QEventLoop::ExcludeUserInputEvents
         qApp->processEvents();
     }
     QByteArray response_data = reply->readAll();

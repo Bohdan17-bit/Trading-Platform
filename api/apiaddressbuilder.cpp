@@ -3,7 +3,7 @@
 
 QString ApiAddressBuilder::getChartData(QString currency_pair, QString period, QString limit)
 {
-    return QString("https://api.poloniex.com/markets/") + currency_pair + QString("/candles?")
+    return base_api + currency_pair + QString("/candles?")
             + QString("interval=") + period
             + QString("&limit=")
             + limit;
@@ -12,11 +12,11 @@ QString ApiAddressBuilder::getChartData(QString currency_pair, QString period, Q
 
 QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
 {
-    return QString("https://api.poloniex.com/markets/") + pair + QString("/markPrice");
+    return base_api + pair + QString("/markPrice");
 }
 
 
 QString ApiAddressBuilder::getDataAllCryptoPairs()
 {
-    return QString("https://api.poloniex.com/markets/") + QString("price");
+    return base_api + QString("price");
 }
