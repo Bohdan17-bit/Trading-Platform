@@ -65,6 +65,40 @@ Your portfolio is a pie chart!
 
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/diagram_piechart.gif" width="600">
 
+## Sending requests
+1. To get a request string of a specific price of a crypto pair, you can use the method:
+~~~~~cpp
+QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
+{
+    return base_api + pair + QString("/markPrice");
+}
+~~~~~
+2. Next, you will send the request and receive a response in QJsonDocument format:
+~~~~~cpp
+QJsonDocument ApiService::MakeRequest(QString requestStr)
+{
+    QNetworkRequest request((QUrl(requestStr)));
+    request.setTransferTimeout(3000);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QNetworkReply *reply = accessManager->get(request);
+    while (!reply->isFinished())
+    {
+        qApp->processEvents();
+    }
+    QByteArray response_data = reply->readAll();
+    reply->deleteLater();
+    return QJsonDocument::fromJson(response_data);
+}
+~~~~~
+3. After all, you get the following answer, which you can use and display in the price Label:
+```json
+{
+  "symbol" : "BTC_USDT",
+  "markPrice" : "27066.07",
+  "time" : "1684654973165"
+}
+```
+
 ## OpenSSL
 The OpenSSL library has been included to make and send API requests, various dlls have been added to the pro file:
 <br>
