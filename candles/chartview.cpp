@@ -2,7 +2,7 @@
 #include <QtCharts/QChartView>
 #include <QApplication>
 #include <QCandlestickSeries>
-#include <QCandlestickSet>>
+#include <QCandlestickSet>
 #include <QDateTime>
 #include <QDateTimeAxis>
 #include <QDebug>
@@ -21,7 +21,16 @@ void ChartView::mousePressEvent(QMouseEvent *event)
      QChartView::mousePressEvent(event);
 }
 
-void ChartView::setNewLabel(QtCharts::QCandlestickSet *set, QString dateTime)
+
+void ChartView::handleHovered(bool hovered, QtCharts::QCandlestickSet *set)
+{
+    if(hovered)
+    {
+        setNewLabel(set);
+    }
+}
+
+void ChartView::setNewLabel(QtCharts::QCandlestickSet *set)
 {
     QGraphicsSimpleTextItem *label = dynamic_cast<QGraphicsSimpleTextItem*>(chart()->scene()->items().at(0));
 
@@ -37,6 +46,8 @@ void ChartView::setNewLabel(QtCharts::QCandlestickSet *set, QString dateTime)
         label->setBrush(green_color_brush);
     }
 
+    QString dateTime =  QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(set->timestamp())).toString("dd.MM-hh:mm");
+
     QString label_changed =
             "open : " + QString::number(set->open()) + "   " +
             "close : " + QString::number(set->close()) + "   " +
@@ -50,41 +61,6 @@ void ChartView::setNewLabel(QtCharts::QCandlestickSet *set, QString dateTime)
 
 void ChartView::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF mousePoint = this->mapFromGlobal(QCursor::pos());
-    QtCharts::QDateTimeAxis *xAxis = qobject_cast<QtCharts::QDateTimeAxis *>(chart()->axisX());
-
-    if (xAxis) {
-        QPointF mappedPoint = chart()->mapToValue(mousePoint);
-        QString dateTime;
-        if(mode == "2_HOURS")
-        {
-            dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:00");
-        }
-        else
-        {
-            dateTime = QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(mappedPoint.x())).toString("dd.MM-hh:mm");
-        }
-        for(int i = list_candlestick_set.count() - 1; i > 0; i--)
-        {
-            if(mode == "2_HOURS")
-            {
-                if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:00") == dateTime)
-                {
-                    setNewLabel(list_candlestick_set.at(i), dateTime);
-                    return;
-                }
-            }
-            else
-            {
-                if(QDateTime::fromMSecsSinceEpoch(list_candlestick_set.at(i)->timestamp()).toString("dd.MM-hh:mm") == dateTime)
-                {
-                    setNewLabel(list_candlestick_set.at(i), dateTime);
-                    return;
-                }
-            }
-        }
-    }
-
     if (event->buttons() & Qt::LeftButton)
        {
 

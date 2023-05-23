@@ -18,7 +18,8 @@ public:
     QList<QtCharts::QCandlestickSet*> list_candlestick_set;
     QString mode;
     void setRangeForValueAxis();
-
+public slots:
+    void handleHovered(bool status, QtCharts::QCandlestickSet *set);
 protected:
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
@@ -28,7 +29,7 @@ private:
     QPointF m_lastMousePos;
     bool maxScopeRiched();
     bool minScopeRiched();
-    void setNewLabel(QtCharts::QCandlestickSet *set, QString dateTime);
+    void setNewLabel(QtCharts::QCandlestickSet *set);
 
 signals:
     void mousePress();

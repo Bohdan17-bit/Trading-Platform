@@ -53,6 +53,7 @@ void CandleGraphBuilder::createNewChart()
     candle->setPos(105, 45);
     candle->setFont(font);
     chart->scene()->addItem(candle);
+    QObject::connect(acmeSeries, &QCandlestickSeries::hovered, chartView, &ChartView::handleHovered);
 
 }
 
