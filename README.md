@@ -19,13 +19,6 @@ The platform provides:
 - 10 cryptocurrencies (BTC, XRP, ETH, DASH, DOGE, LTC, BNB, SOL, UNI, TRX).
 - 40 thousands dollars on a Demo Account.
 
-If you want to add new cryptocurrencies, time frame or language, go to the Discussions tab and suggest your own options!
-
-## How to develop the project further
-1. Give this project a star.
-2. Fork this repository.
-3. Keep improving the project.
-
 ## Features and Functionality
 
 ### Login Form
@@ -64,6 +57,16 @@ Create an unlimited number of demo accounts!
 Your portfolio is a pie chart!
 
 <img src="https://github.com/Bogdan17-bit/Photos/blob/master/trade/diagram_piechart.gif" width="600">
+
+## You need to participate in the development!
+1. Do you have a new idea for a crypto exchange?
+2. Do you know what is missing from the project description?
+3. Are you a novice tester and want to test your first great app? 
+4. Would you like to gain team development experience?
+
+In this case, you should:
+- give this project a star! (strongest support for promotion!)
+- create an issue or new discussion for further communication!
 
 ## Sending requests
 1. To get a request string of a specific price of a crypto pair, you can use the method:
