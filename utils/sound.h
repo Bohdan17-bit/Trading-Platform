@@ -6,6 +6,7 @@ class Sound
 {
 public:
     Sound();
+    ~Sound();
     void transitionOnAnotherWindow();
     void error();
     void hover();

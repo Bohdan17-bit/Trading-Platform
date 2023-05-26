@@ -10,8 +10,9 @@
 class ApiService
 {
 private:
-    ApiService(){};
-    static QNetworkAccessManager *accessManager;
+    ApiService();
+    static ApiService& getInstance();
+    QNetworkAccessManager *accessManager;
 public:
     static QJsonDocument MakeRequest(QString requestStr);
 };

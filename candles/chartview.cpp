@@ -143,6 +143,7 @@ bool ChartView::maxScopeRiched()
         }
         return false;
     }
+    return false;
 }
 
 
@@ -177,6 +178,7 @@ bool ChartView::minScopeRiched()
         }
         return false;
     }
+    return false;
 }
 
 

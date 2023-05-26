@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 
     QTranslator *translator = new QTranslator();
 
-    QSettings *settings = new QSettings("preferences.ini",QSettings::IniFormat);
-    QString locale = settings->value("settings/language", "en").toString();
+    QSettings settings("preferences.ini", QSettings::IniFormat);
+    QString locale = settings.value("settings/language", "en").toString();
 
     translator->load(QApplication::applicationName() + "_" + locale);
     a.installTranslator(translator);

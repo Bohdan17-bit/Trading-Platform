@@ -80,14 +80,14 @@ QString ApiAddressBuilder::getPriceCryptoPair(QString pair)
 ~~~~~cpp
 QJsonDocument ApiService::MakeRequest(QString requestStr)
 {
+    ApiService& service = getInstance();
     QNetworkRequest request((QUrl(requestStr)));
     request.setTransferTimeout(3000);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QNetworkReply *reply = accessManager->get(request);
-    while (!reply->isFinished())
-    {
-        qApp->processEvents();
-    }
+    QNetworkReply *reply = service.accessManager->get(request);
+    QEventLoop eventLoop;
+    QObject::connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+    eventLoop.exec();
     QByteArray response_data = reply->readAll();
     reply->deleteLater();
     return QJsonDocument::fromJson(response_data);

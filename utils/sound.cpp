@@ -8,6 +8,11 @@ Sound::Sound()
     soundEffect->setVolume(0.2f);
 }
 
+Sound::~Sound()
+{
+    delete soundEffect;
+}
+
 void Sound::transitionOnAnotherWindow()
 {
     soundEffect->setSource(QUrl::fromLocalFile(path + "joystick_trigger.wav"));
