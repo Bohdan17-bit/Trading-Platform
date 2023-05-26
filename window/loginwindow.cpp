@@ -8,6 +8,7 @@ LoginWindow::LoginWindow(Sound *sound, QTranslator *translator, QWidget *parent)
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
+    setDefaultSize();
     setWindowTitle(tr("Вхід"));
     user = new User();
     this->sound = sound;
@@ -26,6 +27,26 @@ LoginWindow::~LoginWindow()
 void LoginWindow::closeEvent(QCloseEvent *event)
 {
     Database::closeDatabase();
+}
+
+
+void LoginWindow::setDefaultSize()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QSize screenSize = screen->availableSize();
+
+    int screenWidth = screenSize.width();
+    int screenHeight = screenSize.height();
+
+    double kfWidth = 3.0;
+    double kHeight = 3.5;
+
+    int scaledWidth = screenWidth / kfWidth;
+    int scaleHeight = screenHeight / kHeight;
+
+    this->resize(scaledWidth, scaleHeight);
+
+    delete screen;
 }
 
 
