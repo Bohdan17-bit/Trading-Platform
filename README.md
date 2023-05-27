@@ -19,6 +19,12 @@ The platform provides:
 - 10 cryptocurrencies (BTC, XRP, ETH, DASH, DOGE, LTC, BNB, SOL, UNI, TRX).
 - 40 thousands dollars on a Demo Account.
 
+## Compatibility
+- Versions of Windows 7, 10, 11;
+- Architecture ×32, ×64;
+- Responsive interface with resolution 1366 × 768 up to 2560 × 1600.
+- Microsoft Visual C++ 2015-2022 Redistributable.
+
 ## Features and Functionality
 
 ### Login Form
@@ -125,3 +131,4 @@ How its looks like:
 ## Links
 1. OpenSSL - https://www.openssl.org/source/
 2. Poloniex API - https://docs.poloniex.com/
+3. Redistributable packages - https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
