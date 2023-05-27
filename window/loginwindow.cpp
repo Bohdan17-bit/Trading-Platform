@@ -8,7 +8,6 @@ LoginWindow::LoginWindow(Sound *sound, QTranslator *translator, QWidget *parent)
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
-    setDefaultSize();
     setWindowTitle(tr("Вхід"));
     user = new User();
     this->sound = sound;
@@ -19,7 +18,7 @@ LoginWindow::LoginWindow(Sound *sound, QTranslator *translator, QWidget *parent)
 
 LoginWindow::~LoginWindow()
 {
-    qDebug() << "destructor LoginWindow";
+    delete loading_window;
     delete ui;
 }
 
@@ -30,33 +29,15 @@ void LoginWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void LoginWindow::setDefaultSize()
-{
-    QScreen *screen = QGuiApplication::primaryScreen();
-    QSize screenSize = screen->availableSize();
-
-    int screenWidth = screenSize.width();
-    int screenHeight = screenSize.height();
-
-    double kfWidth = 3.0;
-    double kHeight = 3.5;
-
-    int scaledWidth = screenWidth / kfWidth;
-    int scaleHeight = screenHeight / kHeight;
-
-    this->resize(scaledWidth, scaleHeight);
-
-    delete screen;
-}
-
-
 void LoginWindow::showDialogLoading()
 {
-    QMovie *movie_loading = new QMovie("./images/loading.gif");
+    QMovie *movie_loading = new QMovie(this);
+    movie_loading->setFileName("./images/loading.gif");
     movie_loading->setScaledSize(QSize(75, 75));
 
     loading_window = new QWidget();
-    loading_window->setFixedSize(75, 75);
+    int sizeWindowLoading = 75;
+    loading_window->setFixedSize(sizeWindowLoading, sizeWindowLoading);
 
     QLabel *label_process = new QLabel(loading_window);
     label_process->setMovie(movie_loading);
@@ -66,6 +47,16 @@ void LoginWindow::showDialogLoading()
     loading_window->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     loading_window->setWindowTitle(tr("Завантаження..."));
 
+    int parentWidth = this->width();
+    int parentHeight = this->height();
+
+    int childWidth = sizeWindowLoading;
+    int childHeight = sizeWindowLoading;
+
+    int x = this->geometry().x() + (parentWidth - childWidth) / 2;
+    int y = this->geometry().y() + (parentHeight - childHeight) / 2;
+
+    loading_window->move(x, y);
     loading_window->show();
 }
 

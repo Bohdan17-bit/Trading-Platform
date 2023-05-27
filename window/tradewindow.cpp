@@ -76,7 +76,8 @@ void TradeWindow::on_comboBox_currentTextChanged(const QString &arg1)
 
 void TradeWindow::setComboBox()
 {
-    ui->comboBox->setIconSize(QSize(32, 32));
+    int iconSize = 32;
+    ui->comboBox->setIconSize(QSize(iconSize, iconSize));
 
     QSettings *settings = new QSettings("preferences.ini", QSettings::IniFormat);
 
