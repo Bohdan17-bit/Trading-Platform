@@ -61,6 +61,7 @@ FORMS += \
     window/portfoliowindow.ui \
     window/tradewindow.ui
 
+RC_FILE = app.rc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -72,6 +73,7 @@ INCLUDEPATH += ../dlls/openssl_x64
 
 DISTFILES += \
     TradePlatform_en.ts \
+    app.rc \
     images/arrow-left.png \
     images/arrow-right.png \
     images/candlestick.png \
@@ -82,6 +84,7 @@ DISTFILES += \
     images/green_triangle.png \
     images/icon.ico \
     images/icon.png \
+    images/icon32.ico \
     images/loading.gif \
     images/red_triangle.png \
     images/ua.png \
