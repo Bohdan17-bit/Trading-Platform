@@ -74,6 +74,13 @@ In this case, you should:
 - give this project a star! (strongest support for promotion!)
 - create an issue or new discussion for further communication!
 
+
+## Next update - Customization of application
+1. The ini file already exists but will contain more settings in the future.
+2. The file will save sound, candle colors, and theme settings. 
+3. Currently, only the selected language is saved.
+4. To edit this file it is important to create a simple editor (a new project).
+
 ## Sending requests
 1. To get a request string of a specific price of a crypto pair, you can use the method:
 ~~~~~cpp
