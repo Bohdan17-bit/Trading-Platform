@@ -92,7 +92,12 @@ void TradeWindow::setComboBox()
         if(current_lang == langs[i].second)
         {
             qDebug() << "current lang: " + current_lang;
-            langs.swapItemsAt(0, i);
+            if(i != 0)
+            {
+                QPair<QIcon, QString> temp = langs[i];
+                langs[i] = langs[0];
+                langs[0] = temp;
+            }
             break;
         }
     }
